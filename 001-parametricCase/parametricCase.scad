@@ -2,14 +2,14 @@ $fn=75;
 extra=0.1; //debug parameter
 
 /* inner case parameters */
-caseX=40;
-caseY=40;
-caseZ=20;
+caseX=70;
+caseY=210;
+caseZ=80;
 
 /* wall thickness will be added to each side */
 wallThickness=2;
 
-snapInBlockY=10;
+snapInBlockY=30;
 snapInBlockZ=1.5;
 
 /* this gives a clearance for the snapInBlocks to be cutout.
@@ -104,10 +104,16 @@ module cutoutFront()
 
 module cutoutLid()
 {
-  #translate([caseX/2+wallThickness-11/2,caseY/2+wallThickness-11/2,0])
+  windowX = 50;
+  windowY = 110;
+  windowPosX = 0;
+  windowPosY = -40;
+
+  translate([windowPosX,windowPosY,0])
+  #translate([caseX/2+wallThickness-(50+1)/2,caseY/2+wallThickness-windowY/2,0])
   translate([1,1,snapInBlockZ*2])
   minkowski() {
-    cube([10,10,lidThickness]);
+    cube([windowX,windowY,lidThickness]);
     cylinder(r=1,h=0.0000001);
   }
 }
