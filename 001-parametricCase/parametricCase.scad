@@ -15,7 +15,7 @@ snapInBlockZ=1.5;
 /* this gives a clearance for the snapInBlocks to be cutout.
    only for lid part. it cuts out some material from the snapInBlocks
    to save some filament. */
-snapInBlockClearance=5;
+snapInBlockClearance=8;
 
 lidThickness=2;
 /* snapIn bulge radius */
@@ -102,20 +102,89 @@ module cutoutFront()
 
 }
 
-module cutoutLid()
+/* ***** module for cutting out the window from the lid *****
+   this function is optional and only defines the cutout for the lid.
+   if this is not needed, this function can be removed and the call
+   should be also removed from 'cutoutLid()' hook */
+module cutOutLidWindow()
 {
   windowX = 50;
-  windowY = 110;
+  windowY = 100;
   windowPosX = 0;
-  windowPosY = -40;
+  windowPosY = 10;
+  rad = 1;
 
-  translate([windowPosX,windowPosY,0])
-  #translate([caseX/2+wallThickness-(50+1)/2,caseY/2+wallThickness-windowY/2,0])
-  translate([1,1,snapInBlockZ*2])
+  /* position cutout */
+  translate([windowPosX,windowPosY,-extra])
+  /* move cutout into the middle */
+  translate([caseX/2+wallThickness-(windowX)/2,0,0])
+  /* compensate minkowski() */
+  translate([rad,rad,0])
   minkowski() {
-    cube([windowX,windowY,lidThickness]);
-    cylinder(r=1,h=0.0000001);
+    cube([windowX-rad*2,windowY-rad*2,lidThickness+extra*2]);
+    cylinder(r=rad,h=0.0000001);
   }
+
+
+  /* cutout some screws */
+  screwR = 3.2/2; // using 3mm screw
+  screwHoleArray = [
+    /* upper and lower screws */
+    [-windowX/2+5,windowPosY-5],
+    [-windowX/2+5,windowY+windowPosY+5],
+    [windowX/2-5,windowPosY-5],
+    [windowX/2-5,windowY+windowPosY+5],
+    /* screws on left and right */
+    [-windowX/2-5,windowPosY+5],
+    [-windowX/2-5,windowY+windowPosY-5],
+    [windowX/2+5,windowPosY+5],
+    [windowX/2+5,windowY+windowPosY-5]
+  ];
+
+  for(hole = screwHoleArray)
+	{
+		translate([hole[0],hole[1],0])
+    translate([wallThickness+caseX/2,0,-snapInBlockZ*2])
+    cylinder(r=3.2/2,h=lidThickness+snapInBlockZ*2);
+	}
+
+}
+
+module cutoutPSCableHole()
+{
+  cableHolePosY = 175;
+  cableHolePosX = 20;
+  cableR = 5;
+
+  translate([caseX+wallThickness+2-cableHolePosX,cableHolePosY+wallThickness-cableR,0])
+  cube([cableHolePosX,cableR*2, lidThickness]);
+  translate([caseX+wallThickness+2-cableHolePosX,cableHolePosY+wallThickness,0])
+  cylinder(r=cableR,h=lidThickness);
+}
+
+module cutoutUSBCableHole()
+{
+  cableHolePosY = 140;
+  cableHolePosX = 15;
+  cableR = 10;
+
+  translate([caseX+wallThickness+2-cableHolePosX,cableHolePosY+wallThickness-cableR,0])
+  cube([cableHolePosX,cableR*2, lidThickness]);
+  translate([caseX+wallThickness+2-cableHolePosX,cableHolePosY+wallThickness,0])
+  cylinder(r=cableR,h=lidThickness);
+}
+
+module cutoutLid()
+{
+  translate([0,0,snapInBlockZ*2])
+  cutOutLidWindow();
+
+
+  translate([0,0,snapInBlockZ*2])
+  cutoutPSCableHole();
+
+  translate([0,0,snapInBlockZ*2])
+  cutoutUSBCableHole();
 }
 
 /* cutoutLid(); */
@@ -161,6 +230,24 @@ module paramCaseLid(cutoutLidEnable = false)
   }
 }
 
+
+module windowFrame()
+{
+  rad=3;
+  difference() {
+    translate([rad+wallThickness+caseX/2-(caseX-wallThickness)/2,rad,0])
+    minkowski()
+    {
+      cube([caseX-wallThickness-rad*2,120-rad*2,lidThickness]);
+      cylinder(r=rad, h=0.0000001);
+    }
+
+    cutOutLidWindow();
+
+  }
+}
+/* translate([0,0,lidThickness+snapInBlockZ*2+2]) */
+#windowFrame();
 /* paramCase(); */
 
 /* translate([-10,0,lidThickness+snapInBlockZ*2])
@@ -168,4 +255,4 @@ rotate([0,180,0]) */
 /* translate([0,0,22]) */
 /* paramCaseLid(); */
 
-paramCaseLid(true);
+/* paramCaseLid(true); */
