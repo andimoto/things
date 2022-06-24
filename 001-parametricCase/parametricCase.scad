@@ -22,12 +22,12 @@ lidThickness=2;
 lidFixRad=1;
 lidFixXMov=0.5;
 
-lidClearance = 0.2;
+lidClearance = 0.15;
 
 screwPlateY=10;
 screwPlateZ=4;
 
-screwR=3.2/2;
+screwR=3/2;
 screwHeadR=5/2;
 
 pocketX = 20;
@@ -247,7 +247,7 @@ module windowFrame()
   }
 }
 /* translate([0,0,lidThickness+snapInBlockZ*2+2]) */
-#windowFrame();
+/* windowFrame(); */
 /* paramCase(); */
 
 /* translate([-10,0,lidThickness+snapInBlockZ*2])
@@ -255,4 +255,4 @@ rotate([0,180,0]) */
 /* translate([0,0,22]) */
 /* paramCaseLid(); */
 
-/* paramCaseLid(true); */
+paramCaseLid(true);
