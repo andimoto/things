@@ -152,26 +152,26 @@ module cutOutLidWindow()
 
 module cutoutPSCableHole()
 {
-  cableHolePosY = 175;
-  cableHolePosX = 20;
-  cableR = 5;
+  psCableHolePosY = 140;
+  psCableHolePosX = 15;
+  psCableR = 15;
 
-  translate([caseX+wallThickness+2-cableHolePosX,cableHolePosY+wallThickness-cableR,0])
-  cube([cableHolePosX,cableR*2, lidThickness]);
-  translate([caseX+wallThickness+2-cableHolePosX,cableHolePosY+wallThickness,0])
-  cylinder(r=cableR,h=lidThickness);
+  translate([caseX+wallThickness+2-psCableHolePosX,psCableHolePosY+wallThickness-psCableR,-snapInBlockZ*2])
+  cube([psCableHolePosX,psCableR*2, lidThickness+snapInBlockZ*2]);
+  translate([caseX+wallThickness+2-psCableHolePosX,psCableHolePosY+wallThickness,-snapInBlockZ*2])
+  cylinder(r=psCableR,h=lidThickness+snapInBlockZ*2);
 }
 
 module cutoutUSBCableHole()
 {
-  cableHolePosY = 140;
-  cableHolePosX = 15;
-  cableR = 10;
+  usbCableHolePosY = 190;
+  usbCableHolePosX = 20;
+  usbCableR = 10;
 
-  translate([caseX+wallThickness+2-cableHolePosX,cableHolePosY+wallThickness-cableR,0])
-  cube([cableHolePosX,cableR*2, lidThickness]);
-  translate([caseX+wallThickness+2-cableHolePosX,cableHolePosY+wallThickness,0])
-  cylinder(r=cableR,h=lidThickness);
+  translate([caseX+wallThickness+2-usbCableHolePosX,usbCableHolePosY+wallThickness-usbCableR,-snapInBlockZ*2])
+  cube([usbCableHolePosX,usbCableR*2, lidThickness+snapInBlockZ*2]);
+  translate([caseX+wallThickness+2-usbCableHolePosX,usbCableHolePosY+wallThickness,-snapInBlockZ*2])
+  cylinder(r=usbCableR,h=lidThickness+snapInBlockZ*2);
 }
 
 module cutoutLid()
