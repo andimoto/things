@@ -23,7 +23,7 @@ hingeExtraMove = 0;
 
 hingeTubeDia = 3.5;
 
-module cap()
+module cap(hinge = false, fingerCone = false)
 {
   difference()
   {
@@ -34,33 +34,41 @@ module cap()
         translate([0,0,0]) cylinder(r=-champferDiff+wallThickness+diaInner/2,h=flatness);
         translate([0,0,champferDiff]) cylinder(r=wallThickness+diaInner/2,h=hInner+wallThickness);
       }
-      translate([(diaInner/2)+fingerConeXMove,0,0]) fingerGrip();
+      if(fingerCone == true)
+      {
+        translate([(diaInner/2)+fingerConeXMove,0,0]) fingerGrip();
+      }
     }
     translate([0,0,wallThickness+champferDiff]) cylinder(r=diaInner/2,h=hInner);
 
-    difference()
+    if(hinge == true)
     {
-      /* hinge cutout from wall */
-      cylinder(r=wallThickness+diaInner/2,h=hInner+wallThickness+champferDiff);
-      cylinder(r=diaInner/2,h=hInner+wallThickness+champferDiff);
-      translate([-(diaInner+wallThickness*2)/2,innerHingeSpace/2,0])
-        cube([diaInner+wallThickness*2,(diaInner+wallThickness)/2,hInner+wallThickness+champferDiff]);
-      translate([-(diaInner+wallThickness*2)/2,-(innerHingeSpace/2+(diaInner+wallThickness)/2),0])
-        cube([diaInner+wallThickness*2,(diaInner+wallThickness)/2,hInner+wallThickness+champferDiff]);
-      translate([(diaInner/2+wallThickness*2)/2,-(diaInner/2+wallThickness)/2,0])
-        cube([diaInner/2+wallThickness*2,(diaInner+wallThickness)/2,hInner+wallThickness+champferDiff]);
-    }
+      difference()
+      {
+        /* hinge cutout from wall */
+        cylinder(r=wallThickness+diaInner/2,h=hInner+wallThickness+champferDiff);
+        cylinder(r=diaInner/2,h=hInner+wallThickness+champferDiff);
+        translate([-(diaInner+wallThickness*2)/2,innerHingeSpace/2,0])
+          cube([diaInner+wallThickness*2,(diaInner+wallThickness)/2,hInner+wallThickness+champferDiff]);
+        translate([-(diaInner+wallThickness*2)/2,-(innerHingeSpace/2+(diaInner+wallThickness)/2),0])
+          cube([diaInner+wallThickness*2,(diaInner+wallThickness)/2,hInner+wallThickness+champferDiff]);
+        translate([(diaInner/2+wallThickness*2)/2,-(diaInner/2+wallThickness)/2,0])
+          cube([diaInner/2+wallThickness*2,(diaInner+wallThickness)/2,hInner+wallThickness+champferDiff]);
+      } // difference of hinge end
+    } // if close
+  } // difference of cap end
+
+  if(hinge == true)
+  {
+    translate([-(diaInner/2+hingePlateWidth+hingeExtraMove),innerHingeSpace/2,0])
+      hingePlate(true);
+    translate([-(diaInner/2+hingePlateWidth+hingeExtraMove),-(hingePlateThickness+innerHingeSpace/2),0])
+      hingePlate();
   }
-
-  translate([-(diaInner/2+hingePlateWidth+hingeExtraMove),innerHingeSpace/2,0])
-    hingePlate(true);
-  translate([-(diaInner/2+hingePlateWidth+hingeExtraMove),-(hingePlateThickness+innerHingeSpace/2),0])
-    hingePlate();
-
 
 }
 
-cap();
+cap(true, true);
 
 module hingePlate(hingeTube = false)
 {
