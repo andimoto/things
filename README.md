@@ -6,8 +6,8 @@
 
 |No. | Thing             |  Image |
 |:--:|:---------------:|:------:|
-|001| Parametric Case or Box with snapable Lid|![](parametricCase/parametricCase.png)|
-|002| Parametric Round Lid |![](parametricLid/parametricLid.png)|
+|001| Parametric Case or Box with snapable Lid|![](001-parametricCase/parametricCase.png)|
+|002| Parametric Round Cap |![](002-cap/parametricCap.png)|
 |00x| next thing is WIP! | |
 
 <br>
