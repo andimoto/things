@@ -1,3 +1,7 @@
+/* parametricCase.scad
+Author: andimoto@posteo.de
+----------------------------
+*/
 $fn=75;
 extra=0.1; //debug parameter
 
