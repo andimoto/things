@@ -3,35 +3,51 @@ Author: andimoto@posteo.de
 ----------------------------
 */
 $fn=75;
-extra=0.1; //debug parameter
+//debug parameter
+extra=0.1;
 
-/* inner case parameters */
+// inner case parameter x
 caseX=70;
+// inner case parameter y
 caseY=210;
+// inner case parameter z
 caseZ=80;
 
-/* wall thickness will be added to each side */
+// wall thickness will be added to each side
 wallThickness=2;
 
+/* Param snapInBlockY sets the amount of snap-in lines on the lid
+   and the case (snap-in lines don't go through the complete case/lid)
+*/
+// length of snap-in line (lid & case)
 snapInBlockY=30;
+// thicknes of the snap-in part (lid/case)
 snapInBlockZ=1.5;
 
-/* this gives a clearance for the snapInBlocks to be cutout.
+/* this gives a clearance for the snapInBlocks to be cut away
    only for lid part. it cuts out some material from the snapInBlocks
-   to save some filament. */
+   (better said: from the inner middle) to save some filament. */
+// clearance between lid cutout and snap-in side of the lid
 snapInBlockClearance=8;
 
+// lid thickness (just top part; not inner)
 lidThickness=2;
-/* snapIn bulge radius */
+// snapIn bulge radius
 lidFixRad=1;
+// fine tuning of the bulge line
 lidFixXMov=0.5;
 
+// clearance of the inner lid part to the case
 lidClearance = 0.15;
 
+// screw plate Y thickness
 screwPlateY=10;
+// screw plate height
 screwPlateZ=4;
 
+// screw radius of the screw plate
 screwR=3/2;
+// radius of screw head
 screwHeadR=5/2;
 
 pocketX = 20;
@@ -191,7 +207,7 @@ module cutoutLid()
   cutoutUSBCableHole();
 }
 
-/* cutoutLid(); */
+/* ##########################end of custom lid cutout structure ######################### */
 
 module screwPlate()
 {
@@ -201,7 +217,7 @@ module screwPlate()
     translate([(caseX+wallThickness*2)/2,screwPlateY/2,0]) cylinder(r=screwR,h=wallThickness/2);
   }
 }
-/* translate([0,-screwPlateY,0]) screwPlate(); */
+
 
 module paramCaseLid(cutoutLidEnable = false)
 {
@@ -252,11 +268,11 @@ module windowFrame()
 }
 /* translate([0,0,lidThickness+snapInBlockZ*2+2]) */
 /* windowFrame(); */
-/* paramCase(); */
+/* paramCase(true); */
 
 /* translate([-10,0,lidThickness+snapInBlockZ*2])
 rotate([0,180,0]) */
 /* translate([0,0,22]) */
-/* paramCaseLid(); */
+paramCaseLid();
 
-paramCaseLid(true);
+/* paramCaseLid(true); */
