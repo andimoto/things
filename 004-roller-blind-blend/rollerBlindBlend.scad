@@ -6,11 +6,11 @@ Author: andimoto@posteo.de
 $fn=80;
 extra = 0.1;
 
-vWidthFront=50;
-vHeightFront=194;
+vWidthFront=51;
+vHeightFront=195;
 
-vWidthBack=56.5;
-vHeightBack=201;
+vWidthBack=57.5;
+vHeightBack=202;
 
 
 
@@ -45,8 +45,8 @@ module bar(widthFront=50,heightFront=200,widthBack=55,heightBack=210,thickness=5
 
 }
 
-cutoutX=38;
-cutoutY=18;
+cutoutX=31;
+cutoutY=17;
 
 cutoutMoveY=32;
 
