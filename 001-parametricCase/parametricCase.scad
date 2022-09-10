@@ -266,12 +266,12 @@ module windowFrame()
 
   }
 }
-/* translate([0,0,lidThickness+snapInBlockZ*2+2]) */
+translate([0,0,lidThickness+snapInBlockZ*2+2])
 /* windowFrame(); */
-/* paramCase(true); */
+paramCase(true);
 
-/* translate([-10,0,lidThickness+snapInBlockZ*2])
-rotate([0,180,0]) */
+translate([-10,0,lidThickness+snapInBlockZ*2])
+rotate([0,180,0])
 /* translate([0,0,22]) */
 paramCaseLid();
 
