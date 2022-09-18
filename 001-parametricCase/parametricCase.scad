@@ -7,11 +7,11 @@ $fn=75;
 extra=0.1;
 
 // inner case parameter x
-caseX=70;
+caseX=31;
 // inner case parameter y
-caseY=210;
+caseY=70;
 // inner case parameter z
-caseZ=80;
+caseZ=35;
 
 // wall thickness will be added to each side
 wallThickness=2;
@@ -62,6 +62,8 @@ module paramCase(screwPlateUpDown = false)
     cutoutLeft();
 
     /* place cutout for right side into this module */
+    translate([caseX+wallThickness,wallThickness,0])
+    rotate([90,0,90])
     cutoutRight();
 
     /* place cutout for head side into this module */
@@ -69,6 +71,8 @@ module paramCase(screwPlateUpDown = false)
 
     /* place cutout for bottom side into this module */
     cutoutFront();
+
+    cutoutBottom();
 
     /* fixBlock */
     translate([wallThickness,0,caseZ+wallThickness])
@@ -108,7 +112,15 @@ module cutoutLeft()
 
 module cutoutRight()
 {
+  translate([2,6,0])
+  union()
+  {
+    translate([12.4-6,0,0]) cube([12,5,wallThickness*2]);
+    translate([41.4-4,0,0]) cube([8,5,wallThickness*2]);
+    translate([54-4,0,0]) cube([8,5,wallThickness*2]);
+  }
 
+  translate([25,19,0]) cube([20,10,wallThickness*2]);
 }
 
 module cutoutBack()
@@ -120,6 +132,20 @@ module cutoutBack()
 module cutoutFront()
 {
 
+}
+
+module cutoutBottom()
+{
+  holeArray = [[0,0],[23,0],[23,58],[0,58]];
+  bottomScrewR = 2.8/2;
+  /* i=0; */
+
+  translate([wallThickness+1+3.5,wallThickness+2+3.5,0])
+  for(hole = holeArray)
+  {
+
+    translate([ hole[0], hole[1], 0]) cylinder(r=bottomScrewR, h=wallThickness*3+extra);
+  }
 }
 
 /* ***** module for cutting out the window from the lid *****
@@ -196,15 +222,7 @@ module cutoutUSBCableHole()
 
 module cutoutLid()
 {
-  translate([0,0,snapInBlockZ*2])
-  cutOutLidWindow();
-
-
-  translate([0,0,snapInBlockZ*2])
-  cutoutPSCableHole();
-
-  translate([0,0,snapInBlockZ*2])
-  cutoutUSBCableHole();
+  cutoutBottom();
 }
 
 /* ##########################end of custom lid cutout structure ######################### */
@@ -266,13 +284,17 @@ module windowFrame()
 
   }
 }
-translate([0,0,lidThickness+snapInBlockZ*2+2])
+/* translate([0,0,lidThickness+snapInBlockZ*2+2]) */
 /* windowFrame(); */
-paramCase(true);
+/* paramCase(true); */
+
+/* cutoutBottom(); */
+/* cutoutRight(); */
+
 
 translate([-10,0,lidThickness+snapInBlockZ*2])
 rotate([0,180,0])
 /* translate([0,0,22]) */
-paramCaseLid();
+/* paramCaseLid(cutoutLidEnable=true); */
 
-/* paramCaseLid(true); */
+paramCaseLid(true);
