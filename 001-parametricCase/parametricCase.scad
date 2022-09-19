@@ -7,7 +7,7 @@ $fn=75;
 extra=0.1;
 
 // inner case parameter x
-caseX=31;
+caseX=31.5;
 // inner case parameter y
 caseY=70;
 // inner case parameter z
@@ -292,8 +292,8 @@ module windowFrame()
 /* cutoutRight(); */
 
 
-translate([-10,0,lidThickness+snapInBlockZ*2])
-rotate([0,180,0])
+/* translate([-10,0,lidThickness+snapInBlockZ*2])
+rotate([0,180,0]) */
 /* translate([0,0,22]) */
 /* paramCaseLid(cutoutLidEnable=true); */
 
