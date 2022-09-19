@@ -112,15 +112,15 @@ module cutoutLeft()
 
 module cutoutRight()
 {
-  translate([2,6,0])
+  translate([2,0,0])
   union()
   {
-    translate([12.4-6,0,0]) cube([12,5,wallThickness*2]);
-    translate([41.4-4,0,0]) cube([8,5,wallThickness*2]);
-    translate([54-4,0,0]) cube([8,5,wallThickness*2]);
+    translate([12.4-6,8,0]) cube([13,5,wallThickness*2]);
+    translate([41.4-4,6,0]) cube([10,8,wallThickness*2]);
+    translate([54-4,6,0]) cube([10,8,wallThickness*2]);
   }
 
-  translate([25,19,0]) cube([20,10,wallThickness*2]);
+  translate([27,22,0]) cube([20,10,wallThickness*2]);
 }
 
 module cutoutBack()
@@ -220,9 +220,25 @@ module cutoutUSBCableHole()
   cylinder(r=usbCableR,h=lidThickness+snapInBlockZ*2);
 }
 
+
+module airVent()
+{
+  hull()
+  {
+    translate([wallThickness+caseX/2-caseX/6,0,0]) cylinder(r=2,h=wallThickness*3);
+    translate([wallThickness+caseX/2+caseX/6,0,0]) cylinder(r=2,h=wallThickness*3);
+  }
+}
+
 module cutoutLid()
 {
   cutoutBottom();
+
+  translate([0,wallThickness+caseY/2-caseY/4,0]) airVent();
+  translate([0,wallThickness+caseY/2-caseY/8,0]) airVent();
+  translate([0,wallThickness+caseY/2,0]) airVent();
+  translate([0,wallThickness+caseY/2+caseY/8,0]) airVent();
+  translate([0,wallThickness+caseY/2+caseY/4,0]) airVent();
 }
 
 /* ##########################end of custom lid cutout structure ######################### */
@@ -292,9 +308,6 @@ module windowFrame()
 /* cutoutRight(); */
 
 
-/* translate([-10,0,lidThickness+snapInBlockZ*2])
-rotate([0,180,0]) */
-/* translate([0,0,22]) */
-/* paramCaseLid(cutoutLidEnable=true); */
-
+translate([-10,0,lidThickness+snapInBlockZ*2])
+rotate([0,180,0])
 paramCaseLid(true);
