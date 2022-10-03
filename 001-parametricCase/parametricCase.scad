@@ -302,12 +302,12 @@ module windowFrame()
 }
 /* translate([0,0,lidThickness+snapInBlockZ*2+2]) */
 /* windowFrame(); */
-/* paramCase(true); */
+paramCase(true);
 
 /* cutoutBottom(); */
 /* cutoutRight(); */
 
 
-translate([-10,0,lidThickness+snapInBlockZ*2])
+translate([80,0,lidThickness+snapInBlockZ*2])
 rotate([0,180,0])
 paramCaseLid(true);
