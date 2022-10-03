@@ -11,6 +11,8 @@
 |003| Panel Wall Holder System !!!WIP!! ||
 |004| Parametric Roller Blind Blend |![](004-roller-blind-blend/004-1.png)|
 |005| Brandson Vertical Blower Cable Holder |![](005-brandson-vertical-blower-cable-holder/holderRing001.png)|
+|006| Fan-Funnel |![](006-fan-funnel/006-fan-funnel.png)|
+|007| LED Holder for Fan-Funnel |![](007-fan-funnel-upgrade/007-fan-funnel-upgrade.png)|
 |00x| next thing is WIP! | |
 
 <br>

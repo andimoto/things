@@ -7,11 +7,11 @@ $fn=75;
 extra=0.1;
 
 // inner case parameter x
-caseX=70;
+caseX=31.5;
 // inner case parameter y
-caseY=210;
+caseY=70;
 // inner case parameter z
-caseZ=80;
+caseZ=35;
 
 // wall thickness will be added to each side
 wallThickness=2;
@@ -62,6 +62,8 @@ module paramCase(screwPlateUpDown = false)
     cutoutLeft();
 
     /* place cutout for right side into this module */
+    translate([caseX+wallThickness,wallThickness,0])
+    rotate([90,0,90])
     cutoutRight();
 
     /* place cutout for head side into this module */
@@ -69,6 +71,8 @@ module paramCase(screwPlateUpDown = false)
 
     /* place cutout for bottom side into this module */
     cutoutFront();
+
+    cutoutBottom();
 
     /* fixBlock */
     translate([wallThickness,0,caseZ+wallThickness])
@@ -108,7 +112,15 @@ module cutoutLeft()
 
 module cutoutRight()
 {
+  translate([2,0,0])
+  union()
+  {
+    translate([12.4-6,8,0]) cube([13,5,wallThickness*2]);
+    translate([41.4-4,6,0]) cube([10,8,wallThickness*2]);
+    translate([54-4,6,0]) cube([10,8,wallThickness*2]);
+  }
 
+  translate([27,22,0]) cube([20,10,wallThickness*2]);
 }
 
 module cutoutBack()
@@ -120,6 +132,20 @@ module cutoutBack()
 module cutoutFront()
 {
 
+}
+
+module cutoutBottom()
+{
+  holeArray = [[0,0],[23,0],[23,58],[0,58]];
+  bottomScrewR = 2.8/2;
+  /* i=0; */
+
+  translate([wallThickness+1+3.5,wallThickness+2+3.5,0])
+  for(hole = holeArray)
+  {
+
+    translate([ hole[0], hole[1], 0]) cylinder(r=bottomScrewR, h=wallThickness*3+extra);
+  }
 }
 
 /* ***** module for cutting out the window from the lid *****
@@ -194,17 +220,25 @@ module cutoutUSBCableHole()
   cylinder(r=usbCableR,h=lidThickness+snapInBlockZ*2);
 }
 
+
+module airVent()
+{
+  hull()
+  {
+    translate([wallThickness+caseX/2-caseX/6,0,0]) cylinder(r=2,h=wallThickness*3);
+    translate([wallThickness+caseX/2+caseX/6,0,0]) cylinder(r=2,h=wallThickness*3);
+  }
+}
+
 module cutoutLid()
 {
-  translate([0,0,snapInBlockZ*2])
-  cutOutLidWindow();
+  cutoutBottom();
 
-
-  translate([0,0,snapInBlockZ*2])
-  cutoutPSCableHole();
-
-  translate([0,0,snapInBlockZ*2])
-  cutoutUSBCableHole();
+  translate([0,wallThickness+caseY/2-caseY/4,0]) airVent();
+  translate([0,wallThickness+caseY/2-caseY/8,0]) airVent();
+  translate([0,wallThickness+caseY/2,0]) airVent();
+  translate([0,wallThickness+caseY/2+caseY/8,0]) airVent();
+  translate([0,wallThickness+caseY/2+caseY/4,0]) airVent();
 }
 
 /* ##########################end of custom lid cutout structure ######################### */
@@ -266,13 +300,14 @@ module windowFrame()
 
   }
 }
-translate([0,0,lidThickness+snapInBlockZ*2+2])
+/* translate([0,0,lidThickness+snapInBlockZ*2+2]) */
 /* windowFrame(); */
 paramCase(true);
 
-translate([-10,0,lidThickness+snapInBlockZ*2])
-rotate([0,180,0])
-/* translate([0,0,22]) */
-paramCaseLid();
+/* cutoutBottom(); */
+/* cutoutRight(); */
 
-/* paramCaseLid(true); */
+
+translate([80,0,lidThickness+snapInBlockZ*2])
+rotate([0,180,0])
+paramCaseLid(true);
