@@ -7,22 +7,24 @@ tubeDia = 37; //mm
 wallThickness = 2; //mm
 
 lampInnerDia = 47.7; //mm
-lampOuterDia = 89.4; //mm
-lampHeight = 7; //mm
+lampOuterDia = 90; //mm
+lampHeight = 11; //mm
 
-cableR = 5; //mm
+cableR = 8; //mm
 screwDia = 3.2; //mm
 
+tube001_height = 40; //mm
+tube002_height = 50; //mm
 
 module tube()
 {
   difference()
   {
-    cylinder(r=tubeDia/2+wallThickness, h=30);
-    cylinder(r=tubeDia/2, h=30);
+    cylinder(r=tubeDia/2+wallThickness, h=tube001_height);
+    cylinder(r=tubeDia/2, h=tube001_height);
   }
 
-  translate([0,0,30])
+  translate([0,0,tube001_height])
   difference()
   {
 
@@ -42,11 +44,11 @@ module tube()
     }
 
   }
-  translate([-2.7,0,40.2]) rotate([0,-30,0])
+  translate([-2.7,0,tube001_height+10.2]) rotate([0,-30,0])
   difference()
   {
-    cylinder(r=tubeDia/2+wallThickness, h=50);
-    cylinder(r=tubeDia/2, h=50);
+    cylinder(r=tubeDia/2+wallThickness, h=tube002_height);
+    cylinder(r=tubeDia/2, h=tube002_height);
   }
 }
 /* tube(); */
