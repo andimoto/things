@@ -25,38 +25,53 @@ module frame(holderScrew = true)
     hull()
     {
       cube([innerW+clearance+2*frameWallThickness,
-            innerW+clearance+2*frameWallThickness,
+            innerH+clearance+2*frameWallThickness,
             frameD-champferDist]);
       translate([champferDist,champferDist,frameD-champferDist])
       cube([innerW+clearance+2*frameWallThickness-champferDist*2,
-            innerW+clearance+2*frameWallThickness-champferDist*2,
+            innerH+clearance+2*frameWallThickness-champferDist*2,
             champferDist]);
     }
     translate([frameWallThickness,frameWallThickness,-extra/2])
     cube([innerW+clearance,
-          innerW+clearance,
+          innerH+clearance,
           frameD+extra]);
     /* ----- frame end ----- */
 
+    if(holderScrew == true)
+    {
+      /* screw holes */
+      translate([0,frameWallThickness+innerH/4,frameD/2])
+      rotate([0,90,0])
+      cylinder(r=screwDia/2, h=frameWallThickness+clearance/2+extra);
 
-    /* screw holes */
-    translate([0,frameWallThickness+innerH/4,frameD/2])
-    rotate([0,90,0])
-    cylinder(r=screwDia/2, h=frameWallThickness+clearance/2+extra);
+      translate([0,frameWallThickness+innerH-innerH/4,frameD/2])
+      rotate([0,90,0])
+      cylinder(r=screwDia/2, h=frameWallThickness+clearance/2+extra);
 
-    translate([0,frameWallThickness+innerH-innerH/4,frameD/2])
-    rotate([0,90,0])
-    cylinder(r=screwDia/2, h=frameWallThickness+clearance/2+extra);
+      translate([frameWallThickness+clearance+innerW,frameWallThickness+innerH/4,frameD/2])
+      rotate([0,90,0])
+      cylinder(r=screwDia/2, h=frameWallThickness+extra);
 
-    translate([frameWallThickness+clearance+innerH,frameWallThickness+innerH/4,frameD/2])
-    rotate([0,90,0])
-    cylinder(r=screwDia/2, h=frameWallThickness+extra);
+      translate([frameWallThickness+clearance+innerW,frameWallThickness+innerH-innerH/4,frameD/2])
+      rotate([0,90,0])
+      cylinder(r=screwDia/2, h=frameWallThickness+extra);
+      /* screw holes */
+    }
 
-    translate([frameWallThickness+clearance+innerH,frameWallThickness+innerH-innerH/4,frameD/2])
-    rotate([0,90,0])
-    cylinder(r=screwDia/2, h=frameWallThickness+extra);
-    /* screw holes */
+
+    extraMountingScrew();
   }
+}
+
+module extraMountingScrew()
+{
+  #translate([frameWallThickness+clearance+innerW-10,frameWallThickness+innerH+clearance,frameD/2])
+  rotate([-90,0,0])
+  cylinder(r=screwDia/2, h=frameWallThickness+extra);
+  #translate([frameWallThickness+clearance+innerW-40,frameWallThickness+innerH+clearance,frameD/2])
+  rotate([-90,0,0])
+  cylinder(r=screwDia/2, h=frameWallThickness+extra);
 }
 
 
