@@ -206,7 +206,7 @@ module antennaMount(grubScrew = true)
 /* ######################Model######################################### */
 /* #################################################################### */
 
-if(1)
+if(0)
 {
   frame();
   translate([innerW-frameWallThickness*2+clearance-20,innerH+clearance+frameWallThickness*2,champferDist])
@@ -218,5 +218,6 @@ if(1)
   }
 }
 
-
+frame();
+/* extensionMount(); */
 /* antennaMount(true); */
