@@ -16,7 +16,7 @@ frameWallThickness = 10; //mm frame thickness
 frameThickness = 18; //mm - frame thickness ( z value )
 
 screwDia = 3.2; //mm
-insertDia = 4.1; //mm
+insertDia = 4.2; //mm
 
 grubScrewDia = 3.2; //mm
 
@@ -80,7 +80,7 @@ module frame(holderScrew = true, useInserts = true)
     }
 
 
-    extraMountingScrew();
+    extraMountingScrew(useInserts);
   }
 }
 
@@ -168,11 +168,11 @@ module antennaMount(grubScrew = true)
     /* screw holes for mounting antenna mount extension to other extension; holes are 1mm wider */
     translate([antennaExtensionMountW-antennaExtensionMountW/4,-extra/2,(frameThickness-champferDist*2)/2])
     rotate([-90,0,0])
-      cylinder(r=(screwDia+1)/2, h=frameWallThickness+champferDist+extra );
+      cylinder(r=(screwDia+0.6)/2, h=frameWallThickness+champferDist+extra );
 
     translate([antennaExtensionMountW-3*antennaExtensionMountW/4,-extra/2,(frameThickness-champferDist*2)/2])
     rotate([-90,0,0])
-      cylinder(r=(screwDia+1)/2, h=frameWallThickness+champferDist+extra );
+      cylinder(r=(screwDia+0.6)/2, h=frameWallThickness+champferDist+extra );
 
     /* rail hole */
     hull()
@@ -207,8 +207,8 @@ module antennaMount(grubScrew = true)
 /* #################################################################### */
 /* ######################Model######################################### */
 /* #################################################################### */
-
-if(0)
+all = 0;
+if(all)
 {
   frame();
   translate([innerW-frameWallThickness*2+clearance-20,innerH+clearance+frameWallThickness*2,champferDist])
@@ -221,8 +221,8 @@ if(0)
 }
 
 
-frame();
+frame(useInserts = false);
 
-/* rotate([90,0,0]) */
-/* extension(); */
-/* antennaMount(grubScrew = true); */
+/* rotate([90,0,0])
+extension(useInserts = false); */
+/* antennaMount(grubScrew = false); */
