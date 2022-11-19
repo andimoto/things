@@ -207,7 +207,7 @@ module antennaMount(grubScrew = true)
 /* #################################################################### */
 /* ######################Model######################################### */
 /* #################################################################### */
-all = 0;
+all = 1;
 if(all)
 {
   frame();
@@ -221,7 +221,7 @@ if(all)
 }
 
 
-frame(useInserts = false);
+/* frame(useInserts = false); */
 
 /* rotate([90,0,0])
 extension(useInserts = false); */
