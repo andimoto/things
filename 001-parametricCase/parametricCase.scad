@@ -325,15 +325,15 @@ module otherCutouts()
 }
 
 
-module completeModel()
+module completeModel(caseMounting = true, lidCutout = true)
 {
   /* place case */
-  paramCase( caseMountingEnable = true );
+  paramCase( caseMountingEnable = caseMounting );
 
   /* place lid */
   translate([-20,0,lidThickness+snapInBlockZ*2])
   rotate([0,180,0])
-  paramCaseLid( cutoutLidEnable = true );
+  paramCaseLid( cutoutLidEnable = lidCutout );
 }
 
 /*
@@ -344,7 +344,7 @@ module completeModel()
 //   uncomment model functions
 //   remove '/* .. */' or '//' from functions to enable them
 
-completeModel();
+completeModel(caseMounting = true, lidCutout = true);
 
 /* paramCase( caseMountingEnable = true ); */
 /* paramCaseLid( cutoutLidEnable = true ); */
