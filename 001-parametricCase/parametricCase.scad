@@ -52,7 +52,13 @@ screwHeadR=5/2;
 
 pocketX = 20;
 
-module paramCase(screwPlateUpDown = false)
+
+/*
+'paramCase' : creates a case with given parameters
+parameter: 'caseMountingEnable' creates some 'wings'
+at side of the case to enable mounting case with screws
+*/
+module paramCase(caseMountingEnable = false)
 {
   difference() {
     cube([caseX+wallThickness*2,caseY+wallThickness*2,caseZ+snapInBlockZ*2+wallThickness]);
@@ -66,12 +72,13 @@ module paramCase(screwPlateUpDown = false)
     rotate([90,0,90])
     cutoutRight();
 
-    /* place cutout for head side into this module */
-    cutoutBack();
+    /* place cutout for y=caseY side into this module */
+    cutoutUpper();
+
+    /* place cutout for front side into this module */
+    cutoutLower();
 
     /* place cutout for bottom side into this module */
-    cutoutFront();
-
     cutoutBottom();
 
     /* fixBlock */
@@ -81,7 +88,8 @@ module paramCase(screwPlateUpDown = false)
       lidFixBlock(lidPart = false);
   }
 
-  if(screwPlateUpDown == true)
+
+  if(caseMountingEnable == true)
   {
     translate([0,-screwPlateY,0]) screwPlate();
     translate([0,caseY+wallThickness*2,0]) screwPlate();
@@ -105,13 +113,31 @@ module lidFixBlock(lidPart = true)
 }
 /* lidFixBlock(); */
 
+
+
+
+/* ###################################################################################### */
+/* ###################################################################################### */
+/* ###################################################################################### */
+/* Everything from here are extra modules which can be 'filled' */
+/* or created to generate specific cutouts or other modules */
+
+/* place your cutout design for the left here
+   left means x = 0
+*/
 module cutoutLeft()
 {
-
+  /* example */
+  /* translate([0,caseY/2,caseZ/2])
+  cube([wallThickness, 10,10]); */
 }
 
+/* place your cutout design for the lid here
+   right means x = caseX+wall
+*/
 module cutoutRight()
 {
+  /* example */
   translate([2,0,0])
   union()
   {
@@ -123,19 +149,27 @@ module cutoutRight()
   translate([27,22,0]) cube([20,10,wallThickness*2]);
 }
 
-module cutoutBack()
+/* place your cutout design for the lid here
+   right means x = caseX+wall
+*/
+module cutoutUpper()
 {
-  /* translate([wallThickness,caseY+wallThickness,wallThickness+pcbZ-pcbThickness])
-    cube([caseX,wallThickness,potiZ+pcbThickness]); */
+  /* example */
+  /* translate([caseX/2,caseY+wallThickness,caseZ/2])
+  cube([10,wallThickness,10]); */
 }
 
-module cutoutFront()
+module cutoutLower()
 {
-
+  /* example */
+  /* translate([caseX/2,0,caseZ/2])
+  cube([10,wallThickness,10]); */
 }
 
+/* place your cutout design for the bottom here */
 module cutoutBottom()
 {
+  /* example */
   holeArray = [[0,0],[23,0],[23,58],[0,58]];
   bottomScrewR = 2.8/2;
   /* i=0; */
@@ -285,29 +319,43 @@ module paramCaseLid(cutoutLidEnable = false)
 }
 
 
-module windowFrame()
+module otherCutouts()
 {
-  rad=3;
-  difference() {
-    translate([rad+wallThickness+caseX/2-(caseX-wallThickness)/2,rad,0])
-    minkowski()
-    {
-      cube([caseX-wallThickness-rad*2,120-rad*2,lidThickness]);
-      cylinder(r=rad, h=0.0000001);
-    }
-
-    cutOutLidWindow();
-
-  }
+  /* place other cutous here and place "otherCutouts()" in modules where you need it */
 }
-/* translate([0,0,lidThickness+snapInBlockZ*2+2]) */
-/* windowFrame(); */
-paramCase(true);
+
+
+module completeModel()
+{
+  /* place case */
+  paramCase( caseMountingEnable = true );
+
+  /* place lid */
+  translate([-20,0,lidThickness+snapInBlockZ*2])
+  rotate([0,180,0])
+  paramCaseLid( cutoutLidEnable = true );
+}
+
+/*
+###########################################################################################
+#####################################      Model Placing      #############################
+###########################################################################################
+*/
+//   uncomment model functions
+//   remove '/* .. */' or '//' from functions to enable them
+
+completeModel();
+
+/* paramCase( caseMountingEnable = true ); */
+/* paramCaseLid( cutoutLidEnable = true ); */
+
+/* ################################# Debug Cutouts ##########################################*/
+/* if cutouts on the sides are needed, remove comments from needed cutouts and create them   */
+/* without the other models. when ready, place the case models and check if your cutouts fits*/
+/* ##########################################################################################*/
 
 /* cutoutBottom(); */
 /* cutoutRight(); */
-
-
-translate([80,0,lidThickness+snapInBlockZ*2])
-rotate([0,180,0])
-paramCaseLid(true);
+/* cutoutLeft(); */
+/* cutoutBack(); */
+/* cutoutFront(); */
