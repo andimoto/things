@@ -88,4 +88,4 @@ module cableOrganizer(cnt = 3)
 }
 
 
-cableOrganizer(cnt = 1);
+cableOrganizer(cnt = 5);
