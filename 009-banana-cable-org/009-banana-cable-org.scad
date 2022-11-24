@@ -139,15 +139,15 @@ module cableOrganizer(cnt = 3, threadPos = 3)
 /* ########################### create models ################################## */
 /* ############################################################################ */
 
-translate([bananaPlugHolderH/2+innerBaseDia/2-wallThickness,-cubeHoleXY/2,cubeHoleXY])
+/* translate([bananaPlugHolderH/2+innerBaseDia/2-wallThickness,-cubeHoleXY/2,cubeHoleXY])
 rotate([180,0,180])
-bananaHook();
+bananaHook(); */
 
-translate([70,0,0])
-screwLid();
+/* translate([70,0,0])
+screwLid(); */
 
 /* orgBase(bottom = true, hookCutout = true, thread = true); */
 enableHooks = true;
-baseElements = 5;
+baseElements = 1;
 threadElement = baseElements;
 cableOrganizer(cnt = baseElements, threadPos = threadElement);
