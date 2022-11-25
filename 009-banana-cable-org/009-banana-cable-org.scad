@@ -14,7 +14,7 @@ outerBaseDia = 60;
 innerBaseDia = 50;
 
 outerBaseH = 5;
-innerBaseH = 5;
+innerBaseH = 7;
 
 wallThickness = 4;
 
@@ -23,7 +23,7 @@ bananaPlugDia = 4.1; // mid diameter of banana plug 4mm + some extra
 bananaPlugHolderH = 20;
 
 
-lidThickness = 6;
+lidThickness = 4;
 lidGripRadius = 5;
 
 
@@ -147,7 +147,7 @@ bananaHook(); */
 screwLid(); */
 
 /* orgBase(bottom = true, hookCutout = true, thread = true); */
-enableHooks = true;
-baseElements = 1;
+enableHooks = false;
+baseElements = 2;
 threadElement = baseElements;
 cableOrganizer(cnt = baseElements, threadPos = threadElement);
