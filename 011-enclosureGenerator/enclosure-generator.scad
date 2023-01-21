@@ -102,13 +102,15 @@ showTopCorner = false;
 // show top connector for corners
 showTopConnector = false;
 // show corners and connectors completed
-showCompleteTop = false;
+showCompleteTop = true;
 
-/* [other Parameters] */
+/* [other Parameters & Constants] */
 $fn=70;
 extra = 0.01;
 // filament thickness
 filamentDia = 1.75;
+// width of the filament connector (constant)
+filaConnectorWidth = 5;
 
 /* ################ MODULES ################## */
 /* ################ MODULES ################## */
@@ -248,15 +250,29 @@ module topCorner(xLen=20, yLen=20, width=10, thickness=4, filaConnect=true, conT
   {
     union()
     {
+      /* placing a L-shaped corner */
       cube([xLen,width,thickness]);
       cube([width,yLen,thickness]);
 
+      /* filament connectors */
       if(filaConnect == true)
       {
-        translate([xLen-5,width,-3]) rotate([0,0,-90]) filaConnect(filaDia=1.75,conLen=width,conWidth=5,conThick=conThickness);
-        translate([0,yLen-5,-3]) rotate([0,0,0]) filaConnect(filaDia=1.75,conLen=width,conWidth=5,conThick=conThickness);
+        /* check if adding filament connector is plausible
+         * otherwise it can conflict with the beam  */
+        echo("checking topCorner clearance of filament connector to beam");
+        tempXlen = xLen - filaConnectorWidth;
+        assert((beamX <= tempXlen), "WARNING: topCornerXLen should be larger than beamX");
+        tempYlen = yLen - filaConnectorWidth;
+        assert((beamY <= tempYlen), "WARNING: topCornerYLen should be larger than beamY");
+        echo("Clearance Ok");
+        translate([xLen-5,width,-conThickness]) rotate([0,0,-90])
+          filaConnect(filaDia=filamentDia,conLen=width,conWidth=filaConnectorWidth,conThick=conThickness);
+        translate([0,yLen-5,-conThickness]) rotate([0,0,0])
+          filaConnect(filaDia=filamentDia,conLen=width,conWidth=filaConnectorWidth,conThick=conThickness);
       }
     }
+
+    /* cutout space for the screw and hex-nut */
     translate([beamWallThickness+4,beamWallThickness+4,extra+beamMountThickness-MountNutThick])
     NutScrewCutout(ScrewDia=3, ScrewCutoutLen=beamMountThickness+extra*2, NutDia=MountNutDia, NutCutoutLen=MountNutThick,
       rotX=180, rotY=0, rotZ=0, zOffset=MountNutThick);
