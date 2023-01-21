@@ -7,9 +7,9 @@ Author: andimoto@posteo.de
 
 /* [ Enclosure Parameter ] */
 // length of enclosure front (x side)
-enclosureX = 140;
+enclosureX = 100;
 // length of enclosure side (y side)
-enclosureY = 140;
+enclosureY = 100;
 // vertical amount of beams used for enclosure (height will be beamLen * vBeamCount)
 vBeamCount = 2;
 
@@ -21,7 +21,7 @@ beamX = 20;
 // length of y side of beam
 beamY = 20;
 // length of beam
-beamLen = 60;
+beamLen = 50;
 // Wallthickness of the beam
 beamWallThickness = 2;
 // Thickness of the beam mount plates at the ends
@@ -72,9 +72,16 @@ topCornerXLen = 30;
 topCornerYLen = 30;
 // width of the top frame elements
 topFrameWidth = 20;
+// overlapping of top panel over top frame
+topFramePanelOverlap = 5;
 // enable filament connectors on top fram to connect corners with
-enableTopFrameFilamentConnect = false;
-
+enableTopFrameFilamentConnect = true;
+// amount of holes for panel mounting on top frame
+topFramePanelHolesCnt = 2;
+// distance between holes of panel mounting on top frame
+topFramePanelHolesDist = 20;
+// move panel holes on top frame connectors in Y direction of the connector
+topFramePanelHolesMoveY = 0;
 
 
 
@@ -296,16 +303,23 @@ module cornerConnector(xLen=30, width=10, thickness=4, filaConnect=true, conThic
       }
     }
 
-    moveHoles = (xLen - (panelHolesCnt-1)*panelHolesDist)/2;
-    translate([moveHoles,5,-extra]) rotate([0,0,-90]) panelMountingHoles(ScrewDia=3.4,holeLen=thickness+extra*2, holeCnt=panelHolesCnt, holeDist=panelHolesDist);
+    moveHoles = (xLen - (topFramePanelHolesCnt-1)*topFramePanelHolesDist)/2;
+    translate([moveHoles,width-topFramePanelOverlap-5+topFramePanelHolesMoveY,-extra]) rotate([0,0,-90])
+      panelMountingHoles(ScrewDia=3.4,holeLen=thickness+extra*2, holeCnt=topFramePanelHolesCnt, holeDist=topFramePanelHolesDist);
 
 
     translate([xLen/2,width/2,0])
     linear_extrude(height=0.2)
     text(letter,size=3,halign="center");
 
+    /* overlapping marker */
+    translate([0,width-topFramePanelOverlap,thickness-sqrt(2*0.3^2)/2])
+    rotate([45,0,0])
+    cube([xLen,0.3,0.3]);
   }
+
 }
+
 
 module filaConnect(filaDia=1.75,conLen=10,conWidth=5,conThick=3)
 {
@@ -319,7 +333,24 @@ module filaConnect(filaDia=1.75,conLen=10,conWidth=5,conThick=3)
   }
 }
 
-/* filaConnect(filaDia=1.75,conLen=10,conWidth=5,conThick=3); */
+
+module panelClamp(length=15,width=10,overlapDist=5, panelThickness=3, addClampThickness=1, holeToPanelDist=5)
+{
+  assert( ( (panelThickness+addClampThickness) >= (MountNutThick+1)), "WARNING: panelThickness+addClampThickness should be greater or equal to MountNutThick+1");
+  color("Green")
+  difference()
+  {
+    cube([length,width,panelThickness+addClampThickness]);
+    translate([length-overlapDist,-extra,-extra])
+      cube([overlapDist+extra,width+extra*2,panelThickness+extra]);
+
+    translate([length-overlapDist-holeToPanelDist,width/2,addClampThickness+extra])
+    NutScrewCutout(ScrewDia=3, ScrewCutoutLen=panelThickness+addClampThickness+extra*2, NutDia=MountNutDia, NutCutoutLen=MountNutThick,
+      rotX=180, rotY=0, rotZ=30, zOffset=MountNutThick);
+  }
+}
+/* translate([0,0,5])
+panelClamp(length=15,width=10,overlapDist=5, panelThickness=3, addClampThickness=1, holeToPanelDist=5); */
 
 module panel(panelX=100,panelZ=100,panelThick=3)
 {
@@ -365,7 +396,7 @@ module enclosureTopFrame()
     mirror([0,i*1,0])
     cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=5,
       filaConnect=enableTopFrameFilamentConnect, conThickness=3,
-      panelHolesCnt=2,panelHolesDist=30,letter="X");
+      panelHolesCnt=2,panelHolesDist=topFramePanelHolesDist,letter="X");
   }
 
   /* connection plates orthogonal to y axis */
@@ -376,8 +407,19 @@ module enclosureTopFrame()
     rotate([0,0,-90])
     cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=5,
       filaConnect=enableTopFrameFilamentConnect,
-      conThickness=3,panelHolesCnt=2,panelHolesDist=30,letter="Y");
+      conThickness=3,panelHolesCnt=2,panelHolesDist=topFramePanelHolesDist,letter="Y");
   }
+
+  translate([topCornerXLen+(tempConnectorLenX-topFramePanelHolesDist)/2,topFrameWidth-15,beamLen*vBeamCount+5])
+  translate([10,0,0])
+  rotate([0,0,90])
+  panelClamp(length=15,width=10,overlapDist=topFramePanelOverlap, panelThickness=PanelFront_Thick, addClampThickness=2, holeToPanelDist=5);
+
+  translate([topCornerXLen+(tempConnectorLenX-topFramePanelHolesDist)/2+topFramePanelHolesDist,topFrameWidth-15,beamLen*vBeamCount+5])
+  translate([10,0,0])
+  rotate([0,0,90])
+  panelClamp(length=15,width=10,overlapDist=topFramePanelOverlap, panelThickness=PanelFront_Thick, addClampThickness=2, holeToPanelDist=5);
+
 }
 
 if(showTopCorner == true)
@@ -406,6 +448,8 @@ if(showTopConnector == true)
     panelHolesCnt=2,panelHolesDist=30,letter="Y");
 }
 
+
+
 if(showCompleteTop == true)
 {
   enclosureTopFrame();
@@ -414,42 +458,41 @@ if(showCompleteTop == true)
 /* do simulation of enclosure */
 if(sim == true)
 {
-  union()
-  {
-    translate([0,0,0]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-    translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-  }
+  tempDist = [[0,0],
+              [enclosureX,0],
+              [0,enclosureY],
+              [enclosureX,enclosureY]];
 
-  translate([140,0,0])
-  rotate([0,0,90])
-  union()
-  {
-    translate([0,0,0]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-    translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-  }
-
-  translate([140,140,0])
-  rotate([0,0,180])
-  union()
-  {
-    translate([0,0,0]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-    translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-  }
-
-  translate([0,140,0])
-  rotate([0,0,270])
-  union()
-  {
-    translate([0,0,0]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-    translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+  tempMirror = [[0,0],[1,0]];
+  for (i=[0:1]) {
+    translate([tempDist[i][0],tempDist[i][1],0])
+    mirror([tempMirror[i][0],tempMirror[i][1],0])
+    union()
+    {
+      translate([0,0,0]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+      translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+    }
   }
 
 
-  translate([15,-4,0]) panel(panelX=110,panelZ=120,panelThick=4);
+  for (i=[0:1]) {
+    translate([tempDist[i+2][0],tempDist[i+2][1],0])
+    mirror([tempMirror[i][0],tempMirror[i][1],0])
+    mirror([0,1,0])
+    union()
+    {
+      translate([0,0,0]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+      translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+    }
+  }
+
+
+
+  /* translate([15,-4,0]) panel(panelX=110,panelZ=120,panelThick=4);
   translate([15,110+30,0]) panel(panelX=110,panelZ=120,panelThick=4);
   translate([110+30+4,15,0]) rotate([0,0,90]) panel(panelX=110,panelZ=120,panelThick=4);
   translate([0,15,0]) rotate([0,0,90]) panel(panelX=110,panelZ=120,panelThick=4);
 
-  translate([15,10,beamMountThickness*2+beamLen*2-1]) rotate([-90,0,0]) panel(panelX=110,panelZ=120,panelThick=4);
+  translate([15,10,beamMountThickness*2+beamLen*2-1]) rotate([-90,0,0]) panel(panelX=110,panelZ=120,panelThick=4); */
 
 }
