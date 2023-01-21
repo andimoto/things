@@ -70,6 +70,8 @@ filamentFixingHoles = true;
 topCornerXLen = 30;
 // length of top frame corner in y direction
 topCornerYLen = 30;
+// width of the top frame elements
+topFrameWidth = 20;
 // enable filament connectors on top fram to connect corners with
 enableTopFrameFilamentConnect = false;
 
@@ -279,7 +281,7 @@ module topCorner(xLen=20, yLen=20, width=10, thickness=4, filaConnect=true, conT
   }
 }
 
-module cornerConnector(xLen=30, width=10, thickness=4, filaConnect=true, conThickness=3, panelHolesCnt=3,panelHolesDist=20)
+module cornerConnector(xLen=30, width=10, thickness=4, filaConnect=true, conThickness=3, panelHolesCnt=3,panelHolesDist=20, letter="X")
 {
   difference()
   {
@@ -296,6 +298,12 @@ module cornerConnector(xLen=30, width=10, thickness=4, filaConnect=true, conThic
 
     moveHoles = (xLen - (panelHolesCnt-1)*panelHolesDist)/2;
     translate([moveHoles,5,-extra]) rotate([0,0,-90]) panelMountingHoles(ScrewDia=3.4,holeLen=thickness+extra*2, holeCnt=panelHolesCnt, holeDist=panelHolesDist);
+
+
+    translate([xLen/2,width/2,0])
+    linear_extrude(height=0.2)
+    text(letter,size=3,halign="center");
+
   }
 }
 
@@ -324,7 +332,8 @@ if(showBeam == true)
   corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
 }
 
-
+tempConnectorLenX = enclosureX-topCornerXLen*2;
+tempConnectorLenY = enclosureY-topCornerYLen*2;
 module enclosureTop()
 {
   tempDist = [[0,0],
@@ -336,7 +345,7 @@ module enclosureTop()
   for (i=[0:1]) {
     translate([tempDist[i][0],tempDist[i][1],beamLen*vBeamCount])
     mirror([tempMirror[i][0],tempMirror[i][1],0])
-    topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=20,thickness=beamMountThickness,
+    topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
       filaConnect=enableTopFrameFilamentConnect, conThickness=3);
   }
 
@@ -345,21 +354,18 @@ module enclosureTop()
     translate([tempDist[i+2][0],tempDist[i+2][1],beamLen*vBeamCount])
     mirror([tempMirror[i][0],tempMirror[i][1],0])
     mirror([0,1,0])
-    topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=20,thickness=beamMountThickness,
+    topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
       filaConnect=enableTopFrameFilamentConnect, conThickness=3);
   }
-
-  tempConnectorLenX = enclosureX-topCornerXLen*2;
-  tempConnectorLenY = enclosureY-topCornerYLen*2;
 
   /* connection plates orthogonal to x axis */
   for(i=[0:1])
   {
     translate([topCornerXLen,enclosureY*i,beamLen*vBeamCount])
     mirror([0,i*1,0])
-    cornerConnector(xLen=tempConnectorLenX, width=20, thickness=5,
+    cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=5,
       filaConnect=enableTopFrameFilamentConnect, conThickness=3,
-      panelHolesCnt=2,panelHolesDist=30);
+      panelHolesCnt=2,panelHolesDist=30,letter="X");
   }
 
   /* connection plates orthogonal to y axis */
@@ -368,12 +374,37 @@ module enclosureTop()
     translate([enclosureX*i,tempConnectorLenY+topCornerYLen,beamLen*vBeamCount])
     mirror([1*i,0,0])
     rotate([0,0,-90])
-    cornerConnector(xLen=tempConnectorLenY, width=20, thickness=5,
+    cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=5,
       filaConnect=enableTopFrameFilamentConnect,
-      conThickness=3,panelHolesCnt=2,panelHolesDist=30);
+      conThickness=3,panelHolesCnt=2,panelHolesDist=30,letter="Y");
   }
 }
 
+if(showTopCorner == true)
+{
+  topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
+    filaConnect=enableTopFrameFilamentConnect, conThickness=3);
+
+  translate([enclosureX,0,0])
+  mirror([1,0,0])
+  topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
+    filaConnect=enableTopFrameFilamentConnect, conThickness=3);
+}
+
+
+if(showTopConnector == true)
+{
+  echo("X Connector Length -> ",tempConnectorLenX);
+  cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=5,
+    filaConnect=enableTopFrameFilamentConnect, conThickness=3,
+    panelHolesCnt=2,panelHolesDist=30,letter="X");
+
+  echo("Y Connector Length -> ",tempConnectorLenY);
+  translate([0,topFrameWidth+5,0])
+  cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=5,
+    filaConnect=enableTopFrameFilamentConnect, conThickness=3,
+    panelHolesCnt=2,panelHolesDist=30,letter="Y");
+}
 
 if(showCompleteTop == true)
 {
