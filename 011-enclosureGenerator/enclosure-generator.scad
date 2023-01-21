@@ -334,7 +334,7 @@ if(showBeam == true)
 
 tempConnectorLenX = enclosureX-topCornerXLen*2;
 tempConnectorLenY = enclosureY-topCornerYLen*2;
-module enclosureTop()
+module enclosureTopFrame()
 {
   tempDist = [[0,0],
               [enclosureX,0],
@@ -408,7 +408,7 @@ if(showTopConnector == true)
 
 if(showCompleteTop == true)
 {
-  enclosureTop();
+  enclosureTopFrame();
 }
 
 /* do simulation of enclosure */
