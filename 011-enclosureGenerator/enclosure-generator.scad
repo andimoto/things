@@ -22,9 +22,9 @@ beamX = 20;
 // length of y side of beam
 beamY = 20;
 // length of beam
-beamLen = 50;
+beamLen = 60;
 // Wallthickness of the beam
-beamWallThickness = 2;
+beamWallThickness = 3;
 // Thickness of the beam mount plates at the ends
 beamMountThickness = 5;
 
@@ -38,7 +38,7 @@ panelsMountingY = true;
 // amount of mounting holes on the beams
 panelsMountingHolesCnt = 2;
 // distance between mounting holes
-mountingHolesDist = 20;
+mountingHolesDist = 30;
 
 // move panel mounting holes on X side in x direction
 panelHolesX_MoveX = 0;
@@ -68,11 +68,11 @@ filamentFixingHoles = true;
 
 /* [ Top Frame ] */
 // length of top frame corner in x direction
-topCornerXLen = 30;
+topCornerXLen = 80;
 // length of top frame corner in y direction
-topCornerYLen = 30;
+topCornerYLen = 35;
 // width of the top frame elements
-topFrameWidth = 20;
+topFrameWidth = 25;
 // overlapping of top panel over top frame
 topFramePanelOverlap = 5;
 // enable filament connectors on top fram to connect corners with
@@ -129,6 +129,11 @@ tempConnectorLenY = enclosureY-topCornerYLen*2;
 if(showBeam == true)
 {
   corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+
+  translate([0,-5,0])
+  mirror([0,1,0])
+  rotate([0,0,0])
+  corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
 }
 
 
@@ -138,8 +143,9 @@ if(showTopCorner == true)
   topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
     filaConnect=enableTopFrameFilamentConnect, conThickness=3);
 
-  translate([enclosureX,0,0])
+  translate([0,topCornerYLen*2+5,0])
   mirror([1,0,0])
+  rotate([0,0,180])
   topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
     filaConnect=enableTopFrameFilamentConnect, conThickness=3);
 }
