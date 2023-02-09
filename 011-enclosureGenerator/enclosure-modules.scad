@@ -4,7 +4,8 @@ Author: andimoto@posteo.de
 
 */
 
-
+/* constant distance from holes in the beams to the overlapping panel mount area */
+beamHolesToPlateDist = 5;
 
 /* ################ MODULES ################## */
 /* ################ MODULES ################## */
@@ -94,7 +95,7 @@ module corner_beam(bX=20,bY=20,bH=100, wallTh=5, btmMountTh=5)
       holesOffset = (bH - (panelsMountingHolesCnt-1)*mountingHolesDist)/2;
 
       translate([panelHolesX_MoveX,extra,panelHolesX_MoveZ])
-      translate([bX-panelBeamOverlappingDist-5,wallTh,holesOffset])
+      translate([bX-panelBeamOverlappingDist-beamHolesToPlateDist,wallTh,holesOffset])
       rotate([90,00,0])
       panelMountingHoles(ScrewDia=3.4,holeLen=wallTh+extra*2, holeCnt=panelsMountingHolesCnt, holeDist=mountingHolesDist);
     }
@@ -105,7 +106,7 @@ module corner_beam(bX=20,bY=20,bH=100, wallTh=5, btmMountTh=5)
       holesOffset = (beamLen - (panelsMountingHolesCnt-1)*mountingHolesDist)/2;
 
       translate([0,panelHolesY_MoveY,panelHolesY_MoveZ])
-      translate([-extra,bY-panelBeamOverlappingDist-5,holesOffset])
+      translate([-extra,bY-panelBeamOverlappingDist-beamHolesToPlateDist,holesOffset])
       rotate([90,00,90])
       panelMountingHoles(ScrewDia=3.4,holeLen=wallTh+extra*2, holeCnt=panelsMountingHolesCnt, holeDist=mountingHolesDist);
     }
@@ -299,6 +300,33 @@ module enclosureTopFrame()
 
 }
 
+module slot(screwDia=3.4, slotLength=50, thick=4)
+{
+  #hull()
+  {
+    translate([0,0,0])
+    rotate([-90,0,0]) cylinder(r=screwDia/2, h=thick, center=false);
+    translate([0,0,slotLength])
+    rotate([-90,0,0]) cylinder(r=screwDia/2, h=thick, center=false);
+  }
+}
+
+module backMountingPlate(plateX=100,plateH=100,plateThick=4,mountingSlots=true,mountingLatch=true,borderDist=15)
+{
+  SlotCount = (plateX-borderDist*2)/10;
+  echo(SlotCount);
+
+  difference()
+  {
+    cube([plateX,plateThick,plateH]);
+
+    for (i=[0:SlotCount])
+    {
+      translate([borderDist+10*i,-extra,borderDist])
+      #slot(screwDia=3.4, slotLength=plateH-borderDist*2,thick=plateThick+extra*2);
+    }
+  }
+}
 
 
 module enclosureComplete()

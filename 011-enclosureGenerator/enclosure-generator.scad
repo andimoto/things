@@ -182,3 +182,6 @@ if(sim == true)
 {
   enclosureComplete();
 }
+
+translate([beamX-topFramePanelOverlap,enclosureY+5,0])
+backMountingPlate(plateX=enclosureX-beamX*2+topFramePanelOverlap*2,plateH=beamLen,plateThick=4,mountingSlots=true,mountingLatch=true);
