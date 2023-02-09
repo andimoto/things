@@ -1,6 +1,6 @@
 {
     "parameterSets": {
-        "Standardwerte des Designs": {
+        "cyclonePCB_EnclosureValues_BackPart": {
             "$fn": "70",
             "MountNutDia": "6",
             "MountNutThick": "3",
@@ -10,7 +10,7 @@
             "beamLen": "160",
             "beamMountCnt": "2",
             "beamMountThickness": "5",
-            "beamWallThickness": "2",
+            "beamWallThickness": "3",
             "beamX": "30",
             "beamY": "30",
             "enableTopFrameFilamentConnect": "true",
@@ -20,14 +20,14 @@
             "filaConnectorWidth": "5",
             "filamentDia": "1.75",
             "filamentFixingHoles": "true",
-            "mountingHolesDist": "30",
+            "mountingHolesDist": "20",
             "panelBeamOverlappingDist": "5",
             "panelHolesX_MoveX": "0",
             "panelHolesX_MoveZ": "0",
             "panelHolesY_MoveY": "0",
             "panelHolesY_MoveZ": "0",
             "panelMarker": "true",
-            "panelsMountingHolesCnt": "5",
+            "panelsMountingHolesCnt": "6",
             "panelsMountingX": "true",
             "panelsMountingY": "true",
             "showBeam": "false",
@@ -35,16 +35,18 @@
             "showPanelClamp": "false",
             "showTopConnector": "false",
             "showTopCorner": "false",
-            "sim": "false",
+            "sim": "true",
             "topCornerXLen": "80",
-            "topCornerYLen": "40",
-            "topFramePanelHolesCnt": "3",
-            "topFramePanelHolesDist": "40",
+            "topCornerYLen": "35",
+            "topFramePanelHolesCnt": "2",
+            "topFramePanelHolesDist": "20",
             "topFramePanelHolesMoveY": "0",
             "topFramePanelOverlap": "5",
-            "topFrameWidth": "30",
+            "topFrameWidth": "25",
             "vBeamCount": "2"
         }
     },
-    "fileFormatVersion": "1"
+    "fileFormatVersion": "1",
+    "parameterSets": "",
+    "parameterSets": ""
 }
