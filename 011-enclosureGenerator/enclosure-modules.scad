@@ -302,16 +302,23 @@ module enclosureTopFrame()
 
 module slot(screwDia=3.4, slotLength=50, thick=4)
 {
-  #hull()
+  hull()
   {
     translate([0,0,0])
     rotate([-90,0,0]) cylinder(r=screwDia/2, h=thick, center=false);
     translate([0,0,slotLength])
     rotate([-90,0,0]) cylinder(r=screwDia/2, h=thick, center=false);
   }
+  hull()
+  {
+    translate([0,0,0])
+    rotate([-90,0,0]) cylinder(r=6/2, h=3, center=false);
+    translate([0,0,slotLength])
+    rotate([-90,0,0]) cylinder(r=6/2, h=3, center=false);
+  }
 }
 
-module backMountingPlate(plateX=100,plateH=100,plateThick=4,mountingSlots=true,mountingLatch=true,borderDist=15)
+module backMountingPlate(plateX=100,plateH=100,plateThick=4,mountingSlots=true,borderDist=15,cableHole=true)
 {
   SlotCount = (plateX-borderDist*2)/10;
   echo(SlotCount);
@@ -320,10 +327,34 @@ module backMountingPlate(plateX=100,plateH=100,plateThick=4,mountingSlots=true,m
   {
     cube([plateX,plateThick,plateH]);
 
-    for (i=[0:SlotCount])
+    translate([-extra,-extra,0])
+    cube([panelBeamOverlappingDist,plateThick+extra*2,beamMountThickness+1]);
+    translate([plateX-panelBeamOverlappingDist,-extra,0])
+    cube([panelBeamOverlappingDist,plateThick+extra*2,beamMountThickness+1]);
+
+    translate([-extra,-extra,plateH-beamMountThickness-1])
+    cube([panelBeamOverlappingDist,plateThick+extra*2,beamMountThickness+1]);
+    translate([plateX-panelBeamOverlappingDist,-extra,plateH-beamMountThickness-1])
+    cube([panelBeamOverlappingDist,plateThick+extra*2,beamMountThickness+1]);
+
+
+    if(cableHole==true)
     {
-      translate([borderDist+10*i,-extra,borderDist])
-      #slot(screwDia=3.4, slotLength=plateH-borderDist*2,thick=plateThick+extra*2);
+      translate([-25+plateX/2,-extra,0])
+      minkowski()
+      {
+        cube([50,plateThick+extra*2,5]);
+        rotate([90,0,0]) cylinder(r=1,plateThick+extra*2);
+      }
+    }
+
+    if(mountingSlots == true)
+    {
+      for (i=[0:SlotCount])
+      {
+        translate([borderDist+10*i,-extra,borderDist])
+        slot(screwDia=3.4, slotLength=plateH-borderDist*2,thick=plateThick+extra*2);
+      }
     }
   }
 }

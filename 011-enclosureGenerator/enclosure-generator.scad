@@ -86,7 +86,7 @@ topFramePanelHolesMoveY = 0;
 
 
 
-/* [ Panel Parameters ] */
+/* [ Front Panel Parameters ] */
 // Panel Width
 PanelFront_X = 100;
 // Panel Height
@@ -95,7 +95,17 @@ PanelFront_Z = 100;
 PanelFront_Thick = 3;
 
 
+/* [ Back Mounting Panel Parameters ] */
+// thickness of back plate
+backMountingPlateThickness = 3;
+//enable mounting panels inside beams
+enableInsideBeamMount = true;
+// enable mounting slots in the back plate for mounting devices on it
+enableMountingSlots = true;
+// enable cable holes (disable if just a back plate is needed)
+enableBackPlateCableHoles = true;
 
+sidePanelThickness = 2;
 
 /* [ Show Parts ] */
 // do a complete enclosure simulation
@@ -110,8 +120,13 @@ showTopConnector = false;
 showCompleteTop = false;
 // show panelClamp
 showPanelClamp = false;
+// show mounting plate of enclosure back ()
+showBackPanel = false;
+// show side panels on enclosure
+showSidePanels = false;
 
-/* [other Parameters & Constants] */
+
+/* [other Parameters and Constants] */
 $fn=70;
 extra = 0.01;
 // filament thickness
@@ -183,5 +198,42 @@ if(sim == true)
   enclosureComplete();
 }
 
-translate([beamX-topFramePanelOverlap,enclosureY+5,0])
-backMountingPlate(plateX=enclosureX-beamX*2+topFramePanelOverlap*2,plateH=beamLen,plateThick=4,mountingSlots=true,mountingLatch=true);
+if(showBackPanel==true)
+{
+  translate([beamX-topFramePanelOverlap,enclosureY,0])
+  backMountingPlate(plateX=enclosureX-beamX*2+topFramePanelOverlap*2,plateH=beamLen,
+      plateThick=backMountingPlateThickness,mountingSlots=enableMountingSlots,
+      cableHole=enableBackPlateCableHoles);
+  if(sim == true)
+  {
+    translate([beamX-topFramePanelOverlap,enclosureY,beamLen])
+    backMountingPlate(plateX=enclosureX-beamX*2+topFramePanelOverlap*2,plateH=beamLen,
+        plateThick=backMountingPlateThickness,mountingSlots=enableMountingSlots,
+        cableHole=enableBackPlateCableHoles);
+  }
+}
+
+if(showSidePanels==true)
+{
+  translate([0,beamY-topFramePanelOverlap,0])
+  rotate([0,0,90])
+  backMountingPlate(plateX=enclosureY-beamY*2+topFramePanelOverlap*2,plateH=beamLen,
+      plateThick=sidePanelThickness,mountingSlots=false,cableHole=false);
+
+  if(sim == true)
+  {
+    translate([0,beamY-topFramePanelOverlap,beamLen])
+    rotate([0,0,90])
+    backMountingPlate(plateX=enclosureY-beamY*2+topFramePanelOverlap*2,plateH=beamLen,
+        plateThick=sidePanelThickness,mountingSlots=false,cableHole=false);
+
+    translate([enclosureX+sidePanelThickness,beamY-topFramePanelOverlap,0])
+    rotate([0,0,90])
+    backMountingPlate(plateX=enclosureY-beamY*2+topFramePanelOverlap*2,plateH=beamLen,
+        plateThick=sidePanelThickness,mountingSlots=false,cableHole=false);
+    translate([enclosureX+sidePanelThickness,beamY-topFramePanelOverlap,beamLen])
+    rotate([0,0,90])
+    backMountingPlate(plateX=enclosureY-beamY*2+topFramePanelOverlap*2,plateH=beamLen,
+        plateThick=sidePanelThickness,mountingSlots=false,cableHole=false);
+  }
+}
