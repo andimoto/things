@@ -155,7 +155,7 @@ module filterCardridge()
     union()
     {
       cube([cutoutHoleR*2+wallThickness*2,cutoutHoleR*2+wallThickness*2,wallThickness]);
-      translate([wallThickness+extra,wallThickness+extra,wallThickness]) cube([cutoutHoleR*2-extra*2,cutoutHoleR*2-extra*2,10]);
+      translate([wallThickness+0.5,wallThickness+0.5,wallThickness]) cube([cutoutHoleR*2-1,cutoutHoleR*2-1,10]);
     }
     translate([wallThickness*2,wallThickness*2,wallThickness])
       cube([cutoutHoleR*2-wallThickness*2,cutoutHoleR*2-wallThickness*2,10]);
@@ -163,7 +163,7 @@ module filterCardridge()
     translate([0,0,wallThickness])
     hull()
     {
-      translate([wallThickness,wallThickness*2-1,10-1]) cube([cutoutHoleR*2-wallThickness+extra*2,cutoutHoleR*2-wallThickness*2+2,0.1]);
+      translate([wallThickness,wallThickness*2-0.5,10-1]) cube([cutoutHoleR*2-wallThickness+extra*2,cutoutHoleR*2-wallThickness*2+1,0.1]);
       translate([wallThickness,wallThickness*2,10-0.1]) cube([cutoutHoleR*2-wallThickness+extra*2,cutoutHoleR*2-wallThickness*2,0.1]);
     }
 
@@ -183,8 +183,8 @@ module filterCardridge()
   }
 }
 
-translate([0,0,-18])
-filterCardridge();
+/* translate([0,0,-18])
+filterCardridge(); */
 
 
 module cardridgeTopSlide()
@@ -192,8 +192,8 @@ module cardridgeTopSlide()
   /* closeing plate for cardridge */
   hull()
   {
-    translate([wallThickness,wallThickness*2-1,10-1]) cube([cutoutHoleR*2-wallThickness,cutoutHoleR*2-wallThickness*2+2-0.4,0.1]);
+    translate([wallThickness,wallThickness*2-0.5,10-1]) cube([cutoutHoleR*2-wallThickness,cutoutHoleR*2-wallThickness*2+1-0.4,0.1]);
     translate([wallThickness,wallThickness*2,10-0.1]) cube([cutoutHoleR*2-wallThickness,cutoutHoleR*2-wallThickness*2-0.4,0.1]);
   }
 }
-/* cardridgeTopSlide(); */
+cardridgeTopSlide();
