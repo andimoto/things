@@ -312,9 +312,9 @@ module slot(screwDia=3.4, slotLength=50, thick=4)
   hull()
   {
     translate([0,0,0])
-    rotate([-90,0,0]) cylinder(r=6/2, h=3, center=false);
+    rotate([-90,0,0]) cylinder(r=6/2, h=thick-1, center=false);
     translate([0,0,slotLength])
-    rotate([-90,0,0]) cylinder(r=6/2, h=3, center=false);
+    rotate([-90,0,0]) cylinder(r=6/2, h=thick-1, center=false);
   }
 }
 
@@ -327,6 +327,7 @@ module backMountingPlate(plateX=100,plateH=100,plateThick=4,mountingSlots=true,b
   {
     cube([plateX,plateThick,plateH]);
 
+    /* remove edges if panels get mounted inside beams */
     translate([-extra,-extra,0])
     cube([panelBeamOverlappingDist,plateThick+extra*2,beamMountThickness+1]);
     translate([plateX-panelBeamOverlappingDist,-extra,0])

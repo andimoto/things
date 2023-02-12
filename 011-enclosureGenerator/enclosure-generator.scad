@@ -104,8 +104,10 @@ enableInsideBeamMount = true;
 enableMountingSlots = true;
 // enable cable holes (disable if just a back plate is needed)
 enableBackPlateCableHoles = true;
-
+/* [ Side Panels ] */
+// thicknes of side panels
 sidePanelThickness = 2;
+
 
 /* [ Show Parts ] */
 // do a complete enclosure simulation
