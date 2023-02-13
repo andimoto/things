@@ -77,52 +77,52 @@ module filterEdge()
   {
     union()
     {
-      cube([cutoutHoleR*4+wallThickness*2,cutoutHoleR*2+wallThickness*2,10+wallThickness]);
-      translate([cutoutHoleR*4+wallThickness*2,cutoutHoleR+wallThickness,0])
-        cylinder(r=cutoutHoleR+wallThickness,h=wallThickness*2+20);
+      cube([cutoutHoleR*5,cutoutHoleR*2,10+wallThickness]);
+      translate([cutoutHoleR*5,cutoutHoleR,0])
+        cylinder(r=cutoutHoleR,h=wallThickness*2+20);
 
       hull()
       {
-        translate([0,cutoutHoleR*2+wallThickness*2,0])
+        translate([0,cutoutHoleR*2,0])
         cube([cutoutHoleR*2+wallThickness*2,1,10+wallThickness]);
 
-        translate([cutoutHoleR+wallThickness,80,cutoutHoleR+wallThickness+1])
+        translate([cutoutHoleR+wallThickness,80,cutoutHoleR+1])
           rotate([-90,0,0])
-          cylinder(r=cutoutHoleR+wallThickness,h=1);
+          cylinder(r=cutoutHoleR,h=1);
       }
 
-      translate([cutoutHoleR+wallThickness,80,cutoutHoleR+wallThickness+1])
+      translate([cutoutHoleR+wallThickness,80,cutoutHoleR+1])
         rotate([-90,0,0])
-        cylinder(r=cutoutHoleR+wallThickness,h=20);
+        cylinder(r=cutoutHoleR,h=20);
     }
 
-    translate([cutoutHoleR*4+wallThickness*2,cutoutHoleR+wallThickness,wallThickness])
-      cylinder(r=cutoutHoleR,h=10-wallThickness);
+    translate([cutoutHoleR*5,cutoutHoleR,wallThickness])
+      cylinder(r=cutoutHoleR-wallThickness,h=10-wallThickness);
 
-    translate([cutoutHoleR*4+wallThickness*2,cutoutHoleR+wallThickness,10+0.2])
-      cylinder(r=cutoutHoleR,h=10+wallThickness*2);
+    translate([cutoutHoleR*5,cutoutHoleR,10+0.2])
+      cylinder(r=cutoutHoleR-wallThickness,h=10+wallThickness*2);
 
-    translate([wallThickness,wallThickness,wallThickness]) cube([cutoutHoleR*4+wallThickness*2,cutoutHoleR*2,10-wallThickness]);
+    translate([wallThickness,wallThickness,wallThickness]) cube([cutoutHoleR*5,cutoutHoleR*2-wallThickness*2,10-wallThickness]);
 
-    translate([wallThickness,cutoutHoleR*2,wallThickness])
+    translate([wallThickness,cutoutHoleR*2-wallThickness*2,wallThickness])
     cube([cutoutHoleR*2,wallThickness*2+extra,10-wallThickness]);
 
     hull()
     {
-      translate([wallThickness,cutoutHoleR*2+wallThickness*2,wallThickness])
+      translate([wallThickness,cutoutHoleR*2,wallThickness])
       cube([cutoutHoleR*2,1,10-wallThickness]);
 
-      translate([cutoutHoleR+wallThickness,80,cutoutHoleR+wallThickness+1])
+      translate([cutoutHoleR+wallThickness,80,cutoutHoleR+1])
         rotate([-90,0,0])
-        cylinder(r=cutoutHoleR,h=1);
+        cylinder(r=cutoutHoleR-wallThickness,h=1);
     }
 
-    translate([cutoutHoleR+wallThickness,80,cutoutHoleR+wallThickness+1])
+    translate([cutoutHoleR+wallThickness,80,cutoutHoleR+1])
       rotate([-90,0,0])
-      cylinder(r=cutoutHoleR,h=20+extra);
+      cylinder(r=cutoutHoleR-wallThickness,h=20+extra);
 
     translate([wallThickness,wallThickness,-extra])
-      cube([cutoutHoleR*2,cutoutHoleR*2,wallThickness+extra*2]);
+      cube([cutoutHoleR*2,cutoutHoleR*2-wallThickness*2,wallThickness+extra*2]);
   }
 }
 
@@ -131,21 +131,21 @@ module filterEdge()
 {
   filterEdge();
   translate([0,0,0])
-  cube([100,cutoutHoleR*2+wallThickness*2,40]);
+  cube([120,cutoutHoleR*2,40]);
 } */
 
-/* difference()
+difference()
 {
   filterEdge();
-  translate([0,cutoutHoleR*2+wallThickness*2,0])
-  cube([100,cutoutHoleR*2+wallThickness*2+21,50]);
+  translate([0,cutoutHoleR*2,0])
+  cube([120,cutoutHoleR*2+wallThickness*2+23,50]);
 
   if(0)
   {
     translate([0,cutoutHoleR,0])
     cube([100,cutoutHoleR*2+wallThickness*2+21,50]);
   }
-} */
+}
 
 
 module filterCardridge()
@@ -154,20 +154,20 @@ module filterCardridge()
   {
     union()
     {
-      cube([cutoutHoleR*2+wallThickness*2,cutoutHoleR*2+wallThickness*2,wallThickness]);
-      translate([wallThickness+0.5,wallThickness+0.5,wallThickness]) cube([cutoutHoleR*2-1,cutoutHoleR*2-1,10]);
+      cube([cutoutHoleR*2+wallThickness*2,cutoutHoleR*2,wallThickness]);
+      translate([wallThickness+0.5,wallThickness+0.5,wallThickness]) cube([cutoutHoleR*2-1,cutoutHoleR*2-wallThickness*2-1,10]);
     }
     translate([wallThickness*2,wallThickness*2,wallThickness])
-      cube([cutoutHoleR*2-wallThickness*2,cutoutHoleR*2-wallThickness*2,10]);
+      cube([cutoutHoleR*2-wallThickness*2,cutoutHoleR*2-wallThickness*4,10]);
 
     translate([0,0,wallThickness])
     hull()
     {
-      translate([wallThickness,wallThickness*2-0.5,10-1]) cube([cutoutHoleR*2-wallThickness+extra*2,cutoutHoleR*2-wallThickness*2+1,0.1]);
-      translate([wallThickness,wallThickness*2,10-0.1]) cube([cutoutHoleR*2-wallThickness+extra*2,cutoutHoleR*2-wallThickness*2,0.1]);
+      translate([wallThickness,wallThickness*2-0.5,10-1]) cube([cutoutHoleR*2-wallThickness+extra*2,cutoutHoleR*2-wallThickness*4+1,0.1]);
+      translate([wallThickness,wallThickness*2,10-0.1]) cube([cutoutHoleR*2-wallThickness+extra*2,cutoutHoleR*2-wallThickness*4,0.1]);
     }
 
-    for(i=[0:8])
+    for(i=[0:7])
     {
       translate([0,3.85*i,0])
       translate([wallThickness*2,wallThickness*2,wallThickness+1])
@@ -192,8 +192,8 @@ module cardridgeTopSlide()
   /* closeing plate for cardridge */
   hull()
   {
-    translate([wallThickness,wallThickness*2-0.5,10-1]) cube([cutoutHoleR*2-wallThickness,cutoutHoleR*2-wallThickness*2+1-0.4,0.1]);
-    translate([wallThickness,wallThickness*2,10-0.1]) cube([cutoutHoleR*2-wallThickness,cutoutHoleR*2-wallThickness*2-0.4,0.1]);
+    translate([wallThickness,wallThickness*2-0.5,10-1]) cube([cutoutHoleR*2-wallThickness,cutoutHoleR*2-wallThickness*4+1-0.4,0.1]);
+    translate([wallThickness,wallThickness*2,10-0.1]) cube([cutoutHoleR*2-wallThickness,cutoutHoleR*2-wallThickness*4-0.4,0.1]);
   }
 }
-cardridgeTopSlide();
+/* cardridgeTopSlide(); */
