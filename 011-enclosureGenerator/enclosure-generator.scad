@@ -75,8 +75,10 @@ topCornerYLen = 35;
 topFrameWidth = 25;
 // overlapping of top panel over top frame
 topFramePanelOverlap = 5;
-// enable filament connectors on top fram to connect corners with
-enableTopFrameFilamentConnect = true;
+// enable filament connectors on x axis on top frame to connect corners with topConnectors
+enableTopFrameFilamentConnectX = true;
+// enable filament connectors on x axis on top frame to connect corners with topConnectors
+enableTopFrameFilamentConnectY = true;
 // amount of holes for panel mounting on top frame
 topFramePanelHolesCnt = 2;
 // distance between holes of panel mounting on top frame
@@ -158,13 +160,13 @@ if(showBeam == true)
 if(showTopCorner == true)
 {
   topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
-    filaConnect=enableTopFrameFilamentConnect, conThickness=3);
+    filaConnectX=enableTopFrameFilamentConnectX, filaConnectY=enableTopFrameFilamentConnectY, conThickness=3);
 
   translate([0,topCornerYLen*2+5,0])
   mirror([1,0,0])
   rotate([0,0,180])
   topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
-    filaConnect=enableTopFrameFilamentConnect, conThickness=3);
+    filaConnectX=enableTopFrameFilamentConnectX, filaConnectY=enableTopFrameFilamentConnectY, conThickness=3);
 }
 
 
@@ -172,13 +174,13 @@ if(showTopConnector == true)
 {
   echo("X Connector Length -> ",tempConnectorLenX);
   cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=5,
-    filaConnect=enableTopFrameFilamentConnect, conThickness=3,
+    filaConnect=enableTopFrameFilamentConnectX, conThickness=3,
     panelHolesCnt=2,panelHolesDist=30,letter="X");
 
   echo("Y Connector Length -> ",tempConnectorLenY);
   translate([0,topFrameWidth+5,0])
   cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=5,
-    filaConnect=enableTopFrameFilamentConnect, conThickness=3,
+    filaConnect=enableTopFrameFilamentConnectY, conThickness=3,
     panelHolesCnt=2,panelHolesDist=30,letter="Y");
 }
 

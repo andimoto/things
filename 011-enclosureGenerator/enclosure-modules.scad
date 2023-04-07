@@ -139,7 +139,7 @@ module panelMarker(markerHeight=10)
 }
 
 
-module topCorner(xLen=20, yLen=20, width=10, thickness=4, filaConnect=true, conThickness=3)
+module topCorner(xLen=20, yLen=20, width=10, thickness=4, filaConnectX=true, filaConnectY=true, conThickness=3)
 {
   difference()
   {
@@ -149,19 +149,31 @@ module topCorner(xLen=20, yLen=20, width=10, thickness=4, filaConnect=true, conT
       cube([xLen,width,thickness]);
       cube([width,yLen,thickness]);
 
-      /* filament connectors */
-      if(filaConnect == true)
+      if(filaConnectX || filaConnectY)
+      {
+        echo("checking topCorner clearance of filament connector to beam");
+      }
+
+      /* filament connectors on X axis */
+      if(filaConnectX == true)
       {
         /* check if adding filament connector is plausible
          * otherwise it can conflict with the beam  */
-        echo("checking topCorner clearance of filament connector to beam");
         tempXlen = xLen - filaConnectorWidth;
         assert((beamX <= tempXlen), "WARNING: topCornerXLen should be larger than beamX");
-        tempYlen = yLen - filaConnectorWidth;
-        assert((beamY <= tempYlen), "WARNING: topCornerYLen should be larger than beamY");
         echo("Clearance Ok");
         translate([xLen-5,width,-conThickness]) rotate([0,0,-90])
           filaConnect(filaDia=filamentDia,conLen=width,conWidth=filaConnectorWidth,conThick=conThickness);
+      }
+
+      /* filament connectors on Y axis */
+      if(filaConnectY == true)
+      {
+        /* check if adding filament connector is plausible
+         * otherwise it can conflict with the beam  */
+        tempYlen = yLen - filaConnectorWidth;
+        assert((beamY <= tempYlen), "WARNING: topCornerYLen should be larger than beamY");
+        echo("Clearance Ok");
         translate([0,yLen-5,-conThickness]) rotate([0,0,0])
           filaConnect(filaDia=filamentDia,conLen=width,conWidth=filaConnectorWidth,conThick=conThickness);
       }
@@ -255,7 +267,7 @@ module enclosureTopFrame()
     translate([tempDist[i][0],tempDist[i][1],beamLen*vBeamCount])
     mirror([tempMirror[i][0],tempMirror[i][1],0])
     topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
-      filaConnect=enableTopFrameFilamentConnect, conThickness=3);
+      filaConnectX=enableTopFrameFilamentConnectX, filaConnectY=enableTopFrameFilamentConnectY, conThickness=3);
   }
 
 
@@ -264,7 +276,7 @@ module enclosureTopFrame()
     mirror([tempMirror[i][0],tempMirror[i][1],0])
     mirror([0,1,0])
     topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
-      filaConnect=enableTopFrameFilamentConnect, conThickness=3);
+      filaConnectX=enableTopFrameFilamentConnectX, filaConnectY=enableTopFrameFilamentConnectY, conThickness=3);
   }
 
   /* connection plates orthogonal to x axis */
@@ -273,7 +285,7 @@ module enclosureTopFrame()
     translate([topCornerXLen,enclosureY*i,beamLen*vBeamCount])
     mirror([0,i*1,0])
     cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=5,
-      filaConnect=enableTopFrameFilamentConnect, conThickness=3,
+      filaConnect=enableTopFrameFilamentConnectX, conThickness=3,
       panelHolesCnt=2,panelHolesDist=topFramePanelHolesDist,letter="X");
   }
 
@@ -284,7 +296,7 @@ module enclosureTopFrame()
     mirror([1*i,0,0])
     rotate([0,0,-90])
     cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=5,
-      filaConnect=enableTopFrameFilamentConnect,
+      filaConnect=enableTopFrameFilamentConnectY,
       conThickness=3,panelHolesCnt=2,panelHolesDist=topFramePanelHolesDist,letter="Y");
   }
 
