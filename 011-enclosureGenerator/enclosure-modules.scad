@@ -158,10 +158,13 @@ module topCorner(xLen=20, yLen=20, width=10, thickness=4, filaConnectX=true, fil
       if(filaConnectX == true)
       {
         /* check if adding filament connector is plausible
-         * otherwise it can conflict with the beam  */
+         * otherwise it can conflict with the beam; only when filaConnectY is enabled  */
         tempXlen = xLen - filaConnectorWidth;
-        assert((beamX <= tempXlen), "WARNING: topCornerXLen should be larger than beamX");
-        echo("Clearance Ok");
+
+        if(filaConnectX)
+        {
+          assert((beamX <= tempXlen), "WARNING: topCornerXLen should be larger than beamX");
+        }
         translate([xLen-5,width,-conThickness]) rotate([0,0,-90])
           filaConnect(filaDia=filamentDia,conLen=width,conWidth=filaConnectorWidth,conThick=conThickness);
       }
@@ -170,10 +173,12 @@ module topCorner(xLen=20, yLen=20, width=10, thickness=4, filaConnectX=true, fil
       if(filaConnectY == true)
       {
         /* check if adding filament connector is plausible
-         * otherwise it can conflict with the beam  */
+         * otherwise it can conflict with the beam; only when filaConnectY is enabled  */
         tempYlen = yLen - filaConnectorWidth;
-        assert((beamY <= tempYlen), "WARNING: topCornerYLen should be larger than beamY");
-        echo("Clearance Ok");
+        if(filaConnectY)
+        {
+          assert((beamY <= tempYlen), "WARNING: topCornerYLen should be larger than beamY");
+        }
         translate([0,yLen-5,-conThickness]) rotate([0,0,0])
           filaConnect(filaDia=filamentDia,conLen=width,conWidth=filaConnectorWidth,conThick=conThickness);
       }
@@ -333,7 +338,7 @@ module slot(screwDia=3.4, slotLength=50, thick=4)
 module backMountingPlate(plateX=100,plateH=100,plateThick=4,mountingSlots=true,borderDist=15,cableHole=true)
 {
   SlotCount = (plateX-borderDist*2)/10;
-  echo(SlotCount);
+  //echo("Slot Count:", SlotCount);
 
   difference()
   {

@@ -118,8 +118,10 @@ sim = false;
 showBeam = false;
 // show top corner
 showTopCorner = false;
-// show top connector for corners
-showTopConnector = false;
+// show top X axis connector for corners
+showTopConnectorX = false;
+// show top Y axis connector for corners
+showTopConnectorY = false;
 // show corners and connectors completed
 showCompleteTop = false;
 // show panelClamp
@@ -170,13 +172,15 @@ if(showTopCorner == true)
 }
 
 
-if(showTopConnector == true)
+if(showTopConnectorX == true)
 {
   echo("X Connector Length -> ",tempConnectorLenX);
   cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=5,
     filaConnect=enableTopFrameFilamentConnectX, conThickness=3,
     panelHolesCnt=2,panelHolesDist=30,letter="X");
-
+}
+if(showTopConnectorY == true)
+{
   echo("Y Connector Length -> ",tempConnectorLenY);
   translate([0,topFrameWidth+5,0])
   cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=5,
