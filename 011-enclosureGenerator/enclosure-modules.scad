@@ -271,7 +271,7 @@ module enclosureTopFrame()
   for (i=[0:1]) {
     translate([tempDist[i][0],tempDist[i][1],beamLen*vBeamCount])
     mirror([tempMirror[i][0],tempMirror[i][1],0])
-    topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
+    topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=topFrameThickness,
       filaConnectX=enableTopFrameFilamentConnectX, filaConnectY=enableTopFrameFilamentConnectY, conThickness=3);
   }
 
@@ -280,7 +280,7 @@ module enclosureTopFrame()
     translate([tempDist[i+2][0],tempDist[i+2][1],beamLen*vBeamCount])
     mirror([tempMirror[i][0],tempMirror[i][1],0])
     mirror([0,1,0])
-    topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
+    topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=topFrameThickness,
       filaConnectX=enableTopFrameFilamentConnectX, filaConnectY=enableTopFrameFilamentConnectY, conThickness=3);
   }
 
@@ -289,7 +289,7 @@ module enclosureTopFrame()
   {
     translate([topCornerXLen,enclosureY*i,beamLen*vBeamCount])
     mirror([0,i*1,0])
-    cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=5,
+    cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=topFrameThickness,
       filaConnect=enableTopFrameFilamentConnectX, conThickness=3,
       panelHolesCnt=2,panelHolesDist=topFramePanelHolesDist,letter="X");
   }
@@ -300,17 +300,17 @@ module enclosureTopFrame()
     translate([enclosureX*i,tempConnectorLenY+topCornerYLen,beamLen*vBeamCount])
     mirror([1*i,0,0])
     rotate([0,0,-90])
-    cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=5,
+    cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=topFrameThickness,
       filaConnect=enableTopFrameFilamentConnectY,
       conThickness=3,panelHolesCnt=2,panelHolesDist=topFramePanelHolesDist,letter="Y");
   }
 
-  translate([topCornerXLen+(tempConnectorLenX-topFramePanelHolesDist)/2,topFrameWidth-15,beamLen*vBeamCount+5])
+  translate([topCornerXLen+(tempConnectorLenX-topFramePanelHolesDist)/2,topFrameWidth-15,beamLen*vBeamCount+topFrameThickness])
   translate([5,0,0])
   rotate([0,0,90])
   panelClamp(length=15,width=10,overlapDist=topFramePanelOverlap, panelThickness=PanelFront_Thick, addClampThickness=2, holeToPanelDist=5);
 
-  translate([topCornerXLen+(tempConnectorLenX-topFramePanelHolesDist)/2+topFramePanelHolesDist,topFrameWidth-15,beamLen*vBeamCount+5])
+  translate([topCornerXLen+(tempConnectorLenX-topFramePanelHolesDist)/2+topFramePanelHolesDist,topFrameWidth-15,beamLen*vBeamCount+topFrameThickness])
   translate([5,0,0])
   rotate([0,0,90])
   panelClamp(length=15,width=10,overlapDist=topFramePanelOverlap, panelThickness=PanelFront_Thick, addClampThickness=2, holeToPanelDist=5);
@@ -385,6 +385,7 @@ module enclosureComplete()
               [0,enclosureY],
               [enclosureX,enclosureY]];
 
+  /* place front beams (at lower Y axis) */
   tempMirror = [[0,0],[1,0]];
   for (i=[0:1]) {
     translate([tempDist[i][0],tempDist[i][1],0])
@@ -396,7 +397,7 @@ module enclosureComplete()
     }
   }
 
-
+  /* place back beams (at upper Y axis) */
   for (i=[0:1]) {
     translate([tempDist[i+2][0],tempDist[i+2][1],0])
     mirror([tempMirror[i][0],tempMirror[i][1],0])

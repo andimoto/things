@@ -73,6 +73,8 @@ topCornerXLen = 80;
 topCornerYLen = 35;
 // width of the top frame elements
 topFrameWidth = 25;
+// thickness of the top frame elements (without filament connectors)
+topFrameThickness = 5;
 // overlapping of top panel over top frame
 topFramePanelOverlap = 5;
 // enable filament connectors on x axis on top frame to connect corners with topConnectors
@@ -100,8 +102,6 @@ PanelFront_Thick = 3;
 /* [ Back Mounting Panel Parameters ] */
 // thickness of back plate
 backMountingPlateThickness = 3;
-//enable mounting panels inside beams
-enableInsideBeamMount = true;
 // enable mounting slots in the back plate for mounting devices on it
 enableMountingSlots = true;
 // enable cable holes (disable if just a back plate is needed)
@@ -114,6 +114,8 @@ sidePanelThickness = 2;
 /* [ Show Parts ] */
 // do a complete enclosure simulation
 sim = false;
+// show corners and connectors completed
+showCompleteTop = false;
 // show beam with current configuration
 showBeam = false;
 // show top corner
@@ -122,8 +124,6 @@ showTopCorner = false;
 showTopConnectorX = false;
 // show top Y axis connector for corners
 showTopConnectorY = false;
-// show corners and connectors completed
-showCompleteTop = false;
 // show panelClamp
 showPanelClamp = false;
 // show mounting plate of enclosure back ()
@@ -161,13 +161,13 @@ if(showBeam == true)
 
 if(showTopCorner == true)
 {
-  topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
+  topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=topFrameThickness,
     filaConnectX=enableTopFrameFilamentConnectX, filaConnectY=enableTopFrameFilamentConnectY, conThickness=3);
 
   translate([0,topCornerYLen*2+5,0])
   mirror([1,0,0])
   rotate([0,0,180])
-  topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=beamMountThickness,
+  topCorner(xLen=topCornerXLen, yLen=topCornerYLen, width=topFrameWidth,thickness=topFrameThickness,
     filaConnectX=enableTopFrameFilamentConnectX, filaConnectY=enableTopFrameFilamentConnectY, conThickness=3);
 }
 
@@ -175,7 +175,7 @@ if(showTopCorner == true)
 if(showTopConnectorX == true)
 {
   echo("X Connector Length -> ",tempConnectorLenX);
-  cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=5,
+  cornerConnector(xLen=tempConnectorLenX, width=topFrameWidth, thickness=topFrameThickness,
     filaConnect=enableTopFrameFilamentConnectX, conThickness=3,
     panelHolesCnt=2,panelHolesDist=30,letter="X");
 }
@@ -183,7 +183,7 @@ if(showTopConnectorY == true)
 {
   echo("Y Connector Length -> ",tempConnectorLenY);
   translate([0,topFrameWidth+5,0])
-  cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=5,
+  cornerConnector(xLen=tempConnectorLenY, width=topFrameWidth, thickness=topFrameThickness,
     filaConnect=enableTopFrameFilamentConnectY, conThickness=3,
     panelHolesCnt=2,panelHolesDist=30,letter="Y");
 }
