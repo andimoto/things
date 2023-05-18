@@ -107,9 +107,10 @@ enableMountingSlots = true;
 // enable cable holes (disable if just a back plate is needed)
 enableBackPlateCableHoles = true;
 /* [ Side Panels ] */
-// thicknes of side panels
+// thickness of side panels
 sidePanelThickness = 2;
-
+// extra thickness for panel clamps
+clampThicknessExtra = 1;
 
 /* [ Show Parts ] */
 // do a complete enclosure simulation
@@ -191,8 +192,8 @@ if(showTopConnectorY == true)
 if(showPanelClamp == true)
 {
   translate([0,0,0])
-  rotate([0,180,0])
-  panelClamp(length=15,width=10,overlapDist=5, panelThickness=3, addClampThickness=1, holeToPanelDist=5);
+  /* rotate([0,180,0]) */
+  panelClamp(length=15,width=10,overlapDist=5, panelThickness=sidePanelThickness, addClampThickness=clampThicknessExtra, holeToPanelDist=5);
 }
 
 if(showCompleteTop == true)

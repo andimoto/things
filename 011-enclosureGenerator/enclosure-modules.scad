@@ -6,7 +6,7 @@ Author: andimoto@posteo.de
 
 /* constant distance from holes in the beams to the overlapping panel mount area */
 beamHolesToPlateDist = 5;
-
+panelClampMinThick = 4;
 /* ################ MODULES ################## */
 /* ################ MODULES ################## */
 
@@ -236,20 +236,22 @@ module filaConnect(filaDia=1.75,conLen=10,conWidth=5,conThick=3)
   }
 }
 
-
+function getClampThickness(thickness) = (thickness <= panelClampMinThick) ? (panelClampMinThick) : (thickness) ;
 module panelClamp(length=15,width=10,overlapDist=5, panelThickness=3, addClampThickness=1, holeToPanelDist=5)
 {
-  assert( ( (panelThickness+addClampThickness) >= (MountNutThick+1)), "WARNING: panelThickness+addClampThickness should be greater or equal to MountNutThick+1");
+  /* errorStr = str("WARNING: panelThickness+addClampThickness should be greater or equal to panelClampMinThick: ", panelClampMinThick); */
+  /* assert( ( (panelThickness+addClampThickness) >= (panelClampMinThick)), errorStr); */
   color("Green")
   difference()
   {
-    cube([length,width,panelThickness+addClampThickness]);
+    cube([length,width,getClampThickness(panelThickness)+addClampThickness]);
+
     translate([length-overlapDist,-extra,-extra])
       cube([overlapDist+extra,width+extra*2,panelThickness+extra]);
 
-    translate([length-overlapDist-holeToPanelDist,width/2,addClampThickness+extra])
-    NutScrewCutout(ScrewDia=3, ScrewCutoutLen=panelThickness+addClampThickness+extra*2, NutDia=MountNutDia, NutCutoutLen=MountNutThick,
-      rotX=180, rotY=0, rotZ=30, zOffset=MountNutThick);
+    translate([length-overlapDist-holeToPanelDist,width/2,getClampThickness(panelThickness)+addClampThickness+extra])
+    NutScrewCutout(ScrewDia=3, ScrewCutoutLen=(getClampThickness(panelThickness)+addClampThickness+extra*2),
+    NutDia=MountNutDia, NutCutoutLen=MountNutThick, rotX=180, rotY=0, rotZ=30, zOffset=0);
   }
 }
 /* translate([0,0,5])
@@ -355,7 +357,6 @@ module backMountingPlate(plateX=100,plateH=100,plateThick=4,mountingSlots=true,b
     translate([plateX-panelBeamOverlappingDist,-extra,plateH-beamMountThickness-1])
     cube([panelBeamOverlappingDist,plateThick+extra*2,beamMountThickness+1]);
 
-
     if(cableHole==true)
     {
       translate([-25+plateX/2,-extra,0])
@@ -370,10 +371,22 @@ module backMountingPlate(plateX=100,plateH=100,plateThick=4,mountingSlots=true,b
     {
       for (i=[0:SlotCount])
       {
-        translate([borderDist+10*i,-extra,borderDist])
-        slot(screwDia=3.4, slotLength=plateH-borderDist*2,thick=plateThick+extra*2);
+        translate([borderDist+10*i,-extra,borderDist+5])
+        slot(screwDia=3.4, slotLength=(plateH-borderDist*2-5)/2-10,thick=plateThick+extra*2);
+        translate([borderDist+10*i,-extra,borderDist+5+(plateH-borderDist*2-5)/2])
+        slot(screwDia=3.4, slotLength=(plateH-borderDist*2-5)/2-10,thick=plateThick+extra*2);
       }
     }
+
+    /* fixing holes for cables etc. */
+    temp = (plateX-borderDist*2)/20;
+    for (i=[0:temp])
+    {
+      translate([borderDist+20*i-2/2,-extra*2,beamMountThickness+3])
+      /* rotate([-90,0,0]) */
+      cube([2,plateThick+extra*4, 5]); //r=3/2, h=plateThick+extra*4
+    }
+
   }
 }
 
