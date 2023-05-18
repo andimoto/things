@@ -1,35 +1,19 @@
-# IDEA: Ikea Besta with extra Workbenches
+# Rectangular Cover Generator
 
-This is just a quick and dirty hack to visualize
-the mod I want to make with a Ikea Besta Sideboard
+WIP!!
+
+Rectangular Cover for whatever one might need it!
+Customizable with OpenSCAD Customizer!
 
 <br>
 
-![](bigBestaMod.gif)
-![](big01.png)
-![](big02.png)
-
-
-![](smallBestaMod.gif)
-![](small01.png)
-![](small02.png)
+![](013-rectangularCover.png)
 
 
 <br>
 
-![](img/001.jpg)
-![](img/002.jpg)
-![](img/003.jpg)
-![](img/004.jpg)
-![](img/005.jpg)
-![](img/006.jpg)
-![](img/007.jpg)
-![](img/008.jpg)
-![](img/009.jpg)
-![](img/010.jpg)
-![](img/011.jpg)
 
-<br>
+
 
 # LICENSE
 

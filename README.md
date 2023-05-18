@@ -17,6 +17,8 @@
 |009| Banana Cable Organizer with Lid |![](009-banana-cable-org/009-banana-cable-org.png)|
 |010| IDEA: Ikea Besta Mod (with SCAD Model) |![](010-ikea-besta-mod/bigBestaMod.gif)|
 |011| Enclosure Generator WIP |![](011-enclosureGenerator/011-enclosure-generator.png)|
+|012| Tablet Shelf WIP (FreeCAD) ||
+|011| Rectangular Cover WIP! |![](013-rectangularCover/013-rectangularCover.png)|
 |00x| next thing is WIP! | |
 
 <br>
