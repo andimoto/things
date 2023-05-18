@@ -244,14 +244,21 @@ module panelClamp(length=15,width=10,overlapDist=5, panelThickness=3, addClampTh
   color("Green")
   difference()
   {
-    cube([length,width,getClampThickness(panelThickness)+addClampThickness]);
+    cube([length,width,getClampThickness(panelThickness)+1+addClampThickness]);
 
     translate([length-overlapDist,-extra,-extra])
       cube([overlapDist+extra,width+extra*2,panelThickness+extra]);
 
-    translate([length-overlapDist-holeToPanelDist,width/2,getClampThickness(panelThickness)+addClampThickness+extra])
-    NutScrewCutout(ScrewDia=3, ScrewCutoutLen=(getClampThickness(panelThickness)+addClampThickness+extra*2),
+    translate([length-overlapDist-holeToPanelDist,width/2,getClampThickness(panelThickness)+1+addClampThickness+extra])
+    NutScrewCutout(ScrewDia=3, ScrewCutoutLen=(getClampThickness(panelThickness)+1+addClampThickness+extra*2),
     NutDia=MountNutDia, NutCutoutLen=MountNutThick, rotX=180, rotY=0, rotZ=30, zOffset=0);
+
+    /* add panelThickness as number to clamp */
+    translate([0.2,1,0])
+    rotate([0,-90,0])
+    linear_extrude(height=0.2+extra)
+    text(str(panelThickness),size = 5);
+
   }
 }
 /* translate([0,0,5])
