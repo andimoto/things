@@ -11,12 +11,12 @@ extra = 0.05;
 
 
 outerBaseDia = 60;
-innerBaseDia = 50;
+innerBaseDia = 58;
 
-outerBaseH = 5;
-innerBaseH = 7;
+outerBaseH = 7;
+innerBaseH = 10;
 
-wallThickness = 4;
+wallThickness = 2;
 
 cubeHoleXY = 5;
 bananaPlugDia = 4.1; // mid diameter of banana plug 4mm + some extra
@@ -143,8 +143,8 @@ module cableOrganizer(cnt = 3, threadPos = 3)
 rotate([180,0,180])
 bananaHook(); */
 
-/* translate([70,0,0])
-screwLid(); */
+translate([70,0,-wallThickness])
+screwLid();
 
 /* orgBase(bottom = true, hookCutout = true, thread = true); */
 enableHooks = false;
