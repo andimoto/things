@@ -42,9 +42,40 @@ backwallClearance = 2;
 // edge radius of the case (bottom and top)
 edgeRadius = 3;
 
+/* [ visualization ] */
+// show everything build together
+showAssembly = false;
+// cut through the model to view profile
+cutView = false;
+
 /* [ other Parameter ] */
 $fn = 80;
 extra = 0.015;
+
+if(showAssembly == true)
+{
+  difference()
+  {
+    union()
+    {
+      assembly();
+
+      translate([verticalFrameWidth+sideClearance*2,lowerFrameWidth+sideClearance*2,backwallThickness+backwallClearance+extra*2])
+      LaptopDisplay(absDisplayX, absDisplayY, absDisplayZ, screenX, screenY, screenZ);
+    }
+
+    if(cutView == true)
+    {
+      translate([absDisplayX/2,0,-extra])
+      cube([absDisplayX,absDisplayY+upperFrameWidth+lowerFrameWidth+sideClearance*2,absDisplayZ+backwallThickness+backwallClearance+extra*2]);
+    }
+  }
+}
+
+module assembly()
+{
+  casingBottom();
+}
 
 
 module casingBottom()
@@ -70,7 +101,7 @@ module casingBottom()
   }
 }
 
-casingBottom();
+/* casingBottom(); */
 
 module LaptopDisplay(xAbs=360, yAbs=210, zAbs=5, xScreen=350, yScreen=200, zScreen=4.5)
 {
@@ -91,5 +122,5 @@ module LaptopDisplay(xAbs=360, yAbs=210, zAbs=5, xScreen=350, yScreen=200, zScre
 }
 
 
-translate([verticalFrameWidth+sideClearance*2,lowerFrameWidth+sideClearance*2,backwallThickness+backwallClearance+extra*2])
-LaptopDisplay(absDisplayX, absDisplayY, absDisplayZ, screenX, screenY, screenZ);
+/* translate([verticalFrameWidth+sideClearance*2,lowerFrameWidth+sideClearance*2,backwallThickness+backwallClearance+extra*2])
+LaptopDisplay(absDisplayX, absDisplayY, absDisplayZ, screenX, screenY, screenZ); */
