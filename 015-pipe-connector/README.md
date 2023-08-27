@@ -1,12 +1,10 @@
 # Pipe Connector
 
-WIP!!
-
 Just a pipe connector...
 
 <br>
 
-![](013-rectangularCover.png)
+![](pipe-connector.png)
 
 
 <br>
