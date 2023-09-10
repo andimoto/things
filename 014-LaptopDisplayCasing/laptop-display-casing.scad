@@ -41,12 +41,24 @@ backwallThickness = 2;
 backwallClearance = 2;
 // edge radius of the case (bottom and top)
 edgeRadius = 3;
+// clearance between outer display frame an inner case
+frameToCaseClearance = 0.2;
+// display frame profiles
+displayFrameProfileThickness = 5; //mm
+// connector cutout length in Y direction
+connectorCutoutY = 70;
+// thickness of the lid
+lidFrameThickness = 1;
 
 /* [ visualization ] */
 // show everything build together
 showAssembly = false;
+// show full assembly with lid frame
+assemblyWithLid = false;
 // show display casing
 showCase = false;
+// show display casing
+showLidFrame = false;
 // cut through the model to view profile
 cutView = false;
 
@@ -76,6 +88,11 @@ if(showAssembly == false && showCase == true)
   }
 }
 
+if(showAssembly == false && showLidFrame == true)
+{
+
+}
+
 module assembly()
 {
   difference()
@@ -86,6 +103,12 @@ module assembly()
 
       translate([verticalFrameWidth+sideClearance*2,lowerFrameWidth+sideClearance*2,backwallThickness+backwallClearance+extra*2])
       LaptopDisplay(absDisplayX, absDisplayY, absDisplayZ, screenX, screenY, screenZ);
+
+      if(assemblyWithLid == true)
+      {
+        translate([0,0,absDisplayZ+backwallThickness+backwallClearance+extra])
+        lidFrame();
+      }
     }
 
     if(cutView == true)
@@ -93,9 +116,11 @@ module assembly()
       translate([absDisplayX/2,-extra,-extra])
       cube([absDisplayX,
         absDisplayY+upperFrameWidth+lowerFrameWidth+sideClearance*2+extra*2,
-        absDisplayZ+backwallThickness+backwallClearance+extra*2+cutExtra]);
+        absDisplayZ+backwallThickness+backwallClearance+extra*2+cutExtra+2]);
     }
   }
+
+
 }
 
 
@@ -119,10 +144,21 @@ module casingBottom()
 
     translate([verticalFrameWidth+sideClearance,lowerFrameWidth+sideClearance, backwallThickness])
     cube([absDisplayX+sideClearance*2,absDisplayY+sideClearance*2,absDisplayZ+backwallClearance+extra]);
+
+    connectorCutout();
   }
 
-  cube();
+  translate([verticalFrameWidth,lowerFrameWidth+sideClearance,backwallThickness])
+  cube([absDisplayX+sideClearance*3, displayFrameProfileThickness,backwallClearance-frameToCaseClearance]);
+  translate([verticalFrameWidth,lowerFrameWidth+absDisplayY+sideClearance*3-5,backwallThickness])
+  cube([absDisplayX+sideClearance*3, displayFrameProfileThickness,backwallClearance-frameToCaseClearance]);
 
+}
+
+module connectorCutout()
+{
+  translate([connectorXmove,verticalFrameWidth+sideClearance+connectorYmove,-extra])
+  cube([connectorX,connectorCutoutY,backwallThickness+extra*2]);
 }
 
 /* casingBottom(); */
@@ -143,6 +179,33 @@ module LaptopDisplay(xAbs=360, yAbs=210, zAbs=5, xScreen=350, yScreen=200, zScre
   color("Gold")
   translate([connectorXmove,connectorYmove,0])
   cube([connectorX, connectorY, connectorZ]);
+}
+
+/* lidFrame(); */
+module lidFrame()
+{
+  tempX=absDisplayX+sideClearance*2+verticalFrameWidth*2;
+  tempY=absDisplayY+sideClearance*2+upperFrameWidth+lowerFrameWidth;
+  tempZ=absDisplayZ + backwallClearance + backwallThickness;
+
+  difference()
+  {
+    union()
+    {
+      translate([edgeRadius,edgeRadius,0])
+      minkowski()
+      {
+        cube([tempX-edgeRadius*2,tempY-edgeRadius*2,lidFrameThickness]);
+        cylinder(r=edgeRadius, h=0.00001);
+      }
+    }
+
+    translate([(absDisplayX-screenX)/2+verticalFrameWidth+sideClearance,
+      (absDisplayX-screenX)/2+lowerFrameWidth+sideClearance,
+      -extra])
+    cube([screenX+sideClearance*2,screenY+sideClearance*2,absDisplayZ+backwallClearance+extra]);
+
+  }
 }
 
 
