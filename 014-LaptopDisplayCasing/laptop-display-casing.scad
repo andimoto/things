@@ -57,7 +57,7 @@ showAssembly = false;
 assemblyWithLid = false;
 // show display casing
 showCase = false;
-// show display casing
+// place lidFrame
 showLidFrame = false;
 // cut through the model to view profile
 cutView = false;
@@ -90,7 +90,7 @@ if(showAssembly == false && showCase == true)
 
 if(showAssembly == false && showLidFrame == true)
 {
-
+  lidFrame();
 }
 
 module assembly()
