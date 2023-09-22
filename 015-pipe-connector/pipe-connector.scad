@@ -12,7 +12,7 @@ length = 80;
 screwSetThickness = 5;
 screwEndClearence = 10;
 
-insertDia=3;
+insertDia=4.2;
 insertH=6;
 
 extra = 0.01;

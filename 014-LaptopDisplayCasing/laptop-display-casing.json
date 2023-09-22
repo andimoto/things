@@ -1,0 +1,40 @@
+{
+    "parameterSets": {
+        "JTC1BB": {
+            "$fn": "80",
+            "absDisplayX": "359",
+            "absDisplayY": "209",
+            "absDisplayZ": "6",
+            "assemblyWithLid": "false",
+            "backwallClearance": "2",
+            "backwallThickness": "2",
+            "connectorCutoutX": "45",
+            "connectorCutoutY": "70",
+            "connectorX": "35",
+            "connectorXmove": "225",
+            "connectorY": "30",
+            "connectorYmove": "25",
+            "connectorZ": "1",
+            "cutExtra": "1",
+            "cutView": "false",
+            "displayFrameProfileThickness": "5",
+            "edgeRadius": "3",
+            "extra": "0.015",
+            "frameToCaseClearance": "0.2",
+            "lidFrameThickness": "1",
+            "lowerFrameWidth": "10",
+            "moveConCutoutX": "-5",
+            "moveConCutoutY": "0",
+            "screenX": "350",
+            "screenY": "200",
+            "screenZ": "4.5",
+            "showAssembly": "true",
+            "showCase": "false",
+            "showLidFrame": "false",
+            "sideClearance": "0.4",
+            "upperFrameWidth": "10",
+            "verticalFrameWidth": "10"
+        }
+    },
+    "fileFormatVersion": "1"
+}

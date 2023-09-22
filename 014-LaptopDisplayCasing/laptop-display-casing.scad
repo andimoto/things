@@ -46,15 +46,25 @@ frameToCaseClearance = 0.2;
 // display frame profiles
 displayFrameProfileThickness = 5; //mm
 // connector cutout length in Y direction
+connectorCutoutX = 40;
+// connector cutout length in Y direction
 connectorCutoutY = 70;
+// move connector cutout by X
+moveConCutoutX = 0;
+// move connector cutout by Y
+moveConCutoutY = 0;
 // thickness of the lid
 lidFrameThickness = 1;
+// select if inserts should be used
+useInsertsInFrame = false;
 
 /* [ visualization ] */
 // show everything build together
 showAssembly = false;
 // show full assembly with lid frame
 assemblyWithLid = false;
+// show full assembly with screws
+assemblyWithScrews = false;
 // show display casing
 showCase = false;
 // place lidFrame
@@ -62,10 +72,44 @@ showLidFrame = false;
 // cut through the model to view profile
 cutView = false;
 
+/* [ Screw Parameter ] */
+screwDia = 3.2;
+screwLen = 10;
+screwHeadLen = 3;
+screwHeadThickness = 6.2;
+insertDia=4.2;
+insertH=6;
+
+
 /* [ other Parameter ] */
 $fn = 80;
 extra = 0.015;
 cutExtra = 1;
+
+
+
+
+
+screwHalfXMove=(absDisplayX/2+verticalFrameWidth+sideClearance);
+screwHalfYMove=(absDisplayX/2+lowerFrameWidth+sideClearance);
+screwTopYMove=(absDisplayY+upperFrameWidth/2+lowerFrameWidth+sideClearance);
+screwMaxXMove=(absDisplayX+verticalFrameWidth*2+sideClearance*2);
+
+frameScrews = [
+  [verticalFrameWidth/2,lowerFrameWidth/2],
+  [screwHalfXMove-verticalFrameWidth,lowerFrameWidth/2],
+  [verticalFrameWidth/2,screwTopYMove],
+  [screwHalfXMove-verticalFrameWidth,screwTopYMove],
+
+  [screwHalfXMove+verticalFrameWidth,lowerFrameWidth/2],
+  [screwMaxXMove-verticalFrameWidth/2,lowerFrameWidth/2],
+  [screwHalfXMove+verticalFrameWidth,screwTopYMove],
+  [screwMaxXMove-verticalFrameWidth/2,screwTopYMove]
+];
+
+
+
+
 
 if(showAssembly == true)
 {
@@ -108,20 +152,25 @@ module assembly()
       {
         translate([0,0,absDisplayZ+backwallThickness+backwallClearance+extra])
         lidFrame();
+
+        if(assemblyWithScrews == true)
+        {
+          color("Silver")
+          LidScrewSimulation();
+        }
       }
     }
 
     if(cutView == true)
     {
-      translate([absDisplayX/2,-extra,-extra])
+      translate([absDisplayX/2+verticalFrameWidth+sideClearance,-extra,-extra])
       cube([absDisplayX,
         absDisplayY+upperFrameWidth+lowerFrameWidth+sideClearance*2+extra*2,
         absDisplayZ+backwallThickness+backwallClearance+extra*2+cutExtra+2]);
     }
   }
-
-
 }
+
 
 
 module casingBottom()
@@ -146,6 +195,8 @@ module casingBottom()
     cube([absDisplayX+sideClearance*2,absDisplayY+sideClearance*2,absDisplayZ+backwallClearance+extra]);
 
     connectorCutout();
+
+    CaseScrewPlacement(inserts = useInsertsInFrame);
   }
 
   translate([verticalFrameWidth,lowerFrameWidth+sideClearance,backwallThickness])
@@ -157,8 +208,9 @@ module casingBottom()
 
 module connectorCutout()
 {
-  translate([connectorXmove,verticalFrameWidth+sideClearance+connectorYmove,-extra])
-  cube([connectorX,connectorCutoutY,backwallThickness+extra*2]);
+  translate([moveConCutoutX+connectorXmove+verticalFrameWidth,
+    moveConCutoutY+lowerFrameWidth+sideClearance+connectorYmove,-extra])
+  cube([connectorCutoutX,connectorCutoutY,backwallThickness+extra*2]);
 }
 
 /* casingBottom(); */
@@ -205,8 +257,82 @@ module lidFrame()
       -extra])
     cube([screenX+sideClearance*2,screenY+sideClearance*2,absDisplayZ+backwallClearance+extra]);
 
+    LidScrewPlacement();
   }
 }
+
+
+/* #CaseScrewPlacement(); */
+module CaseScrewPlacement(inserts = false)
+{
+  for(point = frameScrews)
+  {
+    translate([point[0],point[1],backwallThickness])
+    union()
+    {
+      if(inserts == true)
+      {
+        insertLength=backwallThickness+backwallClearance+absDisplayZ;
+        assert((backwallClearance+absDisplayZ) > insertH, "Warning: Insert is higher than Frame Thickness (excluded backwallThickness)!!");
+
+        translate([0,0,insertLength])
+        mirror([0,0,1])
+        screw(screwD = insertDia, screwLen=insertLength,
+          screwHeadD = 0, screwHeadLength = 0);
+      }else{
+        translate([0,0,screwLen+screwHeadLen])
+        mirror([0,0,1])
+        screw(screwD = screwDia, screwLen=screwLen,
+          screwHeadD = screwDia, screwHeadLength = screwHeadLen);
+      }
+    }
+  }
+}
+
+module LidScrewSimulation()
+{
+  for(point = frameScrews)
+  {
+    translate([point[0],point[1],-extra])
+    translate([0,0,screwLen+screwHeadLen])
+    mirror([0,0,1])
+    screw(screwD = screwDia+0.4, screwLen=screwLen,
+        screwHeadD = screwHeadThickness, screwHeadLength = screwHeadLen);
+  }
+}
+
+module LidScrewPlacement()
+{
+  for(point = frameScrews)
+  {
+    translate([point[0],point[1],-extra])
+    translate([0,0,screwLen+screwHeadLen])
+    mirror([0,0,1])
+    screw(screwD = screwDia+0.4, screwLen=screwLen,
+        screwHeadD = screwHeadThickness, screwHeadLength = screwHeadLen);
+  }
+}
+
+module screw(screwD = 3, screwLen=10, screwHeadD = 6, screwHeadLength = 3)
+{
+  union()
+  {
+    /* head */
+    cylinder(r=screwHeadD/2, h=screwHeadLength);
+    /* screw */
+    translate([0,0,screwHeadLength+0.2])
+    cylinder(r = screwD/2, h=screwLen);
+
+    translate([0,0,screwHeadLength])
+    intersection()
+    {
+      cylinder(r=screwHeadD/2,h=0.2);
+      translate([0,0,0.1])
+        cube([screwHeadD,screwD,0.2],center=true);
+    }
+  }
+}
+
 
 
 /* translate([verticalFrameWidth+sideClearance*2,lowerFrameWidth+sideClearance*2,backwallThickness+backwallClearance+extra*2])
