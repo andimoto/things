@@ -58,7 +58,30 @@ lidFrameThickness = 1;
 // select if inserts should be used
 useInsertsInFrame = false;
 
-/* [ visualization ] */
+/* [ PCB Case Parameter ] */
+// pcb length in x direction
+pcbX = 60;
+// pcb length in y direction
+pcbY = 140;
+// pcb length in z direction
+pcbZ = 18;
+// inner case dimension in x direction
+pcbCaseInnerX = 80;
+// inner case dimension in y direction
+pcbCaseInnerY = 145;
+// inner case dimension in z direction
+pcbCaseInnerZ = 22;
+// wall thickness for horizontal walls (pcb case will be mounted here to display case)
+pcbCaseHorizontalWallThickness = 10;
+// wall thickness for vertical walls
+pcbCaseVerticalWallThickness = 2;
+// bottom thickness of pcb case (pcb will be mounted here)
+pcbCaseBottomThickness = 2;
+// space to route extern pcb with buttons to outside (most display controller have extern pcbs)
+externPcbCableSpace = 2;
+
+
+/* [ Visualization ] */
 // show everything build together
 showAssembly = false;
 // show full assembly with lid frame
@@ -69,13 +92,15 @@ assemblyWithScrews = false;
 showCase = false;
 // place lidFrame
 showLidFrame = false;
+// show electronics case
+showPcbCase = false;
 // cut through the model to view profile
 cutView = false;
 
-/* [ Screw Parameter ] */
-screwDia = 3.2;
-screwLen = 10;
-screwHeadLen = 3;
+/* [ Frame Screw Parameter ] */
+frameScrewDia = 3.2;
+frameScrewLen = 10;
+frameScrewHeadLen = 3;
 screwHeadThickness = 6.2;
 insertDia=4.2;
 insertH=6;
@@ -116,11 +141,16 @@ if(showAssembly == true)
   assembly();
 }
 
+if(showAssembly == false && showPcbCase == true)
+{
+  pcbCase();
+}
+
 if(showAssembly == false && showCase == true)
 {
   difference()
   {
-    casingBottom();
+    displayCase();
 
     if(cutView == true)
     {
@@ -143,7 +173,7 @@ module assembly()
   {
     union()
     {
-      casingBottom();
+      displayCase();
 
       translate([verticalFrameWidth+sideClearance*2,lowerFrameWidth+sideClearance*2,backwallThickness+backwallClearance+extra*2])
       LaptopDisplay(absDisplayX, absDisplayY, absDisplayZ, screenX, screenY, screenZ);
@@ -172,8 +202,30 @@ module assembly()
 }
 
 
+module pcbCase()
+{
+  pcbCaseXTemp = pcbCaseInnerX + pcbCaseVerticalWallThickness*2;
+  pcbCaseYTemp = pcbCaseInnerY + pcbCaseHorizontalWallThickness*2;
 
-module casingBottom()
+  difference() {
+    cube([pcbCaseXTemp,pcbCaseYTemp,pcbCaseInnerZ+pcbCaseBottomThickness]);
+
+    translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseBottomThickness])
+      cube([pcbCaseInnerX,pcbCaseInnerY,pcbCaseInnerZ +extra]);
+
+    tempMoveXCableSpace = pcbCaseXTemp-pcbCaseVerticalWallThickness+extra;
+    tempZCableSpace = pcbCaseBottomThickness+pcbCaseInnerZ-externPcbCableSpace;
+    translate([tempMoveXCableSpace-extra*2,pcbCaseHorizontalWallThickness,tempZCableSpace])
+      cube([pcbCaseVerticalWallThickness+extra*2,pcbCaseInnerY,externPcbCableSpace +extra]);
+
+
+  }
+
+
+}
+
+
+module displayCase()
 {
   tempX=absDisplayX+sideClearance*2+verticalFrameWidth*2;
   tempY=absDisplayY+sideClearance*2+upperFrameWidth+lowerFrameWidth;
@@ -213,7 +265,7 @@ module connectorCutout()
   cube([connectorCutoutX,connectorCutoutY,backwallThickness+extra*2]);
 }
 
-/* casingBottom(); */
+/* displayCase(); */
 
 module LaptopDisplay(xAbs=360, yAbs=210, zAbs=5, xScreen=350, yScreen=200, zScreen=4.5)
 {
@@ -280,10 +332,10 @@ module CaseScrewPlacement(inserts = false)
         screw(screwD = insertDia, screwLen=insertLength,
           screwHeadD = 0, screwHeadLength = 0);
       }else{
-        translate([0,0,screwLen+screwHeadLen])
+        translate([0,0,frameScrewLen+frameScrewHeadLen])
         mirror([0,0,1])
-        screw(screwD = screwDia, screwLen=screwLen,
-          screwHeadD = screwDia, screwHeadLength = screwHeadLen);
+        screw(screwD = frameScrewDia, screwLen=frameScrewLen,
+          screwHeadD = frameScrewDia, screwHeadLength = frameScrewHeadLen);
       }
     }
   }
@@ -294,10 +346,10 @@ module LidScrewSimulation()
   for(point = frameScrews)
   {
     translate([point[0],point[1],-extra])
-    translate([0,0,screwLen+screwHeadLen])
+    translate([0,0,frameScrewLen+frameScrewHeadLen])
     mirror([0,0,1])
-    screw(screwD = screwDia+0.4, screwLen=screwLen,
-        screwHeadD = screwHeadThickness, screwHeadLength = screwHeadLen);
+    screw(screwD = frameScrewDia+0.4, screwLen=frameScrewLen,
+        screwHeadD = screwHeadThickness, screwHeadLength = frameScrewHeadLen);
   }
 }
 
@@ -306,10 +358,10 @@ module LidScrewPlacement()
   for(point = frameScrews)
   {
     translate([point[0],point[1],-extra])
-    translate([0,0,screwLen+screwHeadLen])
+    translate([0,0,frameScrewLen+frameScrewHeadLen])
     mirror([0,0,1])
-    screw(screwD = screwDia+0.4, screwLen=screwLen,
-        screwHeadD = screwHeadThickness, screwHeadLength = screwHeadLen);
+    screw(screwD = frameScrewDia+0.4, screwLen=frameScrewLen,
+        screwHeadD = screwHeadThickness, screwHeadLength = frameScrewHeadLen);
   }
 }
 
