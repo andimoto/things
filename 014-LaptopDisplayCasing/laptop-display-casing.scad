@@ -70,7 +70,7 @@ pcbCaseInnerX = 80;
 // inner case dimension in y direction
 pcbCaseInnerY = 145;
 // inner case dimension in z direction
-pcbCaseInnerZ = 22;
+pcbCaseInnerZ = 20;
 // wall thickness for horizontal walls (pcb case will be mounted here to display case)
 pcbCaseHorizontalWallThickness = 10;
 // wall thickness for vertical walls
@@ -207,19 +207,29 @@ module pcbCase()
   pcbCaseXTemp = pcbCaseInnerX + pcbCaseVerticalWallThickness*2;
   pcbCaseYTemp = pcbCaseInnerY + pcbCaseHorizontalWallThickness*2;
 
-  difference() {
-    cube([pcbCaseXTemp,pcbCaseYTemp,pcbCaseInnerZ+pcbCaseBottomThickness]);
+  tempMoveXCableSpace = pcbCaseXTemp-pcbCaseVerticalWallThickness+extra;
+  tempZCableSpace = pcbCaseBottomThickness+pcbCaseInnerZ-externPcbCableSpace;
 
+  difference() {
+    union()
+    {
+      cube([pcbCaseXTemp,pcbCaseYTemp,pcbCaseInnerZ+pcbCaseBottomThickness]);
+
+      translate([tempMoveXCableSpace+2,0,0])
+      rotate([0,-45,0])
+      cube([tempZCableSpace,pcbCaseYTemp,pcbCaseBottomThickness]);
+    }
     translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseBottomThickness])
       cube([pcbCaseInnerX,pcbCaseInnerY,pcbCaseInnerZ +extra]);
 
-    tempMoveXCableSpace = pcbCaseXTemp-pcbCaseVerticalWallThickness+extra;
-    tempZCableSpace = pcbCaseBottomThickness+pcbCaseInnerZ-externPcbCableSpace;
+
     translate([tempMoveXCableSpace-extra*2,pcbCaseHorizontalWallThickness,tempZCableSpace])
       cube([pcbCaseVerticalWallThickness+extra*2,pcbCaseInnerY,externPcbCableSpace +extra]);
 
 
   }
+
+
 
 
 }
