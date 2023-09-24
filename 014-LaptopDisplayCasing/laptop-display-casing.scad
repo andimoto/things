@@ -79,7 +79,14 @@ pcbCaseVerticalWallThickness = 2;
 pcbCaseBottomThickness = 2;
 // space to route extern pcb with buttons to outside (most display controller have extern pcbs)
 externPcbCableSpace = 2;
-
+// use inserts for pcb case
+pcbCaseMountUseInserts = false;
+// pcb case mount screw dia
+pcbCaseMountScrewDia = 3.2;
+// pcb case mount screw dia
+pcbCaseMountScrewLen = 10;
+// pcb case mount screw head len
+pcbCaseMountScrewHeadLen = 3;
 
 /* [ Visualization ] */
 // show everything build together
@@ -204,35 +211,43 @@ module assembly()
 
 module pcbCase()
 {
-  pcbCaseXTemp = pcbCaseInnerX + pcbCaseVerticalWallThickness*2;
+  pcbCaseXBottom = pcbCaseInnerX + pcbCaseVerticalWallThickness*2;
+  pcbCaseXTop = pcbCaseInnerX + pcbCaseVerticalWallThickness*2 + pcbCaseInnerZ;
   pcbCaseYTemp = pcbCaseInnerY + pcbCaseHorizontalWallThickness*2;
+  pcbCaseZTemp = pcbCaseInnerZ + pcbCaseBottomThickness;
 
-  tempMoveXCableSpace = pcbCaseXTemp-pcbCaseVerticalWallThickness+extra;
+  tempMoveXCableSpace = pcbCaseXBottom-pcbCaseVerticalWallThickness+extra;
   tempZCableSpace = pcbCaseBottomThickness+pcbCaseInnerZ-externPcbCableSpace;
 
   difference() {
-    union()
+    hull()
     {
-      cube([pcbCaseXTemp,pcbCaseYTemp,pcbCaseInnerZ+pcbCaseBottomThickness]);
+      cube([pcbCaseXBottom,pcbCaseYTemp,extra]);
 
-      translate([tempMoveXCableSpace+2,0,0])
-      rotate([0,-45,0])
-      cube([tempZCableSpace,pcbCaseYTemp,pcbCaseBottomThickness]);
+      translate([0,0,pcbCaseZTemp-extra])
+      cube([pcbCaseXTop,pcbCaseYTemp,extra]);
     }
-    translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseBottomThickness])
-      cube([pcbCaseInnerX,pcbCaseInnerY,pcbCaseInnerZ +extra]);
 
+    hull()
+    {
+      translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseBottomThickness])
+      cube([pcbCaseXBottom-pcbCaseVerticalWallThickness*2,
+        pcbCaseYTemp-pcbCaseHorizontalWallThickness*2,extra]);
 
-    translate([tempMoveXCableSpace-extra*2,pcbCaseHorizontalWallThickness,tempZCableSpace])
-      cube([pcbCaseVerticalWallThickness+extra*2,pcbCaseInnerY,externPcbCableSpace +extra]);
+      translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseZTemp])
+      cube([pcbCaseXTop-pcbCaseVerticalWallThickness*2,pcbCaseYTemp-pcbCaseHorizontalWallThickness*2,extra]);
+    }
 
+    translate([-extra,pcbCaseHorizontalWallThickness,pcbCaseBottomThickness])
+      cube([pcbCaseVerticalWallThickness+extra*2,pcbCaseInnerY,pcbCaseInnerZ+extra]);
 
+    translate([pcbCaseXTop-pcbCaseVerticalWallThickness*3,pcbCaseHorizontalWallThickness,tempZCableSpace])
+      cube([pcbCaseVerticalWallThickness*4,pcbCaseInnerY,externPcbCableSpace +extra]);
+
+    pcbCaseFrameScrews(pcbCaseMountUseInserts);
   }
-
-
-
-
 }
+
 
 
 module displayCase()
@@ -323,6 +338,37 @@ module lidFrame()
   }
 }
 
+pcbCaseFrameScrews = [
+  [10,pcbCaseHorizontalWallThickness/2],
+  [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness/2],
+  [10,pcbCaseHorizontalWallThickness+pcbCaseHorizontalWallThickness/2+pcbCaseInnerY],
+  [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness+pcbCaseHorizontalWallThickness/2+pcbCaseInnerY]
+];
+
+module pcbCaseFrameScrews(inserts = false)
+{
+  for(point = pcbCaseFrameScrews)
+  {
+    translate([point[0],point[1],0])
+    union()
+    {
+      if(inserts == true)
+      {
+        insertLength=backwallThickness+backwallClearance+absDisplayZ;
+
+        translate([0,0,pcbCaseBottomThickness+pcbCaseInnerZ-insertLength])
+        /* mirror([0,0,1]) */
+        screw(screwD = insertDia, screwLen=insertLength,
+          screwHeadD = 0, screwHeadLength = 0);
+      }else{
+        translate([0,0,pcbCaseBottomThickness+pcbCaseInnerZ+extra])
+        mirror([0,0,1])
+        screw(screwD = pcbCaseMountScrewDia, screwLen=pcbCaseMountScrewLen,
+          screwHeadD = pcbCaseMountScrewDia, screwHeadLength = pcbCaseMountScrewHeadLen);
+      }
+    }
+  }
+}
 
 /* #CaseScrewPlacement(); */
 module CaseScrewPlacement(inserts = false)
