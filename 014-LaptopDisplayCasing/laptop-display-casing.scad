@@ -56,7 +56,7 @@ moveConCutoutY = 0;
 // thickness of the lid
 lidFrameThickness = 1;
 // select if inserts should be used
-useInsertsInFrame = false;
+useInsertsInFrame = true;
 
 /* [ PCB Case Parameter ] */
 // pcb length in x direction
@@ -80,7 +80,7 @@ pcbCaseBottomThickness = 2;
 // space to route extern pcb with buttons to outside (most display controller have extern pcbs)
 externPcbCableSpace = 2;
 // use inserts for pcb case
-pcbCaseMountUseInserts = false;
+pcbCaseMountUseInserts = true;
 // pcb case mount screw dia
 pcbCaseMountScrewDia = 3.2;
 // pcb case mount screw dia
@@ -139,6 +139,13 @@ frameScrews = [
   [screwMaxXMove-verticalFrameWidth/2,screwTopYMove]
 ];
 
+
+pcbCaseFrameScrews = [
+  [10,pcbCaseHorizontalWallThickness/2],
+  [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness/2],
+  [10,pcbCaseHorizontalWallThickness+pcbCaseHorizontalWallThickness/2+pcbCaseInnerY],
+  [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness+pcbCaseHorizontalWallThickness/2+pcbCaseInnerY]
+];
 
 
 
@@ -274,6 +281,9 @@ module displayCase()
     connectorCutout();
 
     CaseScrewPlacement(inserts = useInsertsInFrame);
+
+    translate([0,0,0])
+    #pcbCaseFrameScrews();
   }
 
   translate([verticalFrameWidth,lowerFrameWidth+sideClearance,backwallThickness])
@@ -338,12 +348,7 @@ module lidFrame()
   }
 }
 
-pcbCaseFrameScrews = [
-  [10,pcbCaseHorizontalWallThickness/2],
-  [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness/2],
-  [10,pcbCaseHorizontalWallThickness+pcbCaseHorizontalWallThickness/2+pcbCaseInnerY],
-  [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness+pcbCaseHorizontalWallThickness/2+pcbCaseInnerY]
-];
+
 
 module pcbCaseFrameScrews(inserts = false)
 {
@@ -354,7 +359,7 @@ module pcbCaseFrameScrews(inserts = false)
     {
       if(inserts == true)
       {
-        insertLength=backwallThickness+backwallClearance+absDisplayZ;
+        insertLength=insertH+2;
 
         translate([0,0,pcbCaseBottomThickness+pcbCaseInnerZ-insertLength])
         /* mirror([0,0,1]) */
