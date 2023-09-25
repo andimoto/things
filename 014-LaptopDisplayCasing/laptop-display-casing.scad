@@ -57,6 +57,12 @@ moveConCutoutY = 0;
 lidFrameThickness = 1;
 // select if inserts should be used
 useInsertsInFrame = true;
+// enable mounting inserts on the back side of the display case to mount stand, etc
+sideMountingHoles = true;
+// move pcb case in x direction (from lvds connector)
+diffMovePcbCaseX = 0;
+// move pcb case in y direction (from lvds connector)
+diffMovePcbCaseY = 0;
 
 /* [ PCB Case Parameter ] */
 // pcb length in x direction
@@ -118,7 +124,9 @@ $fn = 80;
 extra = 0.015;
 cutExtra = 1;
 
-
+// movement of ocb case depends on cutout of lvds connector
+movePcbCaseX = connectorXmove + diffMovePcbCaseX;
+movePcbCaseY = connectorYmove + diffMovePcbCaseY;
 
 
 
@@ -140,6 +148,20 @@ frameScrews = [
 ];
 
 
+midTemp = (lowerFrameWidth+upperFrameWidth+absDisplayY)/2;
+rightSideTemp = verticalFrameWidth*2 + sideClearance*2 + absDisplayX - verticalFrameWidth/2;
+backFrameMountingInserts = [
+  // left side mounting insert holes
+  [verticalFrameWidth/2,midTemp-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4],
+  [verticalFrameWidth/2,midTemp],
+  [verticalFrameWidth/2,midTemp+(lowerFrameWidth+upperFrameWidth+absDisplayY)/4],
+  // right side mounting insert holes
+  [rightSideTemp,midTemp-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4],
+  [rightSideTemp,midTemp],
+  [rightSideTemp,midTemp+(lowerFrameWidth+upperFrameWidth+absDisplayY)/4],
+];
+
+
 pcbCaseFrameScrews = [
   [10,pcbCaseHorizontalWallThickness/2],
   [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness/2],
@@ -147,7 +169,12 @@ pcbCaseFrameScrews = [
   [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness+pcbCaseHorizontalWallThickness/2+pcbCaseInnerY]
 ];
 
-
+caseStandoffPoints = [
+  [21,14],
+  [49,20],
+  [21,pcbY-13],
+  [49,pcbY-14]
+];
 
 
 if(showAssembly == true)
@@ -203,6 +230,10 @@ module assembly()
           LidScrewSimulation();
         }
       }
+
+      translate([movePcbCaseX,movePcbCaseY,0])
+      translate([0,0,-pcbCaseInnerZ-pcbCaseBottomThickness])
+      pcbCase();
     }
 
     if(cutView == true)
@@ -252,11 +283,11 @@ module pcbCase()
 
       // move ALL standoffs by pcbCaseHorizontalWallThickness & pcbCaseBottomThickness
       translate([0,pcbCaseHorizontalWallThickness+1,pcbCaseBottomThickness])
-      caseStandoffs(dia=9,height=3);
+      cylinderList(dia=9,height=3, points=caseStandoffPoints);
     } /* union */
     // move ALL standoffs by pcbCaseHorizontalWallThickness & pcbCaseBottomThickness
     translate([0,pcbCaseHorizontalWallThickness+1,0])
-    caseStandoffs(dia=3.8,height=pcbCaseBottomThickness+3+extra);
+    cylinderList(dia=3.8,height=pcbCaseBottomThickness+3+extra, points=caseStandoffPoints);
 
 
     // remove left sidewall where connectors of pcb are placed
@@ -301,8 +332,14 @@ module displayCase()
 
     CaseScrewPlacement(inserts = useInsertsInFrame);
 
-    translate([0,0,0])
-    pcbCaseFrameScrews();
+    translate([movePcbCaseX,movePcbCaseY,-extra])
+      cylinderList(dia=3.5,height=backwallThickness+extra*2,points=pcbCaseFrameScrews);
+
+    if(sideMountingHoles == true)
+    {
+      translate([0,0,-extra])
+        cylinderList(dia=insertDia,height=insertH+extra,points=backFrameMountingInserts);
+    }
   }
 
   translate([verticalFrameWidth,lowerFrameWidth+sideClearance,backwallThickness])
@@ -394,16 +431,11 @@ module pcbCaseFrameScrews(inserts = false)
   }
 }
 
-caseStandoffPoints = [
-  [21,14],
-  [49,20],
-  [21,pcbY-13],
-  [49,pcbY-14]
-];
 
-module caseStandoffs(dia=9,height=3)
+
+module cylinderList(dia=9,height=3,points=[[0,0],[0,0]])
 {
-  for(point = caseStandoffPoints)
+  for(point = points)
   {
     translate([point[0],point[1],0])
     cylinder(r=dia/2, h=height);
