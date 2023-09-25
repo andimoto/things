@@ -227,31 +227,50 @@ module pcbCase()
   tempZCableSpace = pcbCaseBottomThickness+pcbCaseInnerZ-externPcbCableSpace;
 
   difference() {
-    hull()
+    union()
     {
-      cube([pcbCaseXBottom,pcbCaseYTemp,extra]);
+      difference()
+      {
+        hull()
+        {
+          cube([pcbCaseXBottom,pcbCaseYTemp,extra]);
 
-      translate([0,0,pcbCaseZTemp-extra])
-      cube([pcbCaseXTop,pcbCaseYTemp,extra]);
-    }
+          translate([0,0,pcbCaseZTemp-extra])
+          cube([pcbCaseXTop,pcbCaseYTemp,extra]);
+        }
 
-    hull()
-    {
-      translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseBottomThickness])
-      cube([pcbCaseXBottom-pcbCaseVerticalWallThickness*2,
-        pcbCaseYTemp-pcbCaseHorizontalWallThickness*2,extra]);
+        hull()
+        {
+          translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseBottomThickness])
+          cube([pcbCaseXBottom-pcbCaseVerticalWallThickness*2,
+            pcbCaseYTemp-pcbCaseHorizontalWallThickness*2,extra]);
 
-      translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseZTemp])
-      cube([pcbCaseXTop-pcbCaseVerticalWallThickness*2,pcbCaseYTemp-pcbCaseHorizontalWallThickness*2,extra]);
-    }
+          translate([pcbCaseVerticalWallThickness,pcbCaseHorizontalWallThickness,pcbCaseZTemp])
+          cube([pcbCaseXTop-pcbCaseVerticalWallThickness*2,pcbCaseYTemp-pcbCaseHorizontalWallThickness*2,extra]);
+        }
+      } /* difference */
 
+      // move ALL standoffs by pcbCaseHorizontalWallThickness & pcbCaseBottomThickness
+      translate([0,pcbCaseHorizontalWallThickness+1,pcbCaseBottomThickness])
+      caseStandoffs(dia=9,height=3);
+    } /* union */
+    // move ALL standoffs by pcbCaseHorizontalWallThickness & pcbCaseBottomThickness
+    translate([0,pcbCaseHorizontalWallThickness+1,0])
+    caseStandoffs(dia=3.8,height=pcbCaseBottomThickness+3+extra);
+
+
+    // remove left sidewall where connectors of pcb are placed
     translate([-extra,pcbCaseHorizontalWallThickness,pcbCaseBottomThickness])
       cube([pcbCaseVerticalWallThickness+extra*2,pcbCaseInnerY,pcbCaseInnerZ+extra]);
 
+    // remove a small slot to get the cable out for the control button pcb
     translate([pcbCaseXTop-pcbCaseVerticalWallThickness*3,pcbCaseHorizontalWallThickness,tempZCableSpace])
       cube([pcbCaseVerticalWallThickness*4,pcbCaseInnerY,externPcbCableSpace +extra]);
 
+    // remove holes for screws or inserts
     pcbCaseFrameScrews(pcbCaseMountUseInserts);
+
+
   }
 }
 
@@ -283,7 +302,7 @@ module displayCase()
     CaseScrewPlacement(inserts = useInsertsInFrame);
 
     translate([0,0,0])
-    #pcbCaseFrameScrews();
+    pcbCaseFrameScrews();
   }
 
   translate([verticalFrameWidth,lowerFrameWidth+sideClearance,backwallThickness])
@@ -375,6 +394,22 @@ module pcbCaseFrameScrews(inserts = false)
   }
 }
 
+caseStandoffPoints = [
+  [21,14],
+  [49,20],
+  [21,pcbY-13],
+  [49,pcbY-14]
+];
+
+module caseStandoffs(dia=9,height=3)
+{
+  for(point = caseStandoffPoints)
+  {
+    translate([point[0],point[1],0])
+    cylinder(r=dia/2, h=height);
+  }
+}
+
 /* #CaseScrewPlacement(); */
 module CaseScrewPlacement(inserts = false)
 {
@@ -386,7 +421,8 @@ module CaseScrewPlacement(inserts = false)
       if(inserts == true)
       {
         insertLength=backwallThickness+backwallClearance+absDisplayZ;
-        assert((backwallClearance+absDisplayZ) > insertH, "Warning: Insert is higher than Frame Thickness (excluded backwallThickness)!!");
+        assert((backwallClearance+absDisplayZ) > insertH,
+          "Warning: Insert is higher than Frame Thickness (excluded backwallThickness)!!");
 
         translate([0,0,insertLength])
         mirror([0,0,1])
