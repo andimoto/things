@@ -103,8 +103,14 @@ assemblyWithLid = false;
 assemblyWithScrews = false;
 // show display casing
 showCase = false;
-// place lidFrame
+// show right part of case (for printing)
+showCaseR = false;
+// show left part of case (for printing)
+showCaseL = false;
+// place complete lidFrame
 showLidFrame = false;
+// place lidFrame parts divided into 2 side parts and 2 parts
+showAllLidFrameParts = false;
 // show electronics case
 showPcbCase = false;
 // cut through the model to view profile
@@ -128,23 +134,29 @@ cutExtra = 1;
 movePcbCaseX = connectorXmove + diffMovePcbCaseX;
 movePcbCaseY = connectorYmove + diffMovePcbCaseY;
 
+completeX = absDisplayX + sideClearance*2 + verticalFrameWidth*2;
+completeY = absDisplayY + sideClearance*2 + upperFrameWidth + lowerFrameWidth;
 
-
-screwHalfXMove=(absDisplayX/2+verticalFrameWidth+sideClearance);
-screwHalfYMove=(absDisplayX/2+lowerFrameWidth+sideClearance);
 screwTopYMove=(absDisplayY+upperFrameWidth/2+lowerFrameWidth+sideClearance);
 screwMaxXMove=(absDisplayX+verticalFrameWidth*2+sideClearance*2);
+screwThirdXMove= (absDisplayX+verticalFrameWidth*2+sideClearance*2)/3;
 
 frameScrews = [
   [verticalFrameWidth/2,lowerFrameWidth/2],
-  [screwHalfXMove-verticalFrameWidth,lowerFrameWidth/2],
   [verticalFrameWidth/2,screwTopYMove],
-  [screwHalfXMove-verticalFrameWidth,screwTopYMove],
 
-  [screwHalfXMove+verticalFrameWidth,lowerFrameWidth/2],
   [screwMaxXMove-verticalFrameWidth/2,lowerFrameWidth/2],
-  [screwHalfXMove+verticalFrameWidth,screwTopYMove],
-  [screwMaxXMove-verticalFrameWidth/2,screwTopYMove]
+  [screwMaxXMove-verticalFrameWidth/2,screwTopYMove],
+
+  [screwThirdXMove-verticalFrameWidth,lowerFrameWidth/2],
+  [screwThirdXMove-verticalFrameWidth,screwTopYMove],
+  [screwThirdXMove+verticalFrameWidth,lowerFrameWidth/2],
+  [screwThirdXMove+verticalFrameWidth,screwTopYMove],
+
+  [screwThirdXMove*2-verticalFrameWidth,lowerFrameWidth/2],
+  [screwThirdXMove*2-verticalFrameWidth,screwTopYMove],
+  [screwThirdXMove*2+verticalFrameWidth,lowerFrameWidth/2],
+  [screwThirdXMove*2+verticalFrameWidth,screwTopYMove],
 ];
 
 
@@ -207,6 +219,80 @@ if(showAssembly == false && showLidFrame == true)
 {
   lidFrame();
 }
+
+if(showAssembly == false && showLidFrame == false && showAllLidFrameParts == true)
+{
+  difference()
+  {
+    lidFrame();
+
+    translate([screwThirdXMove,-extra,-extra])
+    cube([completeX+extra,completeY+extra*2,
+      lidFrameThickness+extra*2]);
+  }
+
+
+  translate([verticalFrameWidth*3,screwThirdXMove*2+lowerFrameWidth*5,0])
+  rotate([0,0,-90])
+  difference()
+  {
+    lidFrame();
+
+    translate([0,-extra,-extra])
+    cube([screwThirdXMove,completeY+extra*2,
+      lidFrameThickness+extra*2]);
+
+    translate([screwThirdXMove*2,-extra,-extra])
+    cube([completeX+extra,completeY+extra*2,
+      lidFrameThickness+extra*2]);
+  }
+
+  translate([verticalFrameWidth*2-screwThirdXMove*2,lowerFrameWidth*2,0])
+  difference()
+  {
+    lidFrame();
+
+    translate([0,-extra,-extra])
+    cube([screwThirdXMove*2,completeY+extra*2,
+      lidFrameThickness+extra*2]);
+
+
+  }
+}
+
+if(showAssembly == false && showCase == false && showCaseR == true)
+{
+  difference()
+  {
+    displayCase();
+
+    absoluteX = verticalFrameWidth*2 + sideClearance*2 + absDisplayX;
+    absoluteY = upperFrameWidth + lowerFrameWidth + sideClearance*2 + absDisplayY;
+
+    translate([absoluteX/2,-extra,-extra])
+    cube([absoluteX/2+extra,absoluteY+extra*2,
+      absDisplayZ+backwallThickness+backwallClearance+extra*2]);
+
+  }
+}
+
+if(showAssembly == false && showCase == false && showCaseL == true)
+{
+  translate([10,0,0])
+  difference()
+  {
+    displayCase();
+
+    absoluteX = verticalFrameWidth*2 + sideClearance*2 + absDisplayX;
+    absoluteY = upperFrameWidth + lowerFrameWidth + sideClearance*2 + absDisplayY;
+
+    translate([-extra,-extra,-extra])
+    cube([absoluteX/2+extra,absoluteY+extra*2,
+      absDisplayZ+backwallThickness+backwallClearance+extra*2]);
+
+  }
+}
+
 
 module assembly()
 {
@@ -338,7 +424,7 @@ module displayCase()
     if(sideMountingHoles == true)
     {
       translate([0,0,-extra])
-        cylinderList(dia=insertDia,height=insertH+extra,points=backFrameMountingInserts);
+        cylinderList(dia=insertDia ,height=insertH+extra, points=backFrameMountingInserts);
     }
   }
 
