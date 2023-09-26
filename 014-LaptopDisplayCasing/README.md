@@ -2,11 +2,16 @@
 
 WIP!!
 
-Customizable Case for Laptop Displays which have been removed/recycled from old laptops.
+__Customizable Case for Laptop Displays which have been removed \/ recycled from old laptops.__
 
-| STL Model | Display | Display Controller |
-|-----------|---------|--------------------|
-| [Display001](stl/display001) |LP156WH2-TLQA / N156BGE-L21 / N156B6-L04 - 15.6 "panel | NT68676 |
+
+
+| STL Model | Display | Display Controller | Note |
+|-----------|---------|--------------------|------|
+| [Display001](stl/display001) |LP156WH2-TLQA <br> N156BGE-L21 <br> N156B6-L04 <br> much more <br> 15.6 "panel | NT68676 | Display Controller suitable for many displays! Button PCB may be different! |
+| WIP!! [Display002](stl/display002) | LP141WX3 <br> B141EW03 <br> LP154W01 <br> LP154WX4 <br> 14.1" <br> 15.4" | LCD-Controller VS-TY2662-V1 | Display Controller suitable for many displays! Button PCB may be different!  <br> Old display with high voltage backlight! |
+
+# Customization
 
 <br>
 
