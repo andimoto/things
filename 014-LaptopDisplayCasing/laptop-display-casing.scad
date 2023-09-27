@@ -58,7 +58,7 @@ lidFrameThickness = 1;
 // select if inserts should be used
 useInsertsInFrame = true;
 // enable mounting inserts on the back side of the display case to mount stand, etc
-sideMountingHoles = true;
+backMountingHoles = true;
 // move pcb case in x direction (from lvds connector)
 diffMovePcbCaseX = 0;
 // move pcb case in y direction (from lvds connector)
@@ -113,6 +113,8 @@ showLidFrame = false;
 showAllLidFrameParts = false;
 // show electronics case
 showPcbCase = false;
+// show stand
+showStand = false;
 // cut through the model to view profile
 cutView = false;
 
@@ -294,6 +296,11 @@ if(showAssembly == false && showCase == false && showCaseL == true)
 }
 
 
+if(showAssembly == false && showCase == false && showStand == true)
+{
+  stand();
+}
+
 module assembly()
 {
   difference()
@@ -386,8 +393,6 @@ module pcbCase()
 
     // remove holes for screws or inserts
     pcbCaseFrameScrews(pcbCaseMountUseInserts);
-
-
   }
 }
 
@@ -412,7 +417,7 @@ module displayCase()
     }
 
     translate([verticalFrameWidth+sideClearance,lowerFrameWidth+sideClearance, backwallThickness])
-    cube([absDisplayX+sideClearance*2,absDisplayY+sideClearance*2,absDisplayZ+backwallClearance+extra]);
+      cube([absDisplayX+sideClearance*2,absDisplayY+sideClearance*2,absDisplayZ+backwallClearance+extra]);
 
     connectorCutout();
 
@@ -421,7 +426,7 @@ module displayCase()
     translate([movePcbCaseX,movePcbCaseY,-extra])
       cylinderList(dia=3.5,height=backwallThickness+extra*2,points=pcbCaseFrameScrews);
 
-    if(sideMountingHoles == true)
+    if(backMountingHoles == true)
     {
       translate([0,0,-extra])
         cylinderList(dia=insertDia ,height=insertH+extra, points=backFrameMountingInserts);
@@ -429,9 +434,9 @@ module displayCase()
   }
 
   translate([verticalFrameWidth,lowerFrameWidth+sideClearance,backwallThickness])
-  cube([absDisplayX+sideClearance*3, displayFrameProfileThickness,backwallClearance-frameToCaseClearance]);
+    cube([absDisplayX+sideClearance*3, displayFrameProfileThickness,backwallClearance-frameToCaseClearance]);
   translate([verticalFrameWidth,lowerFrameWidth+absDisplayY+sideClearance*3-5,backwallThickness])
-  cube([absDisplayX+sideClearance*3, displayFrameProfileThickness,backwallClearance-frameToCaseClearance]);
+    cube([absDisplayX+sideClearance*3, displayFrameProfileThickness,backwallClearance-frameToCaseClearance]);
 
 }
 
@@ -441,6 +446,7 @@ module connectorCutout()
     moveConCutoutY+lowerFrameWidth+sideClearance+connectorYmove,-extra])
   cube([connectorCutoutX,connectorCutoutY,backwallThickness+extra*2]);
 }
+
 
 /* displayCase(); */
 
@@ -490,6 +496,75 @@ module lidFrame()
   }
 }
 
+
+module stand()
+{
+  lengthY = ((lowerFrameWidth+upperFrameWidth+absDisplayY)/4 ) * 2 + 10;
+  difference()
+  {
+    union()
+    {
+
+      cube([10,lengthY,10]);
+
+      translate([0,0,10])
+      hull()
+      {
+        cube([10,lengthY,0.1]);
+
+        translate([5/2,0,2.5])
+        cube([5,lengthY,0.1]);
+      }
+    }
+    translate([0,5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,-extra])
+      cylinderList(dia=frameScrewDia+0.4 ,height=10+2.6+extra*2, points=backFrameMountingInserts);
+
+    translate([0,5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,12.6-frameScrewHeadLen])
+      cylinderList(dia=screwHeadThickness ,height=frameScrewHeadLen+extra, points=backFrameMountingInserts);
+
+
+    standCutoutLen = (lengthY - 10*3)/2 - 10;
+    translate([-extra,15,2.6+extra])
+      cube([10+extra*2,standCutoutLen,10]);
+
+    translate([-extra,lengthY/2+10,2.6+extra])
+      cube([10+extra*2,standCutoutLen,10]);
+
+    moveYtemp = 15;
+    translate([5, moveYtemp, 10-(12.6-10)])
+    rotate([-90,0,0])
+    coneCutout();
+
+    translate([5, moveYtemp+standCutoutLen, 10-(12.6-10)])
+    rotate([-90,0,0])
+    coneCutout();
+
+    translate([0,standCutoutLen+20,0])
+    union()
+    {
+      translate([5, moveYtemp, 10-(12.6-10)])
+      rotate([-90,0,0])
+        coneCutout();
+
+      translate([5, moveYtemp+standCutoutLen, 10-(12.6-10)])
+      rotate([-90,0,0])
+        coneCutout();
+    }
+  }
+}
+
+module coneCutout()
+{
+  scale([1.05,1.05,1.05])
+  cone();
+}
+
+module cone()
+{
+  cylinder(r1=3,r2=1.5,h=2);
+  rotate([180,0,0])
+  cylinder(r1=3,r2=1.5,h=2);
+}
 
 
 module pcbCaseFrameScrews(inserts = false)
@@ -599,6 +674,7 @@ module screw(screwD = 3, screwLen=10, screwHeadD = 6, screwHeadLength = 3)
     }
   }
 }
+
 
 
 
