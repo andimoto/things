@@ -190,9 +190,18 @@ caseStandoffPoints = [
   [49,pcbY-14]
 ];
 
+/* stand length in y direction */
+lengthY = ((lowerFrameWidth+upperFrameWidth+absDisplayY)/4 ) * 2 + 10;
+/* cutout length for hinges of stand */
+standCutoutLen = (lengthY - 10*3)/2 - 10;
+/* some move parameter */
+moveYtemp = 15;
+stand2Zlen = 50;
+
 
 if(showAssembly == true)
 {
+  rotate([76,0,0])
   assembly();
 }
 
@@ -298,7 +307,22 @@ if(showAssembly == false && showCase == false && showCaseL == true)
 
 if(showAssembly == false && showCase == false && showStand == true)
 {
-  stand();
+  /* translate([-12.50,0,0])
+  mirror([1,0,0])
+  rotate([0,-90,0]) */
+  difference()
+  {
+    union()
+    {
+      stand();
+      stand2();
+    }
+    if(cutView == true)
+    {
+      translate([5,-extra,-extra])
+      cube([10,lengthY+extra*2,20]);
+    }
+  }
 }
 
 module assembly()
@@ -327,6 +351,22 @@ module assembly()
       translate([movePcbCaseX,movePcbCaseY,0])
       translate([0,0,-pcbCaseInnerZ-pcbCaseBottomThickness])
       pcbCase();
+
+      mirror([0,0,1])
+      {
+        translate([0,midTemp-5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,0])
+        union()
+        {
+          stand();
+          stand2();
+        }
+        translate([completeX-10,midTemp-5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,0])
+        union()
+        {
+          stand();
+          stand2();
+        }
+      }
     }
 
     if(cutView == true)
@@ -337,6 +377,8 @@ module assembly()
         absDisplayZ+backwallThickness+backwallClearance+extra*2+cutExtra+2]);
     }
   }
+
+
 }
 
 
@@ -499,7 +541,7 @@ module lidFrame()
 
 module stand()
 {
-  lengthY = ((lowerFrameWidth+upperFrameWidth+absDisplayY)/4 ) * 2 + 10;
+  /* lengthY = ((lowerFrameWidth+upperFrameWidth+absDisplayY)/4 ) * 2 + 10; */
   difference()
   {
     union()
@@ -523,14 +565,14 @@ module stand()
       cylinderList(dia=screwHeadThickness ,height=frameScrewHeadLen+extra, points=backFrameMountingInserts);
 
 
-    standCutoutLen = (lengthY - 10*3)/2 - 10;
+
     translate([-extra,15,2.6+extra])
       cube([10+extra*2,standCutoutLen,10]);
 
     translate([-extra,lengthY/2+10,2.6+extra])
       cube([10+extra*2,standCutoutLen,10]);
 
-    moveYtemp = 15;
+
     translate([5, moveYtemp, 10-(12.6-10)])
     rotate([-90,0,0])
     coneCutout();
@@ -552,6 +594,101 @@ module stand()
     }
   }
 }
+
+
+
+module stand2()
+{
+  difference()
+  {
+    union()
+    {
+      stand2body();
+
+      hull()
+      {
+        translate([0,0,12.6])
+        cube([10,0.1,stand2Zlen]);
+        translate([0,-40,12.6+stand2Zlen-stand2Zlen/4])
+        rotate([-15,0,0])
+        #cube([10,0.1,stand2Zlen/4]);
+      }
+    }
+
+    // cutout to save material
+    translate([0,0,12.6+1+10])
+    hull()
+    {
+      translate([-extra,10,0])
+      cube([10+extra*2,1,stand2Zlen-1-20]);
+      translate([-extra,lengthY-1-10,0])
+      cube([10+extra*2,1,(stand2Zlen-1)/2-16]);
+    }
+
+  }
+
+}
+
+module stand2body()
+{
+  union()
+  {
+    translate([0,0,12.6+1])
+    hull()
+    {
+      cube([10,5,stand2Zlen-1]);
+      translate([0,lengthY-1,0])
+      cube([10,1,(stand2Zlen-1)/2]);
+    }
+
+    translate([0,moveYtemp,0])
+    {
+      hull()
+      {
+        translate([5/2,0+0.4,2.6+1])
+        cube([5,standCutoutLen-0.8,0.1]);
+        translate([0,0+0.4,2.6*2+1])
+        cube([10,standCutoutLen-0.8,0.1]);
+      }
+      translate([0,0+0.4,2.6*2+1])
+      cube([10,standCutoutLen-0.8,10-2.6]);
+    }
+
+    translate([0,lengthY/2+10,0])
+    {
+      hull()
+      {
+        translate([5/2,0.4,2.6+1])
+        cube([5,standCutoutLen-0.8,0.1]);
+        translate([0,0.4,2.6*2+1])
+        cube([10,standCutoutLen-0.8,0.1]);
+      }
+      translate([0,0.4,2.6*2+1])
+      cube([10,standCutoutLen-0.8,10-2.6]);
+    }
+
+    translate([5, moveYtemp+0.4, 10-(12.6-10)])
+    rotate([-90,0,0])
+    coneCutout();
+
+    translate([5, moveYtemp+standCutoutLen-0.4, 10-(12.6-10)])
+    rotate([-90,0,0])
+    coneCutout();
+
+    translate([0,standCutoutLen+20,0])
+    union()
+    {
+      translate([5, moveYtemp+0.4, 10-(12.6-10)])
+      rotate([-90,0,0])
+        coneCutout();
+
+      translate([5, moveYtemp+standCutoutLen-0.4, 10-(12.6-10)])
+      rotate([-90,0,0])
+        coneCutout();
+    }
+  }
+}
+
 
 module coneCutout()
 {
