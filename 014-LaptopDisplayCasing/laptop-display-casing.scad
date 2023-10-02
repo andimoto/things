@@ -94,6 +94,12 @@ pcbCaseMountScrewLen = 10;
 // pcb case mount screw head len
 pcbCaseMountScrewHeadLen = 3;
 
+/* [ Stand Parameter ] */
+// distance between hinge and feet of the stand. Main Parameter to control the angel of the display when standing
+standFeetLength = -40;
+// control the angel of the plate of the stand which touches the ground
+standFeetPlateDegree = -14;
+
 /* [ Visualization ] */
 // show everything build together
 showAssembly = false;
@@ -626,10 +632,10 @@ module stand2()
 
       hull()
       {
-        translate([0,0,12.6])
-        cube([10,0.1,stand2Zlen]);
-        translate([0,-40,12.6+stand2Zlen-stand2Zlen/4])
-        rotate([-15,0,0])
+        translate([0,0,12.6+1])
+        cube([10,0.1,stand2Zlen-1]);
+        translate([0,standFeetLength,12.6+stand2Zlen-stand2Zlen/4])
+        rotate([standFeetPlateDegree,0,0])
         cube([10,0.1,stand2Zlen/4]);
       }
     }
