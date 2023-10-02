@@ -308,8 +308,26 @@ if(showAssembly == false && showCase == false && showCaseL == true)
 if(showAssembly == false && showCase == false && showStand == true)
 {
   /* translate([-12.50,0,0])
-  mirror([1,0,0])
-  rotate([0,-90,0]) */
+  mirror([1,0,0])*/
+
+  translate([5,0,0])
+  rotate([0,90,0])
+  difference()
+  {
+    union()
+    {
+      stand();
+      stand2();
+    }
+    if(cutView == true)
+    {
+      translate([5,-extra,-extra])
+      cube([10,lengthY+extra*2,20]);
+    }
+  }
+
+  rotate([0,90,0])
+  mirror([0,0,1])
   difference()
   {
     union()
@@ -354,7 +372,8 @@ module assembly()
 
       mirror([0,0,1])
       {
-        translate([0,midTemp-5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,0])
+        translate([10,midTemp-5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,0])
+        mirror([1,0,0])
         union()
         {
           stand();
@@ -555,7 +574,7 @@ module stand()
         cube([10,lengthY,0.1]);
 
         translate([5/2,0,2.5])
-        cube([5,lengthY,0.1]);
+        cube([5+5/2,lengthY,0.1]);
       }
     }
     translate([0,5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,-extra])
@@ -611,7 +630,7 @@ module stand2()
         cube([10,0.1,stand2Zlen]);
         translate([0,-40,12.6+stand2Zlen-stand2Zlen/4])
         rotate([-15,0,0])
-        #cube([10,0.1,stand2Zlen/4]);
+        cube([10,0.1,stand2Zlen/4]);
       }
     }
 
