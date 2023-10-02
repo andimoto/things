@@ -107,6 +107,8 @@ showAssembly = false;
 assemblyWithLid = false;
 // show full assembly with screws
 assemblyWithScrews = false;
+// show only display
+showDisplay = false;
 // show display casing
 showCase = false;
 // show right part of case (for printing)
@@ -150,21 +152,30 @@ screwMaxXMove=(absDisplayX+verticalFrameWidth*2+sideClearance*2);
 screwThirdXMove= (absDisplayX+verticalFrameWidth*2+sideClearance*2)/3;
 
 frameScrews = [
-  [verticalFrameWidth/2,lowerFrameWidth/2],
-  [verticalFrameWidth/2,screwTopYMove],
+  /* [verticalFrameWidth/2,lowerFrameWidth/2], */
+  /* [verticalFrameWidth/2,screwTopYMove], */
 
-  [screwMaxXMove-verticalFrameWidth/2,lowerFrameWidth/2],
-  [screwMaxXMove-verticalFrameWidth/2,screwTopYMove],
+  /* [screwMaxXMove-verticalFrameWidth/2,lowerFrameWidth/2], */
+  /* [screwMaxXMove-verticalFrameWidth/2,screwTopYMove], */
 
-  [screwThirdXMove-verticalFrameWidth,lowerFrameWidth/2],
-  [screwThirdXMove-verticalFrameWidth,screwTopYMove],
-  [screwThirdXMove+verticalFrameWidth,lowerFrameWidth/2],
-  [screwThirdXMove+verticalFrameWidth,screwTopYMove],
+  /* [screwThirdXMove-verticalFrameWidth,lowerFrameWidth/2], */
+  /* [screwThirdXMove-verticalFrameWidth,screwTopYMove], */
+  /* [screwThirdXMove+verticalFrameWidth,lowerFrameWidth/2], */
+  /* [screwThirdXMove+verticalFrameWidth,screwTopYMove], */
 
-  [screwThirdXMove*2-verticalFrameWidth,lowerFrameWidth/2],
-  [screwThirdXMove*2-verticalFrameWidth,screwTopYMove],
-  [screwThirdXMove*2+verticalFrameWidth,lowerFrameWidth/2],
-  [screwThirdXMove*2+verticalFrameWidth,screwTopYMove],
+  /* [screwThirdXMove*2-verticalFrameWidth,lowerFrameWidth/2], */
+  /* [screwThirdXMove*2-verticalFrameWidth,screwTopYMove], */
+  /* [screwThirdXMove*2+verticalFrameWidth,lowerFrameWidth/2], */
+  /* [screwThirdXMove*2+verticalFrameWidth,screwTopYMove] */
+];
+
+additionalFrameScrews = [
+  // lower holes
+  [verticalFrameWidth+sideClearance+117,lowerFrameWidth/2],
+  [verticalFrameWidth+sideClearance+absDisplayX-117,lowerFrameWidth/2],
+  // upper holes
+  [verticalFrameWidth+sideClearance+117,completeY-lowerFrameWidth/2],
+  [verticalFrameWidth+sideClearance+absDisplayX-117,completeY-lowerFrameWidth/2]
 ];
 
 
@@ -203,6 +214,11 @@ standCutoutLen = (lengthY - 10*3)/2 - 10;
 /* some move parameter */
 moveYtemp = 15;
 stand2Zlen = 50;
+
+if(showAssembly == false && showDisplay == true)
+{
+  LaptopDisplay(absDisplayX, absDisplayY, absDisplayZ, screenX, screenY, screenZ);
+}
 
 
 if(showAssembly == true)
@@ -490,8 +506,12 @@ module displayCase()
 
     CaseScrewPlacement(inserts = useInsertsInFrame);
 
-    translate([movePcbCaseX,movePcbCaseY,-extra])
+    #translate([movePcbCaseX,movePcbCaseY,-extra])
       cylinderList(dia=3.5,height=backwallThickness+extra*2,points=pcbCaseFrameScrews);
+
+
+    translate([0,0,tempZ-insertH])
+      cylinderList(dia=insertDia,height=insertH+extra,points=additionalFrameScrews);
 
     if(backMountingHoles == true)
     {
