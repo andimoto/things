@@ -302,7 +302,7 @@ if(showAssembly == false && showLidFrame == false && showAllLidFrameParts == tru
   }
 }
 
-if(showAssembly == false && showCase == false && showCaseR == true)
+if(showAssembly == false && showCase == false && showCaseL == true)
 {
   difference()
   {
@@ -318,7 +318,7 @@ if(showAssembly == false && showCase == false && showCaseR == true)
   }
 }
 
-if(showAssembly == false && showCase == false && showCaseL == true)
+if(showAssembly == false && showCase == false && showCaseR == true)
 {
   translate([10,0,0])
   difference()
@@ -586,7 +586,7 @@ module lidFrame()
     }
 
     translate([(absDisplayX-screenX)/2+verticalFrameWidth+sideClearance,
-      (absDisplayX-screenX)/2+lowerFrameWidth+sideClearance,
+      lowerFrameWidth+sideClearance+(absDisplayY-screenY)/2,
       -extra])
     cube([screenX+sideClearance*2,screenY+sideClearance*2,absDisplayZ+backwallClearance+extra]);
 
