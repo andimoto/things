@@ -83,6 +83,10 @@ pcbCaseHorizontalWallThickness = 10;
 pcbCaseVerticalWallThickness = 2;
 // bottom thickness of pcb case (pcb will be mounted here)
 pcbCaseBottomThickness = 2;
+// move pcb away from PCB Case walls (just use small values, otherwise PCB will be placed inside PCB Case)
+moveDiffPcbX = 0;
+// move pcb away from PCB Case walls (just use small values, otherwise PCB will be placed inside PCB Case)
+moveDiffPcbY = 0;
 // space to route extern pcb with buttons to outside (most display controller have extern pcbs)
 externPcbCableSpace = 2;
 // use inserts for pcb case
@@ -93,6 +97,8 @@ pcbCaseMountScrewDia = 3.2;
 pcbCaseMountScrewLen = 10;
 // pcb case mount screw head len
 pcbCaseMountScrewHeadLen = 3;
+
+
 
 /* [ Stand Parameter ] */
 // distance between hinge and feet of the stand. Main Parameter to control the angel of the display when standing
@@ -152,30 +158,30 @@ screwMaxXMove=(absDisplayX+verticalFrameWidth*2+sideClearance*2);
 screwThirdXMove= (absDisplayX+verticalFrameWidth*2+sideClearance*2)/3;
 
 frameScrews = [
-  /* [verticalFrameWidth/2,lowerFrameWidth/2], */
-  /* [verticalFrameWidth/2,screwTopYMove], */
+  [verticalFrameWidth/2,lowerFrameWidth/2],
+  [verticalFrameWidth/2,screwTopYMove],
 
-  /* [screwMaxXMove-verticalFrameWidth/2,lowerFrameWidth/2], */
-  /* [screwMaxXMove-verticalFrameWidth/2,screwTopYMove], */
+  [screwMaxXMove-verticalFrameWidth/2,lowerFrameWidth/2],
+  [screwMaxXMove-verticalFrameWidth/2,screwTopYMove],
 
-  /* [screwThirdXMove-verticalFrameWidth,lowerFrameWidth/2], */
-  /* [screwThirdXMove-verticalFrameWidth,screwTopYMove], */
-  /* [screwThirdXMove+verticalFrameWidth,lowerFrameWidth/2], */
-  /* [screwThirdXMove+verticalFrameWidth,screwTopYMove], */
+  [screwThirdXMove-verticalFrameWidth,lowerFrameWidth/2],
+  [screwThirdXMove-verticalFrameWidth,screwTopYMove],
+  [screwThirdXMove+verticalFrameWidth,lowerFrameWidth/2],
+  [screwThirdXMove+verticalFrameWidth,screwTopYMove],
 
-  /* [screwThirdXMove*2-verticalFrameWidth,lowerFrameWidth/2], */
-  /* [screwThirdXMove*2-verticalFrameWidth,screwTopYMove], */
-  /* [screwThirdXMove*2+verticalFrameWidth,lowerFrameWidth/2], */
-  /* [screwThirdXMove*2+verticalFrameWidth,screwTopYMove] */
+  [screwThirdXMove*2-verticalFrameWidth,lowerFrameWidth/2],
+  [screwThirdXMove*2-verticalFrameWidth,screwTopYMove],
+  [screwThirdXMove*2+verticalFrameWidth,lowerFrameWidth/2],
+  [screwThirdXMove*2+verticalFrameWidth,screwTopYMove]
 ];
 
 additionalFrameScrews = [
   // lower holes
-  [verticalFrameWidth+sideClearance+117,lowerFrameWidth/2],
-  [verticalFrameWidth+sideClearance+absDisplayX-117,lowerFrameWidth/2],
+  /* [verticalFrameWidth+sideClearance+117,lowerFrameWidth/2],
+  [verticalFrameWidth+sideClearance+absDisplayX-117,lowerFrameWidth/2], */
   // upper holes
-  [verticalFrameWidth+sideClearance+117,completeY-lowerFrameWidth/2],
-  [verticalFrameWidth+sideClearance+absDisplayX-117,completeY-lowerFrameWidth/2]
+  /* [verticalFrameWidth+sideClearance+117,completeY-lowerFrameWidth/2],
+  [verticalFrameWidth+sideClearance+absDisplayX-117,completeY-lowerFrameWidth/2] */
 ];
 
 
@@ -200,11 +206,14 @@ pcbCaseFrameScrews = [
   [-10+pcbCaseVerticalWallThickness*2+pcbCaseInnerX,pcbCaseHorizontalWallThickness+pcbCaseHorizontalWallThickness/2+pcbCaseInnerY]
 ];
 
+
+// pcb holes
 caseStandoffPoints = [
-  [21,14],
-  [49,20],
-  [21,pcbY-13],
-  [49,pcbY-14]
+  [3,2],
+  [pcbX-2,11],
+
+  [3,pcbY-2.5],
+  [pcbX-3,pcbY-2.5]
 ];
 
 /* stand length in y direction */
@@ -459,10 +468,12 @@ module pcbCase()
 
       // move ALL standoffs by pcbCaseHorizontalWallThickness & pcbCaseBottomThickness
       translate([0,pcbCaseHorizontalWallThickness+1,pcbCaseBottomThickness])
+      translate([moveDiffPcbX,moveDiffPcbY,0])
       cylinderList(dia=9,height=3, points=caseStandoffPoints);
     } /* union */
     // move ALL standoffs by pcbCaseHorizontalWallThickness & pcbCaseBottomThickness
     translate([0,pcbCaseHorizontalWallThickness+1,0])
+    translate([moveDiffPcbX,moveDiffPcbY,0])
     cylinderList(dia=3.8,height=pcbCaseBottomThickness+3+extra, points=caseStandoffPoints);
 
 
@@ -506,7 +517,7 @@ module displayCase()
 
     CaseScrewPlacement(inserts = useInsertsInFrame);
 
-    #translate([movePcbCaseX,movePcbCaseY,-extra])
+    translate([movePcbCaseX,movePcbCaseY,-extra])
       cylinderList(dia=3.5,height=backwallThickness+extra*2,points=pcbCaseFrameScrews);
 
 
