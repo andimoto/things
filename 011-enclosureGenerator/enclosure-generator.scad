@@ -131,7 +131,8 @@ showPanelClamp = false;
 showBackPanel = false;
 // show side panels on enclosure
 showSidePanels = false;
-
+// show hingeBase and hinge
+showHinge = false;
 
 /* [other Parameters and Constants] */
 $fn=70;
@@ -245,4 +246,14 @@ if(showSidePanels==true)
     backMountingPlate(plateX=enclosureY-beamY*2+topFramePanelOverlap*2,plateH=beamLen,
         plateThick=sidePanelThickness,mountingSlots=false,cableHole=false);
   }
+}
+
+
+if(showHinge == true)
+{
+  hingeBase();
+
+  translate([-20,0,0])
+  rotate([90,0,0])
+  hingeHanger();
 }

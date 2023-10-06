@@ -437,3 +437,81 @@ module enclosureComplete()
 
   translate([15,10,beamMountThickness*2+beamLen*2-1]) rotate([-90,0,0]) panel(panelX=110,panelZ=120,panelThick=4); */
 }
+
+acrylicPanelThickness = 2; //mm
+hingeBasePlateThickness = acrylicPanelThickness + 3;
+module hingeBase(screwDistance = 20, hingeBaseOverHoles = 1)
+{
+  hingeBaseLength = screwDistance*(hingeBaseOverHoles+1) + 2*beamHolesToPlateDist;
+  difference()
+  {
+    union()
+    {
+      cube([beamHolesToPlateDist*2,hingeBaseLength,hingeBasePlateThickness]);
+
+      translate([0,beamHolesToPlateDist*2,beamHolesToPlateDist])
+      hull()
+      {
+        cube([beamHolesToPlateDist*2,hingeBaseLength-beamHolesToPlateDist*4,extra]);
+        translate([beamHolesToPlateDist,0,beamHolesToPlateDist])
+        rotate([-90,0,0])
+        cylinder(r=beamHolesToPlateDist,h=hingeBaseLength-beamHolesToPlateDist*4);
+      }
+    }
+    translate([beamHolesToPlateDist,beamHolesToPlateDist,hingeBasePlateThickness+extra])
+    mirror([0,0,1])
+    Screw(ScrewDia=3.4,ScrewLen=8,ScrewHeadDia=6.2,ScrewHeadLen=3.4);
+    translate([beamHolesToPlateDist,hingeBaseLength-beamHolesToPlateDist,hingeBasePlateThickness+extra])
+    mirror([0,0,1])
+    Screw(ScrewDia=3.4,ScrewLen=8,ScrewHeadDia=6.2,ScrewHeadLen=3.4);
+
+    translate([0,0,beamHolesToPlateDist])
+    translate([beamHolesToPlateDist,0,beamHolesToPlateDist])
+    rotate([-90,0,0])
+    cylinder(r=3.2/2,h=hingeBaseLength);
+  }
+}
+
+hingeHangeLen = 30;
+module hingeHanger()
+{
+  /* translate([0,41,beamHolesToPlateDist]) */
+
+  difference()
+  {
+    union()
+    {
+      hull()
+      {
+        cube([beamHolesToPlateDist,hingeHangeLen,extra]);
+        translate([beamHolesToPlateDist,0,beamHolesToPlateDist])
+        rotate([-90,0,0])
+        cylinder(r=beamHolesToPlateDist,h=hingeHangeLen);
+      }
+
+
+      mirror([1,0,0])
+      difference()
+      {
+        union()
+        {
+        cube([10+beamHolesToPlateDist*2,hingeHangeLen,beamHolesToPlateDist]);
+        translate([beamHolesToPlateDist,0,-hingeBasePlateThickness+acrylicPanelThickness])
+        cube([10+beamHolesToPlateDist,hingeHangeLen,hingeBasePlateThickness-acrylicPanelThickness]);
+        }
+        translate([10+beamHolesToPlateDist,beamHolesToPlateDist, beamHolesToPlateDist+extra])
+        mirror([0,0,1])
+        Screw(ScrewDia=3,ScrewLen=beamHolesToPlateDist*2,ScrewHeadDia=6.2,ScrewHeadLen=3.4);
+
+        translate([10+beamHolesToPlateDist,hingeHangeLen-beamHolesToPlateDist, beamHolesToPlateDist+extra])
+        mirror([0,0,1])
+        Screw(ScrewDia=3,ScrewLen=beamHolesToPlateDist*2,ScrewHeadDia=6.2,ScrewHeadLen=3.4);
+      }
+    }
+
+    translate([beamHolesToPlateDist,hingeHangeLen+extra,beamHolesToPlateDist])
+    rotate([-90,0,0])
+    mirror([0,0,1])
+    Screw(ScrewDia=3,ScrewLen=hingeHangeLen,ScrewHeadDia=6.2,ScrewHeadLen=8);
+  }
+}
