@@ -1,19 +1,20 @@
-# Telescope Drawer Thing
+# Shelly Door Window 2 Clamps
 
-I needed to build a drawer under my office table to move my scanner to it. These are the holders for the telescope arms.
-All holes are M4.
+These are clamps/holders for the Shelly Door Window 2 Sensors. This avoids sticking the sensors directly to the Window-Frame, which makes the replacement of the batteries much more easy.
+
+It is a good fit if the stickers are still attached. Without the stickers the sensor is very loose in the clamp. Something should be attached to the bottom of the Sensorparts to make them thicker. I designed this espercially for new sensors with stickers attached, to avoid removing them.
+
+I sticked them with some double-sided tape to the window.
 
 <br>
 
-![](000.png)
+![](shelly-dw2-clamp-slicer.png)
 
 ![](001.jpg)
 
 ![](002.jpg)
 
 ![](003.jpg)
-
-![]()
 
 <br>
 
