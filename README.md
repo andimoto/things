@@ -21,6 +21,9 @@
 |013| Rectangular Cover WIP! |![](013-rectangularCover/013-rectangularCover.png)|
 |014| Customizable Display Casing for old Laptop Displays WIP! |![](014-LaptopDisplayCasing/014-laptop-display-casing.png) ![](014-LaptopDisplayCasing/stl/display001/009.jpg) ![](014-LaptopDisplayCasing/stl/display001/010.jpg) |
 |015| Pipe Connector | ![](015-pipe-connector/pipe-connector.png) ![](015-pipe-connector/pipe-con001.jpg) |
+|016| Telescope Drawer Thing | ![](016-telescope-drawer-thing/000.png) ![](016-telescope-drawer-thing/001.jpg) |
+|017| Shelly Door Window 2 Tubes (FreeCAD) | ![](017-shelly-dw2-clamp/001.jpg) ![](017-shelly-dw2-clamp/shelly-dw2-clamp-slicer.png) |
+|018| Clockwork Frame Holder | ![](018-clockwork-holder/000.png) ![](018-clockwork-holder/001.jpg) |
 |00x| next thing is WIP! | |
 
 <br>
