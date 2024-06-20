@@ -2,7 +2,7 @@ $fn=100;
 extra=0.02;
 
 
-supDia = 150;
+supDia = 155;
 clampWallThickness = 18;
 clampH = 110;
 
@@ -15,8 +15,8 @@ rodTubeWall = 8;
 strapWidth = 50;
 strapTh = 5;
 
-extensionX1 = 40;
-extensionX2 = 20;
+extensionX1 = 30;
+extensionX2 = 10;
 
 saveFilament = true;
 
@@ -69,7 +69,7 @@ module sup_puller()
   translate([-extensionX2,(supDia/2+clampWallThickness),0])
   mirror([0,1,0])
   extension(lenX=extensionX2, wallTh=clampWallThickness, zHeight=clampH, chmpf=champfer);
-  /* cube([extensionX1,clampWallThickness,clampH-champfer*2]); */
+  /* cube([extensionX1,clampWallThickness,clampH-champfer*2]);*/
 
 }
 
