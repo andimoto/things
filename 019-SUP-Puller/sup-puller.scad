@@ -18,6 +18,8 @@ strapTh = 5;
 extensionX1 = 30;
 extensionX2 = 10;
 
+topAngle = -10;
+
 saveFilament = true;
 
 sup_puller();
@@ -51,7 +53,7 @@ module sup_puller()
     tempCutoutLen = clampWallThickness*2+supDia;
     tempZmove = clampH/2 - strapWidth/2;
     translate([0,-supDia/2-clampWallThickness,tempZmove])
-    cube([cutoutX,tempCutoutLen,clampH/2]);
+    cube([cutoutX,tempCutoutLen/2,clampH/2]);
     translate([20,-supDia/2-clampWallThickness,tempZmove])
     cube([cutoutX,tempCutoutLen,clampH/2]);
     translate([40,-supDia/2-clampWallThickness,tempZmove])
@@ -66,9 +68,9 @@ module sup_puller()
   translate([-extensionX1,-(supDia/2+clampWallThickness),0])
   extension(lenX=extensionX1, wallTh=clampWallThickness, zHeight=clampH, chmpf=champfer);
 
-  translate([-extensionX2,(supDia/2+clampWallThickness),0])
+  /* translate([-extensionX2,(supDia/2+clampWallThickness),0])
   mirror([0,1,0])
-  extension(lenX=extensionX2, wallTh=clampWallThickness, zHeight=clampH, chmpf=champfer);
+  extension(lenX=extensionX2, wallTh=clampWallThickness, zHeight=clampH, chmpf=champfer); */
   /* cube([extensionX1,clampWallThickness,clampH-champfer*2]);*/
 
 }
@@ -115,6 +117,10 @@ module corpus()
       rotate([-90,0,0])
       cylinder(r=(rodDia/2),h=rodTubeLen+extra*2, $fn=6);
 
+    translate([-supDia/2-clampWallThickness-extra*2,-supDia/2-clampWallThickness-extra,0])
+      cube([supDia/2+clampWallThickness+extra*2,supDia+clampWallThickness*2+extra*2,clampH+extra*2]);
+
+    rotate([0,0,topAngle])
     translate([-supDia/2-clampWallThickness-extra*2,-supDia/2-clampWallThickness-extra,0])
       cube([supDia/2+clampWallThickness+extra*2,supDia+clampWallThickness*2+extra*2,clampH+extra*2]);
 
