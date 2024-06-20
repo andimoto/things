@@ -3,22 +3,22 @@ extra=0.02;
 
 
 supDia = 150;
-clampWallThickness = 20;
-clampH = 120;
+clampWallThickness = 18;
+clampH = 110;
 
 champfer = 2; //mm
 
-rodDia = 8;
+rodDia = 9.5;
 rodTubeLen = 100;
-rodTubeWall = 10;
+rodTubeWall = 8;
 
-strapWidth = 60;
+strapWidth = 50;
 strapTh = 5;
 
-extensionX1 = 50;
-extensionX2 = 30;
+extensionX1 = 40;
+extensionX2 = 20;
 
-
+saveFilament = true;
 
 sup_puller();
 module sup_puller()
@@ -36,7 +36,9 @@ module sup_puller()
       translate([0,0,clampH-champfer+extra*2])
         cylinder(r1=(supDia/2), r2=(supDia/2)+champfer, h=champfer);
 
-      translate([-supDia/2-clampWallThickness-extra*2,-supDia/2-clampWallThickness-extra,0])
+      translate([-supDia/2-clampWallThickness-extra*2,
+        -supDia/2-clampWallThickness-extra,
+        0])
         cube([supDia/2+clampWallThickness+extra*2,supDia+clampWallThickness*2+extra*2,clampH+extra*2]);
     }
     union() {
@@ -44,6 +46,21 @@ module sup_puller()
       translate([0,0,tempZmove])
       strapCutout();
     }
+
+    cutoutX = 10;
+    tempCutoutLen = clampWallThickness*2+supDia;
+    tempZmove = clampH/2 - strapWidth/2;
+    translate([0,-supDia/2-clampWallThickness,tempZmove])
+    cube([cutoutX,tempCutoutLen,clampH/2]);
+    translate([20,-supDia/2-clampWallThickness,tempZmove])
+    cube([cutoutX,tempCutoutLen,clampH/2]);
+    translate([40,-supDia/2-clampWallThickness,tempZmove])
+    cube([cutoutX,tempCutoutLen,clampH/2]);
+    /* translate([60,-supDia/2-clampWallThickness,tempZmove])
+    cube([cutoutX,tempCutoutLen,clampH/2]); */
+    /* translate([40,-supDia/2-clampWallThickness,tempZmove])
+    cube([cutoutX,tempCutoutLen,clampH/2]); */
+
   }
 
   translate([-extensionX1,-(supDia/2+clampWallThickness),0])
@@ -55,6 +72,10 @@ module sup_puller()
   /* cube([extensionX1,clampWallThickness,clampH-champfer*2]); */
 
 }
+
+
+
+
 
 module strapCutout()
 {
@@ -90,6 +111,10 @@ module corpus()
       }
     }
 
+    translate([supDia/2+clampWallThickness+rodDia/2+rodTubeWall*2,-rodTubeLen/2-extra,clampH/2])
+      rotate([-90,0,0])
+      cylinder(r=(rodDia/2),h=rodTubeLen+extra*2, $fn=6);
+
     translate([-supDia/2-clampWallThickness-extra*2,-supDia/2-clampWallThickness-extra,0])
       cube([supDia/2+clampWallThickness+extra*2,supDia+clampWallThickness*2+extra*2,clampH+extra*2]);
 
@@ -99,12 +124,26 @@ module corpus()
 
 module extension(lenX=10, wallTh=10, zHeight=10, chmpf=1)
 {
-  hull()
+  difference()
   {
-    cube([lenX, wallTh-chmpf, 0.01]);
-    translate([0,0,chmpf])
-      cube([lenX, wallTh, zHeight-2*chmpf]);
-    translate([0,0,zHeight])
+    hull()
+    {
       cube([lenX, wallTh-chmpf, 0.01]);
+      translate([0,0,chmpf])
+        cube([lenX, wallTh, zHeight-2*chmpf]);
+      translate([0,0,zHeight])
+        cube([lenX, wallTh-chmpf, 0.01]);
+    }
+
+    if(saveFilament)
+    {
+
+      translate([-5,0,clampH/2])
+      rotate([-90,0,0])
+      {
+        scale([1,((clampH-20)/lenX),1])
+        cylinder(r=lenX/2,h=clampWallThickness);
+      }
+    }
   }
 }
