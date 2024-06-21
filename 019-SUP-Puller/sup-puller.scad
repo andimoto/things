@@ -22,7 +22,63 @@ topAngle = -10;
 
 saveFilament = true;
 
-sup_puller();
+
+whlTubeLen = 100;
+whlPlateLen = 50;
+whlPlateTh = 18;
+
+hexNutM8_Outer = 15;
+
+/* translate([116.2,-whlTubeLen-rodTubeLen/2,clampH/2])
+rotate([-90,90,0]) */
+wheelHolder();
+module wheelHolder()
+{
+  rTemp = rodDia/2 + rodTubeWall;
+  movePlateY = rTemp - whlPlateTh;
+
+  difference()
+  {
+    // corpus ot wheel holder
+    union()
+    {
+      cylinder(r=rTemp, h=whlTubeLen);
+
+
+      translate([0,movePlateY,0])
+      union() //wheel mounting plate
+      {
+        cube([whlPlateLen,whlPlateTh,20]);
+        hull()
+        {
+          translate([0,0,20])
+          cube([whlPlateLen,whlPlateTh,extra]);
+          translate([0,0,whlTubeLen])
+          cube([extra,whlPlateTh,extra]);
+        }
+      }
+    } //wheel holder corpus
+
+    rotate([0,0,-30])
+    translate([0,0,-extra])
+    cylinder(r=rodDia/2, h=whlTubeLen + extra*2, $fn=6);
+
+    translate([whlPlateLen-15,movePlateY-extra,15])
+    rotate([-90,0,0])
+    cylinder(r=rodDia/2, h=whlPlateTh + extra*2);
+
+    translate([whlPlateLen-15,movePlateY-extra,15])
+    rotate([-90,0,0])
+    cylinder(r=hexNutM8_Outer/2, h=5 + extra*2, $fn=6);
+
+
+  }
+}
+
+
+
+
+/* sup_puller(); */
 module sup_puller()
 {
   difference()
