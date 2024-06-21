@@ -26,6 +26,7 @@ saveFilament = true;
 whlTubeLen = 100;
 whlPlateLen = 50;
 whlPlateTh = 18;
+whlRodDia = 8.4;
 
 hexNutM8_Outer = 15;
 
@@ -65,7 +66,7 @@ module wheelHolder()
 
     translate([whlPlateLen-15,movePlateY-extra,15])
     rotate([-90,0,0])
-    cylinder(r=rodDia/2, h=whlPlateTh + extra*2);
+    cylinder(r=whlRodDia/2, h=whlPlateTh + extra*2);
 
     translate([whlPlateLen-15,movePlateY-extra,15])
     rotate([-90,0,0])
