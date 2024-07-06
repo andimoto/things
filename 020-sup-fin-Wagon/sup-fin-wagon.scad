@@ -4,7 +4,7 @@ extra=0.02;
 file = "supFin-LargeForMini.stl";
 
 
-usFinLen = 120;
+usFinLen = 140;
 usFinThick = 8.6;
 usFinHeight = 24;
 
@@ -15,7 +15,7 @@ finChampfer = 5;
 
 
 axisLen = 140;
-axisHeight = 100;
+axisHeight = 115;
 axisThick = 40;
 axisChampfer = 10;
 
@@ -32,11 +32,14 @@ blockScrewHeadLen = 4;
 blockHoleXZMove = 7.6;
 
 
-axisDia = 8.6;
-axisScrewHeight = 83;
+axisDia = 9.5;
+axisScrewHeight = 15;
 
+axisTunnelDia = 12;
 
-
+M4ScrewDia = 4;  // optional: for stability
+moveYStabScrew = 20;
+stabScrewCoutoutLen = 30;
 
 /* translate([0,-10,0])
 usFinBase(); */
@@ -75,9 +78,9 @@ module usBoxSmallFinRail()
     translate([tempXMove,-extra,0])
     hull()
     {
-      translate([finChampfer,0,finCutoutheight + extra])
+      translate([finChampfer,0,usFinHeight - finCutoutheight + extra])
       cube([finCutOutLen,usFinThick+extra*2,extra]);
-      translate([-finChampfer,0,usFinHeight + extra])
+      translate([-finChampfer,0,-extra])
       cube([finCutOutLen + finChampfer*4,usFinThick+extra*2,extra]);
     }
 
@@ -104,7 +107,7 @@ module usBoxSmallFinRail()
     }
 
     translate([usFinLen/2,usFinThick/2,-extra])
-    cylinder(r=screwHoleDia/2, h=usFinHeight);
+    cylinder(r=screwHoleDia/2, h=usFinHeight+extra*2);
   }
 }
 
@@ -167,15 +170,34 @@ module wagon()
     translate([tempXMove,-extra,0])
     hull()
     {
-      translate([finChampfer*2,-usFinThick/2,finCutoutheight + extra])
-      cube([finCutOutLen+finChampfer*4,usFinThick*2+extra*2,extra]);
-      translate([-finChampfer,-usFinThick/2,10+usFinHeight + extra])
-      cube([finCutOutLen + finChampfer*4,usFinThick*2+extra*2,extra]);
+      translate([-finChampfer*4-2,-usFinThick/2-usFinThick,finCutoutheight+extra])
+      cube([finCutOutLen+finChampfer*10,usFinThick*4+extra*2,extra]);
+      translate([0,-usFinThick-usFinThick/2,10+usFinHeight + extra])
+      cube([finCutOutLen + finChampfer*2,usFinThick*4+extra*2,extra]);
     }
 
-    translate([axisThick/2,usFinThick/2-axisLen/2-extra,axisScrewHeight])
+    translate([axisThick/2,usFinThick/2-axisLen/2-extra,axisHeight-axisScrewHeight])
     rotate([-90,0,0])
-    cylinder(r=axisDia/2, h=axisLen+extra*2);
+    cylinder(r=axisDia/2, h=axisLen+extra*2, $fn=6);
+
+
+    translate([axisThick/2,moveYStabScrew+usFinThick/2,usFinHeight])
+    cylinder(r=M4ScrewDia/2, h=stabScrewCoutoutLen);
+    translate([axisThick/2,-moveYStabScrew+usFinThick/2,usFinHeight])
+    cylinder(r=M4ScrewDia/2, h=stabScrewCoutoutLen);
+  }
+
+
+  difference()
+  {
+    translate([axisThick/2,usFinThick/2-axisLen/2,axisHeight-axisScrewHeight])
+    rotate([-90,0,0])
+    cylinder(r=axisTunnelDia/2, h=axisLen, $fn=6);
+
+    translate([axisThick/2,usFinThick/2-axisLen/2-extra,axisHeight-axisScrewHeight])
+    rotate([-90,0,0])
+    cylinder(r=axisDia/2, h=axisLen+extra*2, $fn=6);
+
   }
 
 }

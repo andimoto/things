@@ -1,15 +1,32 @@
 # SUP Fin Wagon
 
-Remix of SUP Fin from LeathercraftV https://www.printables.com/de/model/543656-paddleboard-fin-sup-fin
-Only US Box Mount was used.
+!!WIP!!
 
-!! WIP !!
+This is a addon for SUPs with US Box Fin System. With this it is possible to mount
+tyres on the SUP an move it easily around.
 
+OpenSCAD Script is also avaliable and can be changed and configured as needed.
 
+Following sizes are avaiable as STLs:
+
+- 120 090
+  - 120mm long (inside fin box)
+  - axis is 90mm away from of fin box
+- 120 100
+  - 120mm long (inside fin box)
+  - axis is 100mm away from of fin box
+- 140 090
+  - 140mm long (inside fin box)
+  - axis is 90mm away from of fin box
+- 140 100
+  - 140mm long (inside fin box)
+  - axis is 100mm away from of fin box
 
 <br>
 
+![](sup-fin-wagon.png)
 
+![](sup-fin-wagon-slicer.png)
 
 
 # LICENSE
