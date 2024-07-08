@@ -5,7 +5,7 @@
 This is a addon for SUPs with US Box Fin System. With this it is possible to mount
 tyres on the SUP an move it easily around.
 
-OpenSCAD Script is also avaliable and can be changed and configured as needed.
+OpenSCAD Script is also available and can be changed and configured as needed.
 
 Following sizes are avaiable as STLs:
 
@@ -28,6 +28,13 @@ Following sizes are avaiable as STLs:
 
 ![](sup-fin-wagon-slicer.png)
 
+![](001.jpg)
+
+![](002.jpg)
+
+![](003.jpg)
+
+![](004.jpg)
 
 # LICENSE
 
