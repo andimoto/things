@@ -4,7 +4,7 @@ extra=0.02;
 file = "supFin-LargeForMini.stl";
 
 
-usFinLen = 140;
+usFinLen = 160;
 usFinThick = 8.6;
 usFinHeight = 24;
 
@@ -14,7 +14,7 @@ finCutoutheight = 10;
 finChampfer = 5;
 
 
-axisLen = 140;
+axisLen = 160;
 axisHeight = 115;
 axisThick = 40;
 axisChampfer = 10;
@@ -38,8 +38,8 @@ axisScrewHeight = 15;
 axisTunnelDia = 12;
 
 M4ScrewDia = 4;  // optional: for stability
-moveYStabScrew = 20;
-stabScrewCoutoutLen = 30;
+moveYStabScrew = 50;
+stabScrewCoutoutLen = 40;
 
 /* translate([0,-10,0])
 usFinBase(); */
