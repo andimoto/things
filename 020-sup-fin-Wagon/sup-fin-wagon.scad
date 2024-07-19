@@ -17,10 +17,17 @@ finCutoutheight = 10;
 finChampfer = 5;
 
 /* [ Dimensions for Slide-In Fin Mount ] */
-slideFinLen = 170;
+slideFinLen = 160;
 slideFinThick1 = 15.8;
 slideFinThick2 = 19.6;
 slideFinHeight = 24;
+slideFinBaseThick1 = 30.5;
+slideFinBaseThick2 = 34.5;
+slideFinBaseHeight = 4;
+slideFinFixerLen = 15;
+slideFinFixerHeight = 6;
+
+
 
 /*Dimensions of Trolley part*/
 // length of the wheel axis
@@ -110,11 +117,6 @@ module usBoxSmallFinRail()
   }
 }
 
-slideFinBaseThick1 = 30.5;
-slideFinBaseThick2 = 34.5;
-slideFinBaseHeight = 4;
-slideFinFixerLen = 15;
-slideFinFixerHeight = 6;
 
 
 /* slideInFinRail(); */
