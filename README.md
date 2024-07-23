@@ -24,9 +24,8 @@
 |016| Telescope Drawer Thing | ![](016-telescope-drawer-thing/000.png) ![](016-telescope-drawer-thing/001.jpg) |
 |017| Shelly Door Window 2 Tubes (FreeCAD) | ![](017-shelly-dw2-clamp/001.jpg) ![](017-shelly-dw2-clamp/shelly-dw2-clamp-slicer.png) |
 |018| Clockwork Frame Holder | ![](018-clockwork-holder/000.png) ![](018-clockwork-holder/001.jpg) |
-|00x| next thing is WIP! | |
 |019| SUP Puller | ![](019-SUP-Puller/001.jpg) ![](019-SUP-Puller/002.jpg) ![](019-SUP-Puller/003.jpg) |
-|010| SUP Fin Wagon | ![](020-sup-fin-Wagon/sup-fin-wagon.png) ![](020-sup-fin-Wagon/002.jpg) ![](020-sup-fin-Wagon/004.jpg) |
+|020| SUP Fin Wagon | ![](020-sup-fin-Wagon/sup-fin-wagon.png) ![](020-sup-fin-Wagon/002.jpg) ![](020-sup-fin-Wagon/004.jpg) |
 |00x| next thing is WIP! | |
 <br>
 <br>
