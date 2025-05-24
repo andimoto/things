@@ -16,7 +16,8 @@ roundFeet = false;
 
 // display mod
 mod = true;
-
+// display upper
+upperBase = true;
 
 
 translate([0,0,0])
@@ -131,4 +132,14 @@ if(mod == true)
     }
   }
 
+}
+
+
+if(upperBase == true)
+{
+  color("BurlyWood") translate([0,0,640+100+500]) cube([1200/2,395,30]);
+  if(bigBesta == true)
+  {
+    color("BurlyWood") translate([1200/2,0,640+100+500]) cube([1200/2,395,30]);
+  }
 }
