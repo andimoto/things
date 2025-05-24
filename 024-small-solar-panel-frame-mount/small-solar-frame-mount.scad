@@ -23,10 +23,29 @@ screwYDist = clipBaseY/2;
 /* screw */
 
 solFrameInnerXDist = 159;
+mntBaseY = 80;
 mntBaseTh = 5;
 mntPhaseTh = 5;
 
 mntBaseScrewX = screwYDist;
+mntBaseScrewY = (mntBaseY - (screwXDist*(solPanScrewHoles-1)))/2;
+
+
+mntSocketX = 50;
+mntSocketY = 50;
+mntSocketH = 10;
+moveSocketX = 0;
+moveSocketY = 0;
+mntSockWall = 10;
+
+socketScrewDist = 40;
+
+socketScrewDia = 3.2;
+
+tmpX = solFrameInnerXDist/2-mntSocketX/2;
+tmpY = mntBaseY/2-mntSocketY/2;
+
+
 
 translate([15,0,-clipTh])
 rotate([0,0,90])
@@ -36,23 +55,54 @@ translate([solFrameInnerXDist-clipBaseY,clipX,-clipTh])
 rotate([0,0,-90])
 frameClip();
 
+translate([0,(clipX-mntBaseY)/2,0])
 solPanMount();
 module solPanMount()
 {
   difference()
   {
-    solPanMountBase();
+    union()
+    {
+      solPanMountBase();
+      echo("====SocketPosX:", tmpX+moveSocketX, "====");
+      echo("====SocketPosY:", tmpY+moveSocketY, "====");
+      translate([tmpX+moveSocketX,tmpY+moveSocketY,mntBaseTh-extra])
+      difference()
+      {
+        cube([mntSocketX,mntSocketY,mntSocketH]);
 
-    translate([mntBaseScrewX,0,-extra])
-    rotate([0,0,90])
-    clipScrewHoles(dia=screwDia+0.2);
+        translate([mntSockWall/2,mntSockWall/2,0])
+        for(iy=[0:1])
+        {
+          for(ix=[0:1])
+          {
+            translate([socketScrewDist*ix,socketScrewDist*iy,0])
+            cylinder(d=socketScrewDia, h=mntSocketH+extra);
+          }
+        }
 
-    translate([solFrameInnerXDist-mntBaseScrewX,0,-extra])
+      }
+    }
+
+    translate([tmpX+moveSocketX,tmpY+moveSocketY,-extra])
+    translate([mntSockWall,mntSockWall,0])
+    cube([mntSocketX-mntSockWall*2,mntSocketY-mntSockWall*2,mntBaseTh+mntSocketH+extra*2]);
+
+    translate([mntBaseScrewX,mntBaseScrewY,-extra])
     rotate([0,0,90])
-    clipScrewHoles(dia=screwDia+0.2);
+    clipScrewHoles(dia=screwDia+0.2, holeCnt=solPanScrewHoles);
+
+    translate([solFrameInnerXDist-mntBaseScrewX,mntBaseScrewY,-extra])
+    rotate([0,0,90])
+    clipScrewHoles(dia=screwDia+0.2, holeCnt=solPanScrewHoles);
   }
 }
 
+module mntSocket()
+{
+
+
+}
 
 module solPanMountBase()
 {
@@ -61,18 +111,18 @@ module solPanMountBase()
     hull()
     {
       translate([0,mntPhaseTh,0])
-      cube([extra, clipX-mntPhaseTh*2, mntBaseTh]);
+      cube([extra, mntBaseY-mntPhaseTh*2, mntBaseTh]);
       translate([mntPhaseTh,0,0])
-      cube([extra, clipX, mntBaseTh]);
+      cube([extra, mntBaseY, mntBaseTh]);
     }
     translate([mntPhaseTh,0,0])
-    cube([solFrameInnerXDist-mntPhaseTh*2, clipX, mntBaseTh]);
+    cube([solFrameInnerXDist-mntPhaseTh*2, mntBaseY, mntBaseTh]);
     hull()
     {
       translate([solFrameInnerXDist-mntPhaseTh,0,0])
-      cube([extra, clipX, mntBaseTh]);
+      cube([extra, mntBaseY, mntBaseTh]);
       translate([solFrameInnerXDist,mntPhaseTh,0])
-      cube([extra, clipX-mntPhaseTh*2, mntBaseTh]);
+      cube([extra, mntBaseY-mntPhaseTh*2, mntBaseTh]);
     }
   }
 }
@@ -88,14 +138,14 @@ module frameClip()
     translate([-extra,clipBaseY,clipTh/2-solFrameTh/2])
     cube([clipX+extra*2, clipCutInDepth+extra*2,solFrameTh]);
 
-    translate([0,screwYDist,-extra])
-    clipScrewHoles(dia=screwDia);
+    translate([screwXDist,screwYDist,-extra])
+    clipScrewHoles(dia=screwDia, holeCnt=solPanScrewHoles);
 
-    translate([0,clipBaseY,-extra])
-    clipScrewHoles(dia=screwDia);
+    translate([screwXDist,clipBaseY,-extra])
+    clipScrewHoles(dia=screwDia, holeCnt=solPanScrewHoles);
 
-    translate([0,clipBaseY+clipCutInDepth/2,-extra])
-    clipScrewHoles(dia=screwDia);
+    translate([screwXDist,clipBaseY+clipCutInDepth/2,-extra])
+    clipScrewHoles(dia=screwDia, holeCnt=solPanScrewHoles);
   }
 }
 
@@ -128,10 +178,10 @@ module frameClipBase()
 }
 
 
-module clipScrewHoles(dia=3)
+module clipScrewHoles(dia=3, holeCnt=2)
 {
-  translate([screwXDist,0,0])
-  for (i=[0:solPanScrewHoles-1])
+  /* translate([screwXDist,0,0]) */
+  for (i=[0:holeCnt-1])
   {
     translate([screwXDist*i,0,0])
     cylinder(r=dia/2, h=clipTh+extra*2);
