@@ -1,17 +1,10 @@
-# Knob Lever
+# Electronic Grid Plate Generator
 
-Knob Lever for SUP Triple Action Pump.
-It was very heavy to move the Knob. So I
-fixed the knob a little bit and also added
-this Lever to it.
-
+This is a grid plate generator to mount electonic or other things to it.
+This can be used to generate plates which can be mounted inside boxes and cases to mount something on it (with zipties, etc)
 <br>
 
-![](knob-lever.png)
-
-![](knob-lever-bottom.png)
-
-![](knob-lever-real.jpg)
+![](electronic-plate.png)
 
 # LICENSE
 
