@@ -1,9 +1,10 @@
-$fn=100;
+$fn=80;
 extra=0.02;
 
 // Solar Panel Vars
 solFrameTh = 1; //mm
 clipCutInDepth = 12; //mm
+solFrameMntTh =18;
 
 // Clip Vars
 clipX = 100; //mm
@@ -30,24 +31,16 @@ mntPhaseTh = 5;
 mntBaseScrewX = screwYDist;
 mntBaseScrewY = (mntBaseY - (screwXDist*(solPanScrewHoles-1)))/2;
 
-
-mntSocketX = 50;
-mntSocketY = 50;
-mntSocketH = 10;
-moveSocketX = 0;
-moveSocketY = 0;
-mntSockWall = 10;
-
-socketScrewDist = 40;
-
 socketScrewDia = 3.2;
 
-tmpX = solFrameInnerXDist/2-mntSocketX/2;
-tmpY = mntBaseY/2-mntSocketY/2;
+plateMountHolesDistance = 10;
+plateMountHolesClearance = 10;
+plateLenForHoles = solFrameInnerXDist - clipBaseY*2 - plateMountHolesClearance*2;
+plateMountHolesRest = plateLenForHoles % plateMountHolesClearance;
+plateMountHolesCnt = (plateLenForHoles-plateMountHolesRest)/plateMountHolesDistance;
+plateMntHoleYDist = 40;
 
-
-
-translate([15,0,-clipTh])
+/* translate([15,0,-clipTh])
 rotate([0,0,90])
 frameClip();
 
@@ -55,38 +48,66 @@ translate([solFrameInnerXDist-clipBaseY,clipX,-clipTh])
 rotate([0,0,-90])
 frameClip();
 
-translate([0,(clipX-mntBaseY)/2,0])
-solPanMount();
+translate([-55,clipX,-clipTh])
+rotate([0,0,-90])
+frameClip(); */
+
+
+
+/* translate([0,(clipX-mntBaseY)/2,0])
+solPanMount(); */
+
+
+/* translate([-40,(clipX-mntBaseY)/2,0])
+mirror([1,0,0])
+solPanMount(); */
+
+angleBlockDia = 50;
+angleBlockBaseTh = 10;
+
+
+angleBlock();
+
+module angleBlock()
+{
+  difference()
+  {
+    cylinder(d=angleBlockDia, h=angleBlockBaseTh);
+    union()
+    {
+      for(a=[0:30:360])
+      {
+        rotate([0,0,a])
+        translate([0,angleBlockDia/2-6,-extra])
+        screw(screwD = 3.2, screwLen=10, screwHeadD = 6, screwHeadThickness = 3);
+      }
+    }
+  }
+}
+
+module screw(screwD = 3, screwLen=10, screwHeadD = 6, screwHeadThickness = 3)
+{
+  union()
+  {
+    /* head */
+    cylinder(r=screwHeadD/2, h=screwHeadThickness);
+    /* screw */
+    translate([0,0,screwHeadThickness])
+    cylinder(r = screwD/2, h=screwLen);
+  }
+}
+
+
 module solPanMount()
 {
+  echo("Base Plate Mount Hole Distance: x", plateMountHolesDistance, " y ", plateMntHoleYDist);
   difference()
   {
     union()
     {
       solPanMountBase();
-      echo("====SocketPosX:", tmpX+moveSocketX, "====");
-      echo("====SocketPosY:", tmpY+moveSocketY, "====");
-      translate([tmpX+moveSocketX,tmpY+moveSocketY,mntBaseTh-extra])
-      difference()
-      {
-        cube([mntSocketX,mntSocketY,mntSocketH]);
-
-        translate([mntSockWall/2,mntSockWall/2,0])
-        for(iy=[0:1])
-        {
-          for(ix=[0:1])
-          {
-            translate([socketScrewDist*ix,socketScrewDist*iy,0])
-            cylinder(d=socketScrewDia, h=mntSocketH+extra);
-          }
-        }
-
-      }
+      echo(plateMountHolesCnt);
     }
-
-    translate([tmpX+moveSocketX,tmpY+moveSocketY,-extra])
-    translate([mntSockWall,mntSockWall,0])
-    cube([mntSocketX-mntSockWall*2,mntSocketY-mntSockWall*2,mntBaseTh+mntSocketH+extra*2]);
 
     translate([mntBaseScrewX,mntBaseScrewY,-extra])
     rotate([0,0,90])
@@ -95,14 +116,20 @@ module solPanMount()
     translate([solFrameInnerXDist-mntBaseScrewX,mntBaseScrewY,-extra])
     rotate([0,0,90])
     clipScrewHoles(dia=screwDia+0.2, holeCnt=solPanScrewHoles);
+
+    translate([clipBaseY+plateMountHolesClearance+plateMountHolesRest/2,mntBaseY/2-plateMntHoleYDist/2,0])
+    for(iy=[0:1])
+    {
+      for(ix=[0:plateMountHolesCnt])
+      {
+        translate([plateMountHolesDistance*ix,plateMntHoleYDist*iy,-extra])
+        cylinder(d=socketScrewDia, h=mntBaseTh+extra*2);
+      }
+    }
   }
 }
 
-module mntSocket()
-{
 
-
-}
 
 module solPanMountBase()
 {
@@ -176,6 +203,9 @@ module frameClipBase()
     }
   }
 }
+
+
+
 
 
 module clipScrewHoles(dia=3, holeCnt=2)

@@ -1,24 +1,24 @@
 $fn=70;
 extra=0.02;
 
-xLen = 100;
-yLen = 100;
+xLen = 140;
+yLen = 90;
 plateThickness = 2;
 cornerRad = 2;
 
-outerStripTh = 5;
-innerStripTh = 1;
+outerStripTh = 3;
+innerStripTh = 2;
 
-cutoutNumX = 15;
-cutoutNumY = 15;
+cutoutNumX = 13;
+cutoutNumY = 10;
 cutoutRad = 0.5;
 
 cutoutX = (xLen-(outerStripTh*2)-(cutoutNumX-1)*innerStripTh)/cutoutNumX;
 cutoutY = (yLen-(outerStripTh*2)-(cutoutNumY-1)*innerStripTh)/cutoutNumY;
 
 screwDia = 3.2;
-screwDistX = 99;
-screwDistY = 50;
+screwDistX = 70;
+screwDistY = 70;
 screwRingTh = 2;
 
 screwMountMoveX = 0;
