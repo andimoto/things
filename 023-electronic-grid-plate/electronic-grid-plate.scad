@@ -17,8 +17,8 @@ cutoutX = (xLen-(outerStripTh*2)-(cutoutNumX-1)*innerStripTh)/cutoutNumX;
 cutoutY = (yLen-(outerStripTh*2)-(cutoutNumY-1)*innerStripTh)/cutoutNumY;
 
 screwDia = 3.2;
-screwDistX = 70;
-screwDistY = 70;
+screwDistX = 130;
+screwDistY = 80;
 screwRingTh = 2;
 
 screwMountMoveX = 0;
