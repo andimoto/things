@@ -17,7 +17,7 @@ clipPhaseTh = 5;
 
 // Screw Vars
 solPanScrewHoles = 4;
-screwDia = 3.2; //mm
+screwDia = 3.0; //mm
 
 screwXDist = clipX / (solPanScrewHoles+1);
 screwYDist = clipBaseY/2;
@@ -33,12 +33,17 @@ mntBaseScrewY = (mntBaseY - (screwXDist*(solPanScrewHoles-1)))/2;
 
 socketScrewDia = 3.2;
 
-plateMountHolesDistance = 10;
+plateMountHolesXDistance = 10;
 plateMountHolesClearance = 10;
 plateLenForHoles = solFrameInnerXDist - clipBaseY*2 - plateMountHolesClearance*2;
 plateMountHolesRest = plateLenForHoles % plateMountHolesClearance;
-plateMountHolesCnt = (plateLenForHoles-plateMountHolesRest)/plateMountHolesDistance;
+plateMountHolesCnt = (plateLenForHoles-plateMountHolesRest)/plateMountHolesXDistance;
 plateMntHoleYDist = 40;
+
+// Bracket Clearance between Wall an Hole; taken 2x
+bracketClearance = 5; //mm
+bracketPlateThickness = 5;
+holesPerBracket = 2;
 
 /* translate([15,0,-clipTh])
 rotate([0,0,90])
@@ -65,8 +70,84 @@ solPanMount(); */
 angleBlockDia = 50;
 angleBlockBaseTh = 10;
 
+bracketMount();
+module bracketMount()
+{
+  bracketMountAngled();
+  difference()
+  {
+    cube([plateMountHolesXDistance*holesPerBracket,
+    bracketPlateThickness,plateMntHoleYDist+bracketClearance*2]);
 
-angleBlock();
+
+    for(ix=[0:holesPerBracket])
+    {
+      translate([bracketClearance+plateMountHolesXDistance*ix,-extra,bracketClearance])
+        rotate([-90,0,0])
+        cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
+
+      translate([bracketClearance+plateMountHolesXDistance*ix,-extra,bracketClearance+plateMntHoleYDist])
+        rotate([-90,0,0])
+        cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
+    }
+  }
+}
+
+rodBaseAngleCut = true;
+rodBaseAngleCutExtra = 10;
+rodBaseAngle = 45;
+rodBaseY = 20;
+rodOffset = 0;
+rodDistance = 40;
+
+rodDia = 10.3;
+
+
+/* bracketMountAngled(); */
+module bracketMountAngled()
+{
+  angledLen = tan(rodBaseAngle)*(bracketClearance*2+plateMntHoleYDist);
+
+  difference()
+  {
+    hull()
+    {
+      translate([0,bracketPlateThickness,0])
+      cube([bracketPlateThickness,angledLen+rodBaseY+rodOffset,extra]);
+
+      translate([0,bracketPlateThickness,bracketClearance*2+plateMntHoleYDist-extra])
+      cube([bracketPlateThickness,rodBaseY+rodOffset,extra]);
+    }
+
+    if((rodBaseAngleCut == true))
+    {
+      if((rodBaseAngle > 30) )
+      {
+        translate([-extra,angledLen+rodBaseY+rodOffset-bracketPlateThickness-rodBaseAngleCutExtra,-extra])
+        cube([bracketPlateThickness+extra*2,bracketClearance*2+rodBaseAngleCutExtra,plateMntHoleYDist]);
+      }
+    }
+
+    tmpZ = plateMntHoleYDist+bracketClearance*2-bracketClearance-rodDia/2;
+    tmpY = bracketPlateThickness+bracketClearance+rodDia/2;
+    translate([0,tmpY+rodOffset, tmpZ])
+    rotate([rodBaseAngle,0,0])
+    union()
+    {
+      translate([-extra,0, 0])
+        rotate([0,90,0])
+        cylinder(d=rodDia, h=bracketPlateThickness+extra*2);
+
+      translate([-extra,0,-rodDistance])
+        rotate([0,90,0])
+        cylinder(d=rodDia, h=bracketPlateThickness+extra*2);
+    }
+  }
+
+}
+
+
+/* angleBlock(); */
 
 module angleBlock()
 {
@@ -100,7 +181,7 @@ module screw(screwD = 3, screwLen=10, screwHeadD = 6, screwHeadThickness = 3)
 
 module solPanMount()
 {
-  echo("Base Plate Mount Hole Distance: x", plateMountHolesDistance, " y ", plateMntHoleYDist);
+  echo("Base Plate Mount Hole Distance: x", plateMountHolesXDistance, " y ", plateMntHoleYDist);
   difference()
   {
     union()
@@ -122,7 +203,7 @@ module solPanMount()
     {
       for(ix=[0:plateMountHolesCnt])
       {
-        translate([plateMountHolesDistance*ix,plateMntHoleYDist*iy,-extra])
+        translate([plateMountHolesXDistance*ix,plateMntHoleYDist*iy,-extra])
         cylinder(d=socketScrewDia, h=mntBaseTh+extra*2);
       }
     }
