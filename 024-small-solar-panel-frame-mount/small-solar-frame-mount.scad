@@ -45,6 +45,17 @@ bracketClearance = 5; //mm
 bracketPlateThickness = 5;
 holesPerBracket = 2;
 
+rodBaseAngleCut = true;
+rodBaseAngleCutExtra = 10;
+rodBaseAngle = 45;
+rodBaseY = 20;
+rodOffset = 0;
+rodDistance = 40;
+
+rodDia = 10.3;
+
+
+
 /* translate([15,0,-clipTh])
 rotate([0,0,90])
 frameClip();
@@ -93,14 +104,6 @@ module bracketMount()
   }
 }
 
-rodBaseAngleCut = true;
-rodBaseAngleCutExtra = 10;
-rodBaseAngle = 45;
-rodBaseY = 20;
-rodOffset = 0;
-rodDistance = 40;
-
-rodDia = 10.3;
 
 
 /* bracketMountAngled(); */
@@ -124,7 +127,9 @@ module bracketMountAngled()
       if((rodBaseAngle > 30) )
       {
         translate([-extra,angledLen+rodBaseY+rodOffset-bracketPlateThickness-rodBaseAngleCutExtra,-extra])
-        cube([bracketPlateThickness+extra*2,bracketClearance*2+rodBaseAngleCutExtra,plateMntHoleYDist]);
+        cube([bracketPlateThickness+extra*2,
+          bracketClearance*2+bracketPlateThickness+rodBaseAngleCutExtra,
+          plateMntHoleYDist+bracketClearance*2]);
       }
     }
 
@@ -142,6 +147,10 @@ module bracketMountAngled()
         rotate([0,90,0])
         cylinder(d=rodDia, h=bracketPlateThickness+extra*2);
     }
+
+    translate([-extra,bracketPlateThickness+bracketClearance,(bracketClearance*2+plateMntHoleYDist)/2])
+    rotate([0,90,0])
+    cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
   }
 
 }
