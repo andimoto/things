@@ -49,10 +49,17 @@ rodBaseAngleCut = true;
 rodBaseAngleCutExtra = 10;
 rodBaseAngle = 45;
 rodBaseY = 20;
-rodOffset = 0;
-rodDistance = 40;
+rodOffset = 20;
+rodDistance = 45;
 
-rodDia = 10.3;
+rodDia = 8.3;
+
+
+// not used
+angleBlockDia = 50;
+angleBlockBaseTh = 10;
+
+
 
 
 
@@ -78,10 +85,83 @@ solPanMount(); */
 mirror([1,0,0])
 solPanMount(); */
 
-angleBlockDia = 50;
-angleBlockBaseTh = 10;
 
-bracketMount();
+/* bracketMount(); */
+
+
+// hole to hole distance
+caseHoleXDist = 109;
+caseHoleYDist = 69;
+caseMountPlateClearance = 5;
+caseMountPlateThickness = 5;
+caseMountArmThickness = 2;
+caseMountHoleNumber = 4;
+moveMountHolesY = 0;
+
+cutoutMaterial = true;
+cutoutDia = 25;
+
+tmpArmX = caseHoleXDist+caseMountPlateClearance*2 - caseMountPlateClearance*2;
+
+caseMountPlate();
+module caseMountPlate()
+{
+  tmpPlateX = caseMountHoleNumber*plateMountHolesXDistance+caseMountPlateClearance*2;
+  tmpPlateY = caseHoleYDist+caseMountPlateClearance*2;
+  difference()
+  {
+    union()
+    {
+      cube([tmpPlateX,tmpPlateY,caseMountPlateThickness]);
+
+      translate([-(tmpArmX-tmpPlateX)/2,0,0])
+      sideArm();
+      translate([-(tmpArmX-tmpPlateX)/2,tmpPlateY-caseMountPlateClearance*2,0])
+      sideArm();
+    }
+    translate([(tmpPlateX/2-caseMountHoleNumber)/2,caseMountPlateClearance*2+moveMountHolesY,0])
+    for(ix=[0:caseMountHoleNumber-1])
+    {
+      translate([plateMountHolesXDistance*ix,-extra,-extra])
+        rotate([0,0,0])
+        cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
+
+      translate([plateMountHolesXDistance*ix,plateMntHoleYDist,-extra])
+        rotate([0,0,0])
+        cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
+    }
+
+    if(cutoutMaterial == true)
+    {
+      translate([tmpPlateX/2,caseMountPlateClearance*2+plateMntHoleYDist/2,-extra])
+      cylinder(d=cutoutDia, h=caseMountPlateThickness+extra*2);
+
+      translate([tmpPlateX/2,tmpPlateY,-extra])
+      cylinder(d=cutoutDia, h=caseMountPlateThickness+extra*2);
+    }
+  }
+}
+
+module sideArm()
+{
+  difference()
+  {
+
+    union()
+    {
+      cube([tmpArmX,caseMountPlateClearance*2,caseMountArmThickness]);
+      translate([0,caseMountPlateClearance,0])
+      cylinder(d=caseMountPlateClearance*2, h=caseMountArmThickness);
+      translate([tmpArmX,caseMountPlateClearance,0])
+      cylinder(d=caseMountPlateClearance*2, h=caseMountArmThickness);
+    }
+    translate([tmpArmX,caseMountPlateClearance,-extra])
+    cylinder(d=screwDia,h=caseMountArmThickness+extra*2);
+    translate([0,caseMountPlateClearance,-extra])
+    cylinder(d=screwDia,h=caseMountArmThickness+extra*2);
+  }
+}
+
 module bracketMount()
 {
   bracketMountAngled();
