@@ -95,7 +95,8 @@ caseHoleYDist = 69;
 caseMountPlateClearance = 5;
 caseMountPlateThickness = 5;
 caseMountArmThickness = 2;
-caseMountHoleNumber = 4;
+caseMountXHoleNumber = 4;
+caseMountYHoleNumber = 7;
 moveMountHolesY = 0;
 
 cutoutMaterial = true;
@@ -106,7 +107,7 @@ tmpArmX = caseHoleXDist+caseMountPlateClearance*2 - caseMountPlateClearance*2;
 caseMountPlate();
 module caseMountPlate()
 {
-  tmpPlateX = caseMountHoleNumber*plateMountHolesXDistance+caseMountPlateClearance*2;
+  tmpPlateX = caseMountXHoleNumber*plateMountHolesXDistance+caseMountPlateClearance*2;
   tmpPlateY = caseHoleYDist+caseMountPlateClearance*2;
   difference()
   {
@@ -119,26 +120,21 @@ module caseMountPlate()
       translate([-(tmpArmX-tmpPlateX)/2,tmpPlateY-caseMountPlateClearance*2,0])
       sideArm();
     }
-    translate([(tmpPlateX/2-caseMountHoleNumber)/2,caseMountPlateClearance*2+moveMountHolesY,0])
-    for(ix=[0:caseMountHoleNumber-1])
+    translate([(tmpPlateX/2-caseMountXHoleNumber)/2,caseMountPlateClearance*2+moveMountHolesY,0])
+    for(iy=[0:caseMountYHoleNumber-1])
     {
-      translate([plateMountHolesXDistance*ix,-extra,-extra])
-        rotate([0,0,0])
-        cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
+      for(ix=[0:caseMountXHoleNumber-1])
+      {
+        /* translate([plateMountHolesXDistance*ix,-extra,-extra])
+          rotate([0,0,0])
+          cylinder(d=screwDia, h=caseMountPlateThickness+extra*2); */
 
-      translate([plateMountHolesXDistance*ix,plateMntHoleYDist,-extra])
-        rotate([0,0,0])
-        cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
+        translate([plateMountHolesXDistance*ix,plateMountHolesXDistance*iy,-extra])
+          rotate([0,0,0])
+          cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
+      }
     }
 
-    if(cutoutMaterial == true)
-    {
-      translate([tmpPlateX/2,caseMountPlateClearance*2+plateMntHoleYDist/2,-extra])
-      cylinder(d=cutoutDia, h=caseMountPlateThickness+extra*2);
-
-      translate([tmpPlateX/2,tmpPlateY,-extra])
-      cylinder(d=cutoutDia, h=caseMountPlateThickness+extra*2);
-    }
   }
 }
 
