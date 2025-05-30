@@ -55,11 +55,23 @@ rodDistance = 45;
 rodDia = 8.3;
 
 
+
+
 // not used
 angleBlockDia = 50;
 angleBlockBaseTh = 10;
 
 
+// electronics case back plate
+// hole to hole distance
+caseHoleXDist = 109;
+caseHoleYDist = 69;
+caseMountPlateClearance = 5;
+caseMountPlateThickness = 5;
+caseMountArmThickness = 2;
+caseMountXHoleNumber = 4;
+caseMountYHoleNumber = 7;
+moveMountHolesY = 0;
 
 
 
@@ -88,23 +100,81 @@ solPanMount(); */
 
 /* bracketMount(); */
 
+mountArmRodDia = rodDia;
+mountArmRodDiaXBlock = 25;
+mountArmLen = 40;
+mountArmZ = rodDistance;
+mountArmPlateThickness = 5;
+mountArmTravesThickness = 5;
+mountArmClearance = 5;
+mountArmRotatorDia = 20;
+mountArmXHoles = caseMountXHoleNumber;
+mountArmYHoles = 4;
 
-// hole to hole distance
-caseHoleXDist = 109;
-caseHoleYDist = 69;
-caseMountPlateClearance = 5;
-caseMountPlateThickness = 5;
-caseMountArmThickness = 2;
-caseMountXHoleNumber = 4;
-caseMountYHoleNumber = 7;
-moveMountHolesY = 0;
 
-cutoutMaterial = true;
-cutoutDia = 25;
+mountArm();
+module mountArm()
+{
+  tmpZ = mountArmZ+mountArmClearance;
+  tmpY = plateMountHolesXDistance*mountArmXHoles+mountArmClearance*2;
+  union()
+  {
+    difference()
+    {
+      tmpX = mountArmPlateThickness;
+
+
+      cube([mountArmPlateThickness,tmpY,tmpZ]);
+
+      translate([0,mountArmClearance+mountArmTravesThickness,
+        tmpZ/2-(plateMountHolesXDistance*(mountArmYHoles-1))/2])
+      rotate([90,0,90])
+      for(iy=[0:mountArmYHoles-1])
+      {
+        for(ix=[0:mountArmXHoles-1])
+        {
+          translate([plateMountHolesXDistance*ix,plateMountHolesXDistance*iy,-extra])
+            rotate([0,0,0])
+            cylinder(d=screwDia, h=mountArmPlateThickness+extra*2);
+        }
+      }
+    }
+  }
+
+
+  union()
+  {
+    difference()
+    {
+      tmpZ2 = rodDistance + 
+      union()
+      {
+        translate([mountArmPlateThickness,0,0])
+        cube([mountArmLen+mountArmRodDiaXBlock,mountArmTravesThickness,tmpZ]);
+        translate([mountArmPlateThickness,tmpY-mountArmTravesThickness,0])
+        cube([mountArmLen+mountArmRodDiaXBlock,mountArmTravesThickness,tmpZ]);
+      }
+
+      moveRodX = mountArmLen+mountArmRodDiaXBlock;
+      translate([moveRodX,0, 0])
+      union()
+      {
+        #translate([-extra,0, 0])
+          rotate([-90,0,0])
+          cylinder(d=rodDia, h=tmpY+extra*2);
+
+        #translate([-extra,0,rodDistance])
+          rotate([-90,0,0])
+          cylinder(d=rodDia, h=tmpY+extra*2);
+      }
+    }
+  }
+}
+
 
 tmpArmX = caseHoleXDist+caseMountPlateClearance*2 - caseMountPlateClearance*2;
 
-caseMountPlate();
+/* caseMountPlate(); */
 module caseMountPlate()
 {
   tmpPlateX = caseMountXHoleNumber*plateMountHolesXDistance+caseMountPlateClearance*2;
@@ -125,10 +195,6 @@ module caseMountPlate()
     {
       for(ix=[0:caseMountXHoleNumber-1])
       {
-        /* translate([plateMountHolesXDistance*ix,-extra,-extra])
-          rotate([0,0,0])
-          cylinder(d=screwDia, h=caseMountPlateThickness+extra*2); */
-
         translate([plateMountHolesXDistance*ix,plateMountHolesXDistance*iy,-extra])
           rotate([0,0,0])
           cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
@@ -142,7 +208,6 @@ module sideArm()
 {
   difference()
   {
-
     union()
     {
       cube([tmpArmX,caseMountPlateClearance*2,caseMountArmThickness]);
@@ -376,11 +441,9 @@ module frameClipBase()
 
 module clipScrewHoles(dia=3, holeCnt=2)
 {
-  /* translate([screwXDist,0,0]) */
   for (i=[0:holeCnt-1])
   {
     translate([screwXDist*i,0,0])
     cylinder(r=dia/2, h=clipTh+extra*2);
   }
-
 }
