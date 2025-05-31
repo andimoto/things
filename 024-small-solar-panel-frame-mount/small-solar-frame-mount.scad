@@ -53,7 +53,7 @@ rodOffset = 20;
 rodDistance = 45;
 
 rodDia = 8.3;
-
+rodDiaMountSocket = 8;
 
 
 
@@ -73,8 +73,31 @@ caseMountXHoleNumber = 4;
 caseMountYHoleNumber = 7;
 moveMountHolesY = 0;
 
+// case mount arm
+mountArmRodDia = rodDia;
+mountArmRodDiaXBlock = 20;
+mountArmLen = 40;
+mountArmZ = rodDistance;
+mountArmPlateThickness = 5;
+mountArmTravesThickness = 5;
+mountArmClearance = 5;
+mountArmRotatorDia = 20;
+mountArmXHoles = caseMountXHoleNumber;
+mountArmYHoles = 4;
 
+saveHole = true;
+saveHoleDia = 25;
 
+shaftMountSocketH = 50;
+shaftMountWallThickness = 8;
+
+tmpShaftY = plateMountHolesXDistance*mountArmXHoles;
+tmpShaftZ = mountArmZ + rodDia + mountArmClearance*2;
+tmpSocketRadius = (tmpShaftY/2) / cos(30);
+tmpSocketRadiusCutout = (tmpShaftY/2 - shaftMountWallThickness) / cos(30);
+
+shaftMountRad = (tmpShaftY/2 - shaftMountWallThickness);
+shaftBlockH = 60;
 /* translate([15,0,-clipTh])
 rotate([0,0,90])
 frameClip();
@@ -99,20 +122,83 @@ solPanMount(); */
 
 
 /* bracketMount(); */
+/* translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-(shaftMountSocketH)-extra]) */
+shaftMountRotator();
+module shaftMountRotator()
+{
+  tmpRad = (tmpShaftY/2 - shaftMountWallThickness);
+  tmpLen = tmpSocketRadiusCutout - tmpRad;
+  tmpZ = shaftMountSocketH-shaftMountWallThickness;
+  difference()
+  {
+    union()
+    {
+      cylinder(r=tmpRad, h=tmpZ);
+      translate([-tmpRad*3/2,-tmpRad+tmpLen,-(shaftBlockH)])
+      cube([tmpRad*3,tmpRad*2-tmpLen,shaftBlockH+extra*2]);
+    }
+    translate([-tmpRad,-tmpRad,-extra])
+    cube([tmpRad*2,tmpLen,tmpZ+extra*2]);
 
-mountArmRodDia = rodDia;
-mountArmRodDiaXBlock = 25;
-mountArmLen = 40;
-mountArmZ = rodDistance;
-mountArmPlateThickness = 5;
-mountArmTravesThickness = 5;
-mountArmClearance = 5;
-mountArmRotatorDia = 20;
-mountArmXHoles = caseMountXHoleNumber;
-mountArmYHoles = 4;
+    translate([0,-tmpRad+extra,-shaftBlockH/5])
+      rotate([-90,0,0])
+      cylinder(d=rodDia, h=tmpRad*2+extra*2);
+
+    translate([0,-tmpRad+extra,-shaftBlockH+shaftBlockH/5*2.5])
+      rotate([-90,0,0])
+      cylinder(d=rodDia, h=tmpRad*2+extra*2);
+
+    translate([0,-tmpRad+extra,-shaftBlockH+shaftBlockH/5])
+      rotate([-90,0,0])
+      cylinder(d=rodDia, h=tmpRad*2+extra*2);
+  }
+
+}
 
 
-mountArm();
+/* shaftMount(); */
+module shaftMount()
+{
+
+
+  difference()
+  {
+    cube([mountArmRodDiaXBlock,tmpShaftY,tmpShaftZ]);
+
+    moveRodX = mountArmRodDiaXBlock/2;
+    translate([moveRodX,-extra, rodDia/2+mountArmClearance])
+    union()
+    {
+      translate([-extra,0, 0])
+        rotate([-90,0,0])
+        cylinder(d=rodDia, h=tmpShaftY+extra*2);
+
+      translate([-extra,0,rodDistance])
+        rotate([-90,0,0])
+        cylinder(d=rodDia, h=tmpShaftY+extra*2);
+    }
+  }
+
+
+  difference()
+  {
+    translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH])
+    cylinder(r=tmpSocketRadius, h=shaftMountSocketH, $fn=6);
+
+
+    translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH/2])
+    rotate([0,0,60])
+    translate([0,-(tmpShaftY+extra*2)/2,0])
+    rotate([-90,0,0])
+      cylinder(d=rodDia, h=tmpShaftY+extra*2);
+
+    translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH-extra])
+      cylinder(r=tmpSocketRadiusCutout, h=shaftMountSocketH-shaftMountWallThickness, $fn=6);
+  }
+}
+
+
+/* mountArm(); */
 module mountArm()
 {
   tmpZ = mountArmZ+mountArmClearance;
@@ -146,26 +232,50 @@ module mountArm()
   {
     difference()
     {
-      tmpZ2 = rodDistance + 
+      tmpZ2 = mountArmZ + rodDia + mountArmClearance*2;
       union()
       {
-        translate([mountArmPlateThickness,0,0])
-        cube([mountArmLen+mountArmRodDiaXBlock,mountArmTravesThickness,tmpZ]);
-        translate([mountArmPlateThickness,tmpY-mountArmTravesThickness,0])
-        cube([mountArmLen+mountArmRodDiaXBlock,mountArmTravesThickness,tmpZ]);
+        hull()
+        {
+          translate([mountArmPlateThickness,0,0])
+          cube([extra,mountArmTravesThickness,tmpZ]);
+          translate([mountArmPlateThickness+mountArmLen,0,0])
+          cube([extra,mountArmTravesThickness,tmpZ2]);
+        }
+        translate([mountArmPlateThickness+mountArmLen,0,0])
+          cube([mountArmRodDiaXBlock,mountArmTravesThickness,tmpZ2]);
+
+        translate([0,tmpY-mountArmTravesThickness,0])
+        hull()
+        {
+          translate([mountArmPlateThickness,0,0])
+          cube([extra,mountArmTravesThickness,tmpZ]);
+          translate([mountArmPlateThickness+mountArmLen,0,0])
+          cube([extra,mountArmTravesThickness,tmpZ2]);
+        }
+        translate([mountArmPlateThickness+mountArmLen,tmpY-mountArmTravesThickness,0])
+          cube([mountArmRodDiaXBlock,mountArmTravesThickness,tmpZ2]);
       }
 
-      moveRodX = mountArmLen+mountArmRodDiaXBlock;
-      translate([moveRodX,0, 0])
+      moveRodX = mountArmPlateThickness+mountArmLen+mountArmRodDiaXBlock/2;
+      translate([moveRodX,-extra, rodDia/2+mountArmClearance])
       union()
       {
-        #translate([-extra,0, 0])
+        translate([-extra,0, 0])
           rotate([-90,0,0])
           cylinder(d=rodDia, h=tmpY+extra*2);
 
-        #translate([-extra,0,rodDistance])
+        translate([-extra,0,rodDistance])
           rotate([-90,0,0])
           cylinder(d=rodDia, h=tmpY+extra*2);
+      }
+
+      if(saveHole == true)
+      {
+        moveHoleX = mountArmPlateThickness+mountArmLen/2;
+        translate([moveHoleX,-extra,tmpZ/2])
+        rotate([-90,0,0])
+        cylinder(d=saveHoleDia, h=tmpY+extra*2);
       }
     }
   }
