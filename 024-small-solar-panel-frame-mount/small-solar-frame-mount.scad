@@ -55,13 +55,15 @@ rodDistance = 45;
 rodDia = 8.3;
 rodDiaMountSocket = 8;
 
+enableBracketCaseMount = true;
+bracketCaseMountDist = 20;
 
-
-// not used
-angleBlockDia = 50;
-angleBlockBaseTh = 10;
-
-
+coneH = 15;
+coneR1 = 4;
+coneR2 = 1;
+moveMountConeX = 0;
+moveMountConeY = 44.93;
+moveMountConeZ = 43;
 
 
 caseMountXHoleNumber = 4;
@@ -114,10 +116,10 @@ mirror([1,0,0])
 solPanMount(); */
 /* shaftMount(); */
 
-caseMountPlate();
+/* caseMountPlate(); */
 
 /* mountArm(); */
-/* bracketMount(); */
+bracketMount();
 /* translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-(shaftMountSocketH)-extra]) */
 /* shaftMountRotator(); */
 
@@ -143,6 +145,115 @@ mountHoleArray = [
 [113,124],
 [211,124]
 ];
+
+
+
+
+
+
+
+
+
+/* bracketMountAngled(); */
+module bracketMountAngled()
+{
+  angledLen = tan(rodBaseAngle)*(bracketClearance*2+plateMntHoleYDist);
+
+  difference()
+  {
+    union()
+    {
+      hull()
+      {
+        translate([0,bracketPlateThickness,0])
+        cube([bracketPlateThickness,angledLen+rodBaseY+rodOffset,extra]);
+
+        translate([0,bracketPlateThickness,bracketClearance*2+plateMntHoleYDist-extra])
+        cube([bracketPlateThickness,rodBaseY+rodOffset,extra]);
+      }
+
+      if(enableBracketCaseMount == true)
+      {
+        translate([moveMountConeX,moveMountConeY,moveMountConeZ])
+        rotate([-rodBaseAngle,0,0])
+        union()
+        {
+          bracketPlateCaseMount();
+        }
+      }
+    }
+
+    if(enableBracketCaseMount == true)
+    {
+      translate([moveMountConeX,moveMountConeY,moveMountConeZ])
+      rotate([-rodBaseAngle,0,0])
+      union()
+      {
+        translate([5,5,extra])
+        cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
+        translate([5,15,extra])
+        cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
+        translate([5,25,extra])
+        cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
+      }
+    }
+
+    if((rodBaseAngleCut == true))
+    {
+      if((rodBaseAngle > 30) )
+      {
+        translate([-extra,angledLen+rodBaseY+rodOffset-bracketPlateThickness-rodBaseAngleCutExtra,-extra])
+        cube([bracketPlateThickness+extra*2,
+          bracketClearance*2+bracketPlateThickness+rodBaseAngleCutExtra,
+          plateMntHoleYDist+bracketClearance*2]);
+      }
+    }
+
+    tmpZ = plateMntHoleYDist+bracketClearance*2-bracketClearance-rodDia/2;
+    tmpY = bracketPlateThickness+bracketClearance+rodDia/2;
+    translate([0,tmpY+rodOffset, tmpZ])
+    rotate([rodBaseAngle,0,0])
+    union()
+    {
+      translate([-extra,0, 0])
+        rotate([0,90,0])
+        cylinder(d=rodDia, h=bracketPlateThickness+extra*2);
+
+      translate([-extra,0,-rodDistance])
+        rotate([0,90,0])
+        cylinder(d=rodDia, h=bracketPlateThickness+extra*2);
+    }
+
+    translate([-extra,bracketPlateThickness+bracketClearance,(bracketClearance*2+plateMntHoleYDist)/2])
+    rotate([0,90,0])
+    cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
+  }
+
+}
+
+
+
+
+
+/* module cone()
+{
+  cylinder(r2=coneR1, r1=coneR2, h=coneH);
+} */
+
+/* #bracketPlateCaseMount(); */
+module bracketPlateCaseMount()
+{
+    union()
+    {
+      cube([10,30,bracketPlateThickness]);
+      hull()
+      {
+        cube([10,30,extra]);
+        translate([0,0,-10])
+        cube([extra,30,extra]);
+      }
+    }
+}
 
 
 tmpArmX = caseHoleXDist-caseMountPlateClearance*2;
@@ -387,57 +498,6 @@ module bracketMount()
         cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
     }
   }
-}
-
-
-
-/* bracketMountAngled(); */
-module bracketMountAngled()
-{
-  angledLen = tan(rodBaseAngle)*(bracketClearance*2+plateMntHoleYDist);
-
-  difference()
-  {
-    hull()
-    {
-      translate([0,bracketPlateThickness,0])
-      cube([bracketPlateThickness,angledLen+rodBaseY+rodOffset,extra]);
-
-      translate([0,bracketPlateThickness,bracketClearance*2+plateMntHoleYDist-extra])
-      cube([bracketPlateThickness,rodBaseY+rodOffset,extra]);
-    }
-
-    if((rodBaseAngleCut == true))
-    {
-      if((rodBaseAngle > 30) )
-      {
-        translate([-extra,angledLen+rodBaseY+rodOffset-bracketPlateThickness-rodBaseAngleCutExtra,-extra])
-        cube([bracketPlateThickness+extra*2,
-          bracketClearance*2+bracketPlateThickness+rodBaseAngleCutExtra,
-          plateMntHoleYDist+bracketClearance*2]);
-      }
-    }
-
-    tmpZ = plateMntHoleYDist+bracketClearance*2-bracketClearance-rodDia/2;
-    tmpY = bracketPlateThickness+bracketClearance+rodDia/2;
-    translate([0,tmpY+rodOffset, tmpZ])
-    rotate([rodBaseAngle,0,0])
-    union()
-    {
-      translate([-extra,0, 0])
-        rotate([0,90,0])
-        cylinder(d=rodDia, h=bracketPlateThickness+extra*2);
-
-      translate([-extra,0,-rodDistance])
-        rotate([0,90,0])
-        cylinder(d=rodDia, h=bracketPlateThickness+extra*2);
-    }
-
-    translate([-extra,bracketPlateThickness+bracketClearance,(bracketClearance*2+plateMntHoleYDist)/2])
-    rotate([0,90,0])
-    cylinder(d=screwDia, h=bracketPlateThickness+extra*2);
-  }
-
 }
 
 
