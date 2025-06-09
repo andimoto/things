@@ -62,16 +62,9 @@ angleBlockDia = 50;
 angleBlockBaseTh = 10;
 
 
-// electronics case back plate
-// hole to hole distance
-caseHoleXDist = 109;
-caseHoleYDist = 69;
-caseMountPlateClearance = 5;
-caseMountPlateThickness = 5;
-caseMountArmThickness = 2;
+
+
 caseMountXHoleNumber = 4;
-caseMountYHoleNumber = 7;
-moveMountHolesY = 0;
 
 // case mount arm
 mountArmRodDia = rodDia;
@@ -104,9 +97,9 @@ frameClip();
 
 translate([solFrameInnerXDist-clipBaseY,clipX,-clipTh])
 rotate([0,0,-90])
-frameClip();
+frameClip();*/
 
-translate([-55,clipX,-clipTh])
+/* translate([-55,clipX,-clipTh])
 rotate([0,0,-90])
 frameClip(); */
 
@@ -119,11 +112,102 @@ solPanMount(); */
 /* translate([-40,(clipX-mntBaseY)/2,0])
 mirror([1,0,0])
 solPanMount(); */
+/* shaftMount(); */
 
+caseMountPlate();
 
+/* mountArm(); */
 /* bracketMount(); */
 /* translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-(shaftMountSocketH)-extra]) */
-shaftMountRotator();
+/* shaftMountRotator(); */
+
+// electronics case back plate
+// hole to hole distance
+caseHoleXDist = 225;
+caseHoleYDist = 124;
+caseMountPlateClearance = 5;
+caseMountPlateThickness = 3;
+caseMountArmThickness = 3;
+
+caseMountYHoleNumber = 7;
+moveMountHolesY = 30;
+
+moveHoleArrayX = 2.5;
+mountHoleArray = [
+[0,0],
+[97.5,0],
+[113,0],
+[211,0],
+[0,124],
+[97.5,124],
+[113,124],
+[211,124]
+];
+
+
+tmpArmX = caseHoleXDist-caseMountPlateClearance*2;
+module caseMountPlate()
+{
+  tmpPlateX = caseMountXHoleNumber*plateMountHolesXDistance+caseMountPlateClearance*2;
+  tmpPlateY = caseHoleYDist+caseMountPlateClearance*2;
+  difference()
+  {
+    union()
+    {
+      translate([0,caseMountPlateClearance*2,0])
+      cube([tmpPlateX,caseHoleYDist-caseMountPlateClearance*2,caseMountPlateThickness]);
+
+      translate([-(tmpArmX-tmpPlateX)/2,0,0])
+      sideArm();
+      translate([-(tmpArmX-tmpPlateX)/2,caseHoleYDist,0])
+      sideArm();
+    }
+
+
+
+    translate([(tmpPlateX/2-caseMountXHoleNumber)/2,caseMountPlateClearance*2+moveMountHolesY,0])
+    for(iy=[0:caseMountYHoleNumber-1])
+    {
+      for(ix=[0:caseMountXHoleNumber-1])
+      {
+        translate([plateMountHolesXDistance*ix,plateMountHolesXDistance*iy,-extra])
+          rotate([0,0,0])
+          cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
+      }
+    }
+
+    translate([moveHoleArrayX-(tmpArmX-tmpPlateX)/2,caseMountPlateClearance,0])
+    for(hole = mountHoleArray)
+    {
+      translate([hole[0],hole[1],-extra])
+      cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
+    }
+  }
+}
+
+
+module sideArm()
+{
+  difference()
+  {
+    union()
+    {
+      cube([caseHoleXDist-caseMountPlateClearance*2,caseMountPlateClearance*2,caseMountArmThickness]);
+      translate([0,caseMountPlateClearance,0])
+      cylinder(d=caseMountPlateClearance*2, h=caseMountArmThickness);
+      translate([caseHoleXDist-caseMountPlateClearance*2,caseMountPlateClearance,0])
+      cylinder(d=caseMountPlateClearance*2, h=caseMountArmThickness);
+    }
+
+
+    /* translate([caseHoleXDist-caseMountPlateClearance*2,caseMountPlateClearance,-extra])
+    cylinder(d=screwDia,h=caseMountArmThickness+extra*2);
+    translate([0,caseMountPlateClearance,-extra])
+    cylinder(d=screwDia,h=caseMountArmThickness+extra*2); */
+  }
+}
+
+
 module shaftMountRotator()
 {
   tmpRad = (tmpShaftY/2 - shaftMountWallThickness);
@@ -156,7 +240,7 @@ module shaftMountRotator()
 }
 
 
-/* shaftMount(); */
+
 module shaftMount()
 {
 
@@ -198,7 +282,7 @@ module shaftMount()
 }
 
 
-/* mountArm(); */
+
 module mountArm()
 {
   tmpZ = mountArmZ+mountArmClearance;
@@ -282,56 +366,6 @@ module mountArm()
 }
 
 
-tmpArmX = caseHoleXDist+caseMountPlateClearance*2 - caseMountPlateClearance*2;
-
-/* caseMountPlate(); */
-module caseMountPlate()
-{
-  tmpPlateX = caseMountXHoleNumber*plateMountHolesXDistance+caseMountPlateClearance*2;
-  tmpPlateY = caseHoleYDist+caseMountPlateClearance*2;
-  difference()
-  {
-    union()
-    {
-      cube([tmpPlateX,tmpPlateY,caseMountPlateThickness]);
-
-      translate([-(tmpArmX-tmpPlateX)/2,0,0])
-      sideArm();
-      translate([-(tmpArmX-tmpPlateX)/2,tmpPlateY-caseMountPlateClearance*2,0])
-      sideArm();
-    }
-    translate([(tmpPlateX/2-caseMountXHoleNumber)/2,caseMountPlateClearance*2+moveMountHolesY,0])
-    for(iy=[0:caseMountYHoleNumber-1])
-    {
-      for(ix=[0:caseMountXHoleNumber-1])
-      {
-        translate([plateMountHolesXDistance*ix,plateMountHolesXDistance*iy,-extra])
-          rotate([0,0,0])
-          cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
-      }
-    }
-
-  }
-}
-
-module sideArm()
-{
-  difference()
-  {
-    union()
-    {
-      cube([tmpArmX,caseMountPlateClearance*2,caseMountArmThickness]);
-      translate([0,caseMountPlateClearance,0])
-      cylinder(d=caseMountPlateClearance*2, h=caseMountArmThickness);
-      translate([tmpArmX,caseMountPlateClearance,0])
-      cylinder(d=caseMountPlateClearance*2, h=caseMountArmThickness);
-    }
-    translate([tmpArmX,caseMountPlateClearance,-extra])
-    cylinder(d=screwDia,h=caseMountArmThickness+extra*2);
-    translate([0,caseMountPlateClearance,-extra])
-    cylinder(d=screwDia,h=caseMountArmThickness+extra*2);
-  }
-}
 
 module bracketMount()
 {
