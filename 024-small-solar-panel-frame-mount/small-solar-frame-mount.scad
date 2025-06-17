@@ -66,11 +66,11 @@ moveMountConeY = 44.93;
 moveMountConeZ = 43;
 
 
-caseMountXHoleNumber = 4;
+caseMountXHoleNumber =4;
 
 // case mount arm
 mountArmRodDia = rodDia;
-mountArmRodDiaXBlock = 20;
+mountArmRodDiaXBlock = 14;
 mountArmLen = 40;
 mountArmZ = rodDistance;
 mountArmPlateThickness = 5;
@@ -84,15 +84,16 @@ saveHole = true;
 saveHoleDia = 25;
 
 shaftMountSocketH = 50;
-shaftMountWallThickness = 8;
+shaftMountWallThickness = 4;
 
-tmpShaftY = plateMountHolesXDistance*mountArmXHoles;
+tmpShaftY = 25;//plateMountHolesXDistance*mountArmXHoles;
 tmpShaftZ = mountArmZ + rodDia + mountArmClearance*2;
 tmpSocketRadius = (tmpShaftY/2) / cos(30);
 tmpSocketRadiusCutout = (tmpShaftY/2 - shaftMountWallThickness) / cos(30);
 
-shaftMountRad = (tmpShaftY/2 - shaftMountWallThickness);
 shaftBlockH = 60;
+/* shaftMountRad = (tmpShaftY/2 - shaftMountWallThickness); */
+
 /* translate([15,0,-clipTh])
 rotate([0,0,90])
 frameClip();
@@ -114,12 +115,12 @@ solPanMount(); */
 /* translate([-40,(clipX-mntBaseY)/2,0])
 mirror([1,0,0])
 solPanMount(); */
-/* shaftMount(); */
+shaftMount();
 
 /* caseMountPlate(); */
 
 /* mountArm(); */
-bracketMount();
+/* bracketMount(); */
 /* translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-(shaftMountSocketH)-extra]) */
 /* shaftMountRotator(); */
 
@@ -148,6 +149,46 @@ mountHoleArray = [
 
 
 
+
+module shaftMount()
+{
+
+
+  difference()
+  {
+    cube([mountArmRodDiaXBlock,tmpShaftY,tmpShaftZ]);
+
+    moveRodX = mountArmRodDiaXBlock/2;
+    translate([moveRodX,-extra, rodDia/2+mountArmClearance])
+    union()
+    {
+      translate([-extra,0, 0])
+        rotate([-90,0,0])
+        cylinder(d=rodDia, h=tmpShaftY+extra*2);
+
+      translate([-extra,0,rodDistance])
+        rotate([-90,0,0])
+        cylinder(d=rodDia, h=tmpShaftY+extra*2);
+    }
+  }
+
+
+  difference()
+  {
+   translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH])
+    cylinder(r=tmpSocketRadius, h=shaftMountSocketH, $fn=6);
+
+
+    translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH/2])
+    rotate([0,0,60])
+    translate([0,-(tmpShaftY+extra*2)/2,0])
+    rotate([-90,0,0])
+      cylinder(d=3/*rodDia*/, h=tmpShaftY+extra*2);
+
+    translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH-extra])
+      cylinder(r=tmpSocketRadiusCutout, h=shaftMountSocketH-shaftMountWallThickness, $fn=6);
+  }
+}
 
 
 
@@ -230,7 +271,6 @@ module bracketMountAngled()
   }
 
 }
-
 
 
 
@@ -328,7 +368,7 @@ module shaftMountRotator()
   {
     union()
     {
-      cylinder(r=tmpRad, h=tmpZ);
+      cylinder(r=tmpRad-0.5, h=tmpZ);
       translate([-tmpRad*3/2,-tmpRad+tmpLen,-(shaftBlockH)])
       cube([tmpRad*3,tmpRad*2-tmpLen,shaftBlockH+extra*2]);
     }
@@ -352,45 +392,6 @@ module shaftMountRotator()
 
 
 
-module shaftMount()
-{
-
-
-  difference()
-  {
-    cube([mountArmRodDiaXBlock,tmpShaftY,tmpShaftZ]);
-
-    moveRodX = mountArmRodDiaXBlock/2;
-    translate([moveRodX,-extra, rodDia/2+mountArmClearance])
-    union()
-    {
-      translate([-extra,0, 0])
-        rotate([-90,0,0])
-        cylinder(d=rodDia, h=tmpShaftY+extra*2);
-
-      translate([-extra,0,rodDistance])
-        rotate([-90,0,0])
-        cylinder(d=rodDia, h=tmpShaftY+extra*2);
-    }
-  }
-
-
-  difference()
-  {
-    translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH])
-    cylinder(r=tmpSocketRadius, h=shaftMountSocketH, $fn=6);
-
-
-    translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH/2])
-    rotate([0,0,60])
-    translate([0,-(tmpShaftY+extra*2)/2,0])
-    rotate([-90,0,0])
-      cylinder(d=rodDia, h=tmpShaftY+extra*2);
-
-    translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-shaftMountSocketH-extra])
-      cylinder(r=tmpSocketRadiusCutout, h=shaftMountSocketH-shaftMountWallThickness, $fn=6);
-  }
-}
 
 
 
