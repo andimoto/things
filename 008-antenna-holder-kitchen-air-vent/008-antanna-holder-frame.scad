@@ -18,7 +18,7 @@ frameThickness = 18; //mm - frame thickness ( z value )
 screwDia = 3.2; //mm
 insertDia = 4.2; //mm
 
-grubScrewDia = 3.2; //mm
+grubScrewDia = 3.1; //mm
 
 extensionLen = 250; //mm
 extensionThickness = 10; //mm
@@ -26,11 +26,11 @@ railLen = extensionLen - 40; //mm
 railDia = screwDia + 1; //mm
 
 antennaExtensionMountW = 30; //mm
-antennaExtensionLen = 120; //mm
+antennaExtensionLen = 150; //mm
 antennaExtensionDia = 20; //mm
 extensionMountThickness = 6; //mm
 
-antennaSocketDia = 11+0.4; //mm
+antennaSocketDia = 13.4+0.4; //mm
 
 function getScrewDia(useInserts) = (useInserts==true) ? insertDia : screwDia ;
 
@@ -207,7 +207,7 @@ module antennaMount(grubScrew = true)
 /* #################################################################### */
 /* ######################Model######################################### */
 /* #################################################################### */
-all = 1;
+all = 0;
 if(all)
 {
   frame();
@@ -225,4 +225,4 @@ if(all)
 
 /* rotate([90,0,0])
 extension(useInserts = false); */
-/* antennaMount(grubScrew = false); */
+antennaMount(grubScrew = true);
