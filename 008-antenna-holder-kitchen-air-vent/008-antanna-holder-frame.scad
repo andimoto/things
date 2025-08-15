@@ -225,4 +225,34 @@ if(all)
 
 /* rotate([90,0,0])
 extension(useInserts = false); */
-antennaMount(grubScrew = true);
+/* antennaMount(grubScrew = true); */
+
+/* wz=-20;
+wx=12;
+l=15; */
+
+wz=-20;
+wx=57;
+l=5;
+
+/* rotate([0,90,0]) */
+difference()
+{
+  hull()
+  {
+    cylinder(d=15,h=5);
+
+    translate([3,5,5.5])
+    rotate([-90+wx,0,wz])
+    cylinder(d=12,h=10+l);
+  }
+  translate([0,0,-5])
+  cylinder(d=4,h=15.1);
+  translate([0,0,5])
+  cylinder(d=9,h=10.1);
+
+  translate([3,5,5.5])
+  #rotate([-90+wx,0,wz])
+  translate([0,0,l])
+  cylinder(d=8.2,h=10.2);
+}
