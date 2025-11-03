@@ -42,7 +42,7 @@ module plate(mountPlate=false)
       cylinder(r=plateR,h=0.0001);
     }
 
-    plateTolerance =
+    /* plateTolerance = */
     translate([plateX/2,plateY/2,-extra])
     cylinder(r=(funnelOuterDia/2)-funnelWallTh, h=funnelZ+plateZ, center=false);
   }
