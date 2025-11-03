@@ -139,13 +139,19 @@ shaftLen=40;
 
 hook = false;
 fanCutOut = true;
-fanDia = 110;
+fanDia = 115;
+fanHoleDist = 105;
+fanHoleArray = [[0,0],[0,fanHoleDist],[fanHoleDist,0],[fanHoleDist,fanHoleDist]];
 
 enChambers = true;
 slotCutOut = false;
 slotCnt = 12;
 slotSpace = 8;
 chambSepCnt = 2;
+
+
+
+function getTopThickness() = (fanCutOut==true) ? wallThickness : 0 ;
 
 module fanOut()
 {
@@ -173,15 +179,26 @@ module fanOut()
 
   difference()
   {
+    tempWallthickness = getTopThickness();
     translate([0,shaftLen,-fanOutZ/2]) cube([fanOutX,fanOutY,fanOutZ]);
     translate([wallThickness,shaftLen-extra,-fanOutZ/2+wallThickness])
-      cube([fanOutX-2*wallThickness,fanOutY-wallThickness,fanOutZ-wallThickness*2]);
+      cube([fanOutX-2*wallThickness,fanOutY-wallThickness,fanOutZ-wallThickness*2-tempWallthickness]);
 
     if(fanCutOut == true)
     {
-      translate([fanOutX/2,shaftLen+fanOutY/2,fanOutZ/2-wallThickness-extra])
+      tempWallthickness = getTopThickness();
+      translate([fanOutX/2,shaftLen+fanOutY/2,fanOutZ/2-wallThickness-tempWallthickness-extra])
       rotate([0,0,45/2])
-      cylinder(d=fanDia, h = wallThickness+extra*2, $fn=8);
+        cylinder(d=fanDia, h = tempWallthickness+wallThickness+extra*2, $fn=8);
+
+      translate([0,shaftLen,fanOutZ/2-wallThickness*2])
+      translate([fanOutX/2-fanHoleDist/2,fanOutY/2-fanHoleDist/2,0])
+      for(i=fanHoleArray)
+      {
+        translate([i[0],i[1],0])
+        rotate([0,0,45/2])
+          cylinder(d=3.2, h = tempWallthickness+wallThickness+extra*2);
+      }
     }
 
     if(slotCutOut == true)
@@ -193,6 +210,7 @@ module fanOut()
       }
     }
   }
+
 
   if(hook == true)
   {
