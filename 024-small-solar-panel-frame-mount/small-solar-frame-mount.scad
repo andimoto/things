@@ -115,36 +115,37 @@ solPanMount(); */
 /* translate([-40,(clipX-mntBaseY)/2,0])
 mirror([1,0,0])
 solPanMount(); */
-shaftMount();
+/* shaftMount(); */
 
-/* caseMountPlate(); */
+caseMountPlate();
 
 /* mountArm(); */
 /* bracketMount(); */
 /* translate([mountArmRodDiaXBlock/2,tmpShaftY/2,-(shaftMountSocketH)-extra]) */
 /* shaftMountRotator(); */
 
+
 // electronics case back plate
 // hole to hole distance
-caseHoleXDist = 225;
-caseHoleYDist = 124;
+caseHoleXDist = 119;
+caseHoleYDist = 69;
 caseMountPlateClearance = 5;
 caseMountPlateThickness = 3;
 caseMountArmThickness = 3;
 
-caseMountYHoleNumber = 7;
-moveMountHolesY = 30;
+caseMountYHoleNumber = 6;
+moveMountHolesY = 5;
 
-moveHoleArrayX = 2.5;
+moveHoleArrayX = 0;
 mountHoleArray = [
 [0,0],
-[97.5,0],
-[113,0],
-[211,0],
+[109,0],
+/* [113,0], */
+/* [211,0], */
 [0,124],
-[97.5,124],
-[113,124],
-[211,124]
+[109,69],
+/* [113,124], */
+[0,69]
 ];
 
 
@@ -280,7 +281,7 @@ module bracketMountAngled()
   cylinder(r2=coneR1, r1=coneR2, h=coneH);
 } */
 
-/* #bracketPlateCaseMount(); */
+
 module bracketPlateCaseMount()
 {
     union()
@@ -324,6 +325,9 @@ module caseMountPlate()
         translate([plateMountHolesXDistance*ix,plateMountHolesXDistance*iy,-extra])
           rotate([0,0,0])
           cylinder(d=screwDia, h=caseMountPlateThickness+extra*2);
+        translate([plateMountHolesXDistance*ix,plateMountHolesXDistance*iy,caseMountPlateThickness-1])
+          rotate([0,0,0])
+          cylinder(d=2+screwDia*2, h=1+extra*2);
       }
     }
 
