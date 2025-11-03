@@ -227,13 +227,13 @@ if(all)
 extension(useInserts = false); */
 /* antennaMount(grubScrew = true); */
 
-/* wz=-20;
-wx=12;
-l=15; */
-
 wz=-20;
-wx=57;
-l=5;
+wx=12;
+l=20;
+
+/* wz=-20;
+wx=50;
+l=10; */
 
 /* rotate([0,90,0]) */
 difference()
