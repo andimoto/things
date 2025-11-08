@@ -3,8 +3,8 @@ extra=0.02;
 
 
 plateZ = 4;
-plateX = 120;
-plateY = 120;
+plateX = 130;
+plateY = 130;
 
 plateR = 5;
 
@@ -18,9 +18,11 @@ mntHoleDist = 93;
 fanHoleDist = 105;
 
 mntHoleEnable = true;
-mntHoleRotation = 8;
-mntHoleList=[[mntHoleDist/2,mntHoleDist/2],[-mntHoleDist/2,mntHoleDist/2],
-      [mntHoleDist/2,-mntHoleDist/2],[-mntHoleDist/2,-mntHoleDist/2]];
+mntHoleRotation = 0;
+/* mntHoleList=[[mntHoleDist/2,mntHoleDist/2],[-mntHoleDist/2,mntHoleDist/2],
+      [mntHoleDist/2,-mntHoleDist/2],[-mntHoleDist/2,-mntHoleDist/2]]; */
+mntHoleList=[[57,-27],[-25,-57],
+      [25,58],[-60,24]];
 
 fanHoleEnable = true;
 fanHoleRotation = 0;
@@ -60,7 +62,7 @@ module tubeFlange(plateThickness = 3, mountPlate=false)
       cylinder(r=(funnelOuterDia/2)+getTolerance(true), h=funnelZ+plateThickness+extra*2, center=false);
     }
 
-    if(mntHoleEnable == true)
+    #if(mntHoleEnable == true)
     {
       translate([plateX/2,plateY/2,-extra])
       rotate([0,0,mntHoleRotation])
