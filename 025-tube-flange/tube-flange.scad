@@ -8,9 +8,11 @@ plateY = 130;
 
 plateR = 5;
 
-funnelOuterDia = 100;
+funnelOuterDiaBottom = 100;
+funnelOuterDiaTop = 80;
 funnelWallTh = 2;
-funnelZ = 80;
+funnelZBottom = 20;
+funnelZTop = 60;
 
 toleranceRad = 2;
 
@@ -50,19 +52,28 @@ module tubeFlange(plateThickness = 3, mountPlate=false)
       }
 
       translate([plateX/2,plateY/2,0])
-      cylinder(r=(funnelOuterDia/2), h=funnelZ+plateThickness, center=false);
+      cylinder(r1=(funnelOuterDiaBottom/2), r2=(funnelOuterDiaTop/2),
+        h=funnelZBottom+plateThickness, center=false);
+
+      translate([plateX/2,plateY/2,funnelZBottom])
+      cylinder(r=(funnelOuterDiaTop/2), h=funnelZTop, center=false);
     }
 
     translate([plateX/2,plateY/2,-extra])
-    cylinder(r=(funnelOuterDia/2)-funnelWallTh, h=funnelZ+plateThickness+extra*2, center=false);
+    cylinder(r1=(funnelOuterDiaBottom/2)-funnelWallTh, r2=(funnelOuterDiaTop/2)-funnelWallTh,
+      h=funnelZBottom+plateThickness+extra*2, center=false);
+
+    translate([plateX/2,plateY/2,funnelZBottom-extra])
+    cylinder(r=(funnelOuterDiaTop/2)-funnelWallTh,
+      h=funnelZTop+plateThickness+extra*2, center=false);
 
     if(mountPlate == true)
     {
       translate([plateX/2,plateY/2,-extra])
-      cylinder(r=(funnelOuterDia/2)+getTolerance(true), h=funnelZ+plateThickness+extra*2, center=false);
+      cylinder(r=(funnelOuterDiaBottom/2)+getTolerance(true), h=funnelZTop+funnelZTop+plateThickness+extra*2, center=false);
     }
 
-    #if(mntHoleEnable == true)
+    if(mntHoleEnable == true)
     {
       translate([plateX/2,plateY/2,-extra])
       rotate([0,0,mntHoleRotation])
