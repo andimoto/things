@@ -2,7 +2,8 @@ $fn=100;
 extra=0.02;
 
 baseDia = 95;
-baseH = 10;
+innerBaseDia = 92.1;
+baseH = 20;
 baseWallThick = 3;
 champferH = 3;
 baseDiaLow = baseDia - champferH;
