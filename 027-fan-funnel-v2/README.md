@@ -1,6 +1,8 @@
 # Fan Funnel v2
 
+WIP But ready for printing.
 
+![](027-fan-funnel-v2/fanFunnel_v2.png)
 
 <br>
 

@@ -2,7 +2,7 @@
 
 ## This Repository contains some 3d models I made, which I don't put into a separate Repository
 
-
+If not explicitly mentioned, all models have been created using OpenSCAD.
 
 |No. | Thing             |  Image |
 |:--:|:---------------:|:------:|
@@ -26,6 +26,14 @@
 |018| Clockwork Frame Holder | ![](018-clockwork-holder/000.png) ![](018-clockwork-holder/001.jpg) |
 |019| SUP Puller | ![](019-SUP-Puller/001.jpg) ![](019-SUP-Puller/002.jpg) ![](019-SUP-Puller/003.jpg) |
 |020| SUP Fin Wagon | ![](020-sup-fin-Wagon/sup-fin-wagon.png) ![](020-sup-fin-Wagon/002.jpg) ![](020-sup-fin-Wagon/004.jpg) |
+|021| Knob Level | ![](021-knob-lever/knob-lever.png) |
+|022| Smart LED Lamp Base | n/a |
+|023| Electronic Grid Plate | ![](023-electronic-grid-plate/electronic-plate.png) |
+|024| Small Solar Panel Frame Mount | ![](024-small-solar-panel-frame-mount/001.jpg) |
+|025| Tube Flange | ![](025-tube-flange/001.png) |
+|026| Ring Adapter | ![](026-RingAdapter/ringAdapter.png) |
+|027| Fan Funnel | ![](027-fan-funnel-v2/fanFunnel_v2.png) |
+|028| Pixel Art WIP! | ![](028-pixel-art/pixelart.png) |
 |00x| next thing is WIP! | |
 <br>
 <br>
