@@ -1,10 +1,7 @@
-# Solar Panel Mounts
+# Parametric Solar Module Frame
 
-This is a small OpenSCAD library which holds different custom mounts for small solar panels.
 
-| Thing             |  Image |
-|:--:|:---------------:|
-| Small Solar Panel Frame Mount | ![](small-solar-frame-mount/001s.jpg) |
+
 
 <br>
 
