@@ -1,27 +1,27 @@
 $fn=70;
 extra=0.02;
 
-xLen = 80;
-yLen = 70;
-plateThickness = 2;
+xLen = 70;
+yLen = 30;
+plateThickness = 1;
 cornerRad = 2;
 
 outerStripTh = 3;
 innerStripTh = 2;
 
-cutoutNumX = 8;
-cutoutNumY = 8;
+cutoutNumX = 6;
+cutoutNumY = 4;
 cutoutRad = 0.5;
 
 cutoutX = (xLen-(outerStripTh*2)-(cutoutNumX-1)*innerStripTh)/cutoutNumX;
 cutoutY = (yLen-(outerStripTh*2)-(cutoutNumY-1)*innerStripTh)/cutoutNumY;
 
-screwDia = 3.2;
-screwDistX = 70;
-screwDistY = 60;
+screwDia = 3.1;
+screwDistX = 47.5;
+screwDistY = 23;
 screwRingTh = 2;
 
-screwMountMoveX = 0;
+screwMountMoveX = 8.8;
 screwMountMoveY = 0;
 
 module plate()
