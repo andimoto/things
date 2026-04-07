@@ -29,7 +29,7 @@ If not explicitly mentioned, all models have been created using OpenSCAD.
 |021| Knob Level | ![](021-knob-lever/knob-lever.png) |
 |022| Smart LED Lamp Base | n/a |
 |023| Electronic Grid Plate | ![](023-electronic-grid-plate/electronic-plate.png) |
-|024| Small Solar Panel Frame Mount | ![](024-small-solar-panel-frame-mount/001.jpg) |
+|024| Small Solar Panel Frame Mount | ![](024-solar-panel-mounts/small-solar-frame-mount/001s.jpg) |
 |025| Tube Flange | ![](025-tube-flange/001.png) |
 |026| Ring Adapter | ![](026-RingAdapter/ringAdapter.png) |
 |027| Fan Funnel | ![](027-fan-funnel-v2/fanFunnel_v2.png) |

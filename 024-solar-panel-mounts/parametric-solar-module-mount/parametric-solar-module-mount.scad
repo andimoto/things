@@ -4,11 +4,11 @@ extra=0.02;
 // Solar Panel X Len [mm]
 solPnlX = 80;
 // Solar Panel Y Len [mm]
-solPnlY = 45.5;
+solPnlY = 45;
 // Solar Panel Z Height [mm]
 solPnlZ = 2;
 
-solPnlClearance = 1;
+solPnlClearance = 1.5;
 solPnlZMove = 3;
 
 
@@ -56,6 +56,11 @@ module solPnl(yLen=40)
   }
 }
 
+module solPnlCutout(yLen=40)
+{
+  cube([0,0,0]);
+}
+
 
 parametricMount();
 
@@ -70,8 +75,8 @@ module parametricMount()
       translate([tempMoveX+solPnlClearance,mountFrame1Y,-extra])
       cube([tempCutX,tempCutY,mountFrameZ+extra*2]);
 
-      translate([tempMoveX,mountFrame1Y,solPnlZMove])
-      solPnl(yLen=(solPnlY*solPnlCntY)+extra);
+      /* translate([tempMoveX,mountFrame1Y,solPnlZMove])
+      solPnl(yLen=(solPnlY*solPnlCntY)+extra); */
     }
 
 
