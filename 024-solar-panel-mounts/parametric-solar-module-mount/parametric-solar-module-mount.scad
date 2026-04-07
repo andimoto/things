@@ -9,21 +9,25 @@ solPnlY = 45;
 solPnlZ = 2;
 
 solPnlClearance = 1.5;
-solPnlZMove = 3;
+solPnlZMove = 0;
 
 
 solPnlCntX = 2;
 solPnlCntY = 2;
 
 
-
 mountFrame1X = 6;
 mountFrame2X = 6;
-mountFrameMid = 6;
+mountFrameMid = 8;
 mountFrame1Y = 3;
 mountFrame2Y = 3;
 mountFrameZ = 5;
 mountFrame2Move = mountFrameZ + 1;
+
+clampYLen = 60;
+clampZLen = 1;
+clampScrewXMove = 3;
+clampScrewYMove = 0;
 
 screwDia = 3.2;
 screwLen = 8;
@@ -31,16 +35,19 @@ screwXMove = 3;
 
 
 
-
-
-
-
 tempX = mountFrame1X + ((solPnlX)*solPnlCntX) + (mountFrameMid * (solPnlCntX-1)) +  mountFrame2X;
-tempY = mountFrame1Y + (solPnlY)*solPnlCntY ;
+tempY = mountFrame1Y + (solPnlY)*solPnlCntY + mountFrame2Y;
 tempCutX = solPnlX - solPnlClearance*2;
 tempCutY = (solPnlY*solPnlCntY) + extra;
 
+module clampPlate(xLen=10, yLen=20, zLen=1, screwXPos=0,fixture=true)
+{
 
+  cube([xLen,yLen,zLen]);
+}
+
+translate([0,tempY/2-clampYLen/2,mountFrameZ+2])
+#clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLen, zLen=clampZLen, screwXPos=0,fixture=true);
 
 /* solPnl(); */
 module solPnl(yLen=40)
@@ -58,7 +65,7 @@ module solPnl(yLen=40)
 
 module solPnlCutout(yLen=40)
 {
-  cube([0,0,0]);
+  cube([solPnlX,yLen,mountFrameZ]);
 }
 
 
@@ -77,7 +84,11 @@ module parametricMount()
 
       /* translate([tempMoveX,mountFrame1Y,solPnlZMove])
       solPnl(yLen=(solPnlY*solPnlCntY)+extra); */
+      translate([tempMoveX,mountFrame1Y,solPnlZMove-solPnlZ])
+      translate([0,0,mountFrameZ])
+      solPnlCutout(yLen=(solPnlY*solPnlCntY)+extra);
     }
+
 
 
     translate([screwXMove,tempY-screwLen,mountFrameZ/2])
@@ -85,6 +96,10 @@ module parametricMount()
     cylinder(d=screwDia,h=screwLen+extra*2);
     translate([screwXMove,-extra,mountFrameZ/2])
     rotate([-90,0,0])
+    cylinder(d=screwDia,h=screwLen+extra*2);
+
+    translate([clampScrewXMove,tempY/2-extra,-extra])
+    rotate([0,0,0])
     cylinder(d=screwDia,h=screwLen+extra*2);
 
     for (i=[1:solPnlCntX-1]) {
@@ -96,6 +111,10 @@ module parametricMount()
       translate([tempScrewMove,-extra,mountFrameZ/2])
       rotate([-90,0,0])
       cylinder(d=screwDia,h=screwLen+extra*2);
+
+      translate([tempScrewMove,tempY/2-extra,-extra])
+      rotate([0,0,0])
+      cylinder(d=screwDia,h=screwLen+extra*2);
     }
 
     translate([tempX-screwXMove,tempY-screwLen,mountFrameZ/2])
@@ -104,9 +123,13 @@ module parametricMount()
     translate([tempX-screwXMove,-extra,mountFrameZ/2])
     rotate([-90,0,0])
     cylinder(d=screwDia,h=screwLen+extra*2);
+
+    translate([tempX-clampScrewXMove,tempY/2-extra,-extra])
+    rotate([0,0,0])
+    cylinder(d=screwDia,h=screwLen+extra*2);
   }
 
-  translate([0,tempY+mountFrame2Move,0])
+  /* #translate([0,tempY+mountFrame2Move,0])
   rotate([90,0,0])
   union()
   {
@@ -132,5 +155,5 @@ module parametricMount()
       cylinder(d=screwDia,h=mountFrame2Y+extra*2);
 
     }
-  }
+  } */
 }
