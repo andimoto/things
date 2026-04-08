@@ -16,8 +16,13 @@ solPnlCntX = 2;
 solPnlCntY = 2;
 
 
-mountFrame1X = 6;
-mountFrame2X = 6;
+screwDia = 3.2;
+screwLen = 8;
+sideScrewXMove = 3;
+
+
+mountFrame1X = 10;
+mountFrame2X = 10;
 mountFrameMid = 8;
 mountFrame1Y = 3;
 mountFrame2Y = 3;
@@ -26,28 +31,58 @@ mountFrame2Move = mountFrameZ + 1;
 
 clampYLen = 60;
 clampZLen = 1;
-clampScrewXMove = 3;
+clampScrewXMove = 5;
 clampScrewYMove = 0;
-
-screwDia = 3.2;
-screwLen = 8;
-screwXMove = 3;
-
-
+clampFixtureYMove = 10;
+clampFixturePinDia = 4;
+clampFixturePinZ = 4;
+clampFixtureKeyX = 5;
+clampFixtureKeyY = 2;
 
 tempX = mountFrame1X + ((solPnlX)*solPnlCntX) + (mountFrameMid * (solPnlCntX-1)) +  mountFrame2X;
 tempY = mountFrame1Y + (solPnlY)*solPnlCntY + mountFrame2Y;
 tempCutX = solPnlX - solPnlClearance*2;
 tempCutY = (solPnlY*solPnlCntY) + extra;
 
-module clampPlate(xLen=10, yLen=20, zLen=1, screwXPos=0,fixture=true)
-{
+clampYLenTemp = tempY - screwLen*2;
 
-  cube([xLen,yLen,zLen]);
+
+module clampPlate(xLen=10, yLen=20, zLen=1, screwXPos=0,fixture=true, fixtureDia=4, fixtureZ=4, cutoutExtra=0)
+{
+  difference()
+  {
+    cube([xLen+cutoutExtra,yLen,zLen]);
+    translate([screwXPos,yLen/2-extra,-extra])
+    cylinder(d=screwDia,h=screwLen+extra*2);
+  }
+  if(fixture==true)
+  {
+    translate([xLen/2,clampFixtureYMove,-fixtureZ])
+    clampPin(pinDia=fixtureDia+cutoutExtra, pinL=fixtureZ,
+      lx=clampFixtureKeyX+cutoutExtra,ly=clampFixtureKeyY+cutoutExtra,rot=90);
+    translate([xLen/2,yLen-clampFixtureYMove,-fixtureZ])
+    clampPin(pinDia=fixtureDia+cutoutExtra, pinL=fixtureZ,
+      lx=clampFixtureKeyX+cutoutExtra,ly=clampFixtureKeyY+cutoutExtra,rot=-90);
+  }
 }
 
-translate([0,tempY/2-clampYLen/2,mountFrameZ+2])
-#clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLen, zLen=clampZLen, screwXPos=0,fixture=true);
+translate([0,screwLen,mountFrameZ])
+clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen, screwXPos=clampScrewXMove,fixture=true,
+  fixtureDia=clampFixturePinDia, fixtureZ=clampFixturePinZ);
+
+
+
+/* clampPin(pinDia=4, pinL=4, lx=5,ly=2,rot=90); */
+module clampPin(pinDia=4, pinL=4, lx=5,ly=2, rot=0)
+{
+  rotate([0,0,rot])
+  union()
+  {
+    cylinder(d=pinDia, h=pinL);
+    translate([0,-ly/2,0])
+    cube([pinDia+lx,ly,pinL]);
+  }
+}
 
 /* solPnl(); */
 module solPnl(yLen=40)
@@ -69,7 +104,7 @@ module solPnlCutout(yLen=40)
 }
 
 
-parametricMount();
+/* parametricMount(); */
 
 module parametricMount()
 {
@@ -91,10 +126,10 @@ module parametricMount()
 
 
 
-    translate([screwXMove,tempY-screwLen,mountFrameZ/2])
+    translate([sideScrewXMove,tempY-screwLen,mountFrameZ/2])
     rotate([-90,0,0])
     cylinder(d=screwDia,h=screwLen+extra*2);
-    translate([screwXMove,-extra,mountFrameZ/2])
+    translate([sideScrewXMove,-extra,mountFrameZ/2])
     rotate([-90,0,0])
     cylinder(d=screwDia,h=screwLen+extra*2);
 
@@ -102,58 +137,42 @@ module parametricMount()
     rotate([0,0,0])
     cylinder(d=screwDia,h=screwLen+extra*2);
 
-    for (i=[1:solPnlCntX-1]) {
-      tempScrewMove = mountFrame1X + i*(solPnlX + mountFrameMid) - mountFrameMid/2;
-      translate([tempScrewMove,tempY-screwLen,mountFrameZ/2])
-      rotate([-90,0,0])
-      cylinder(d=screwDia,h=screwLen+extra*2);
+    translate([0,screwLen,mountFrameZ+extra])
+    clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen, screwXPos=clampScrewXMove,
+      fixture=true, fixtureDia=clampFixturePinDia, fixtureZ=screwLen, cutoutExtra=0.5);
 
-      translate([tempScrewMove,-extra,mountFrameZ/2])
-      rotate([-90,0,0])
-      cylinder(d=screwDia,h=screwLen+extra*2);
 
-      translate([tempScrewMove,tempY/2-extra,-extra])
-      rotate([0,0,0])
-      cylinder(d=screwDia,h=screwLen+extra*2);
+    if(solPnlCntX > 1)
+    {
+      for (i=[1:solPnlCntX-1]) {
+        tempScrewMove = mountFrame1X + i*(solPnlX + mountFrameMid) - mountFrameMid/2;
+        translate([tempScrewMove,tempY-screwLen,mountFrameZ/2])
+        rotate([-90,0,0])
+        cylinder(d=screwDia,h=screwLen+extra*2);
+
+        translate([tempScrewMove,-extra,mountFrameZ/2])
+        rotate([-90,0,0])
+        cylinder(d=screwDia,h=screwLen+extra*2);
+
+        translate([tempScrewMove,tempY/2-extra,-extra])
+        rotate([0,0,0])
+        cylinder(d=screwDia,h=screwLen+extra*2);
+      }
     }
 
-    translate([tempX-screwXMove,tempY-screwLen,mountFrameZ/2])
+    translate([tempX-sideScrewXMove,tempY-screwLen,mountFrameZ/2])
     rotate([-90,0,0])
     cylinder(d=screwDia,h=screwLen+extra*2);
-    translate([tempX-screwXMove,-extra,mountFrameZ/2])
+    translate([tempX-sideScrewXMove,-extra,mountFrameZ/2])
     rotate([-90,0,0])
     cylinder(d=screwDia,h=screwLen+extra*2);
 
     translate([tempX-clampScrewXMove,tempY/2-extra,-extra])
     rotate([0,0,0])
     cylinder(d=screwDia,h=screwLen+extra*2);
+
+    translate([tempX-mountFrame2X-solPnlClearance,screwLen,mountFrameZ+extra])
+    clampPlate(xLen=mountFrame2X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen, screwXPos=-clampScrewXMove,
+      fixture=true, fixtureDia=clampFixturePinDia, fixtureZ=screwLen, cutoutExtra=0.5);
   }
-
-  /* #translate([0,tempY+mountFrame2Move,0])
-  rotate([90,0,0])
-  union()
-  {
-    difference()
-    {
-      translate([0,0,0])
-      cube([tempX,mountFrame2Y,mountFrameZ]);
-
-      translate([screwXMove,0,mountFrameZ/2])
-      rotate([-90,0,0])
-      cylinder(d=screwDia,h=mountFrame2Y+extra*2);
-
-
-      for (i=[1:solPnlCntX-1]) {
-        tempScrewMove = mountFrame1X + i*(solPnlX + mountFrameMid) - mountFrameMid/2;
-        translate([tempScrewMove,0,mountFrameZ/2-extra])
-        rotate([-90,0,0])
-        #cylinder(d=screwDia,h=mountFrame2Y+extra*2);
-      }
-
-      translate([tempX-screwXMove,0,mountFrameZ/2])
-      rotate([-90,0,0])
-      cylinder(d=screwDia,h=mountFrame2Y+extra*2);
-
-    }
-  } */
 }
