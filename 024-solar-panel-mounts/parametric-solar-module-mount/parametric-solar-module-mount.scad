@@ -104,7 +104,7 @@ module solPnlCutout(yLen=40)
 }
 
 
-/* parametricMount(); */
+parametricMount();
 
 module parametricMount()
 {

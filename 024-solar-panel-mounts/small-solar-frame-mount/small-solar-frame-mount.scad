@@ -31,7 +31,7 @@ mntPhaseTh = 5;
 mntBaseScrewX = screwYDist;
 mntBaseScrewY = (mntBaseY - (screwXDist*(solPanScrewHoles-1)))/2;
 
-socketScrewDia = 3.2;
+socketScrewDia = 3.1;
 
 plateMountHolesXDistance = 10;
 plateMountHolesClearance = 10;
@@ -108,8 +108,8 @@ frameClip(); */
 
 
 
-/* translate([0,(clipX-mntBaseY)/2,0])
-solPanMount(); */
+translate([0,(clipX-mntBaseY)/2,0])
+solPanMount();
 
 
 /* translate([-40,(clipX-mntBaseY)/2,0])
@@ -117,7 +117,7 @@ mirror([1,0,0])
 solPanMount(); */
 /* shaftMount(); */
 
-caseMountPlate();
+/* caseMountPlate(); */
 
 /* mountArm(); */
 /* bracketMount(); */
@@ -551,11 +551,11 @@ module solPanMount()
 
     translate([mntBaseScrewX,mntBaseScrewY,-extra])
     rotate([0,0,90])
-    clipScrewHoles(dia=screwDia+0.2, holeCnt=solPanScrewHoles);
+    clipScrewHoles(dia=screwDia+0.1, holeCnt=solPanScrewHoles);
 
     translate([solFrameInnerXDist-mntBaseScrewX,mntBaseScrewY,-extra])
     rotate([0,0,90])
-    clipScrewHoles(dia=screwDia+0.2, holeCnt=solPanScrewHoles);
+    clipScrewHoles(dia=screwDia+0.1, holeCnt=solPanScrewHoles);
 
     translate([clipBaseY+plateMountHolesClearance+plateMountHolesRest/2,mntBaseY/2-plateMntHoleYDist/2,0])
     for(iy=[0:1])
