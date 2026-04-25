@@ -47,7 +47,8 @@ tempCutY = (solPnlY*solPnlCntY) + extra;
 clampYLenTemp = tempY - screwLen*2;
 
 
-module clampPlate(xLen=10, yLen=20, zLen=1, screwXPos=0,fixture=true, fixtureDia=4, fixtureZ=4, cutoutExtra=0)
+module clampPlate(xLen=10, yLen=20, zLen=1, screwXPos=0,fixture=true,
+  fixtureDia=4, fixtureZ=4, cutoutExtra=0)
 {
   difference()
   {
@@ -66,10 +67,16 @@ module clampPlate(xLen=10, yLen=20, zLen=1, screwXPos=0,fixture=true, fixtureDia
   }
 }
 
-translate([0,screwLen,mountFrameZ])
-clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen, screwXPos=clampScrewXMove,fixture=true,
-  fixtureDia=clampFixturePinDia, fixtureZ=clampFixturePinZ);
+/* translate([0,screwLen,mountFrameZ])
+clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen,
+  screwXPos=clampScrewXMove,fixture=true,
+  fixtureDia=clampFixturePinDia, fixtureZ=clampFixturePinZ); */
 
+
+/* #translate([(tempX-mountFrame1X-solPnlClearance)/2,screwLen,mountFrameZ+extra])
+clampPlate(xLen=mountFrame1X+solPnlClearance/2, yLen=clampYLenTemp, zLen=clampZLen,
+  screwXPos=(mountFrame1X+solPnlClearance)/2, fixture=true, fixtureDia=clampFixturePinDia,
+  fixtureZ=screwLen, cutoutExtra=0.5); */
 
 
 /* clampPin(pinDia=4, pinL=4, lx=5,ly=2,rot=90); */
@@ -142,6 +149,8 @@ module parametricMount()
       fixture=true, fixtureDia=clampFixturePinDia, fixtureZ=screwLen, cutoutExtra=0.5);
 
 
+
+
     if(solPnlCntX > 1)
     {
       for (i=[1:solPnlCntX-1]) {
@@ -159,6 +168,11 @@ module parametricMount()
         cylinder(d=screwDia,h=screwLen+extra*2);
       }
     }
+
+    #translate([(tempX-mountFrame1X-solPnlClearance)/2,screwLen,mountFrameZ+extra])
+    clampPlate(xLen=mountFrame1X+solPnlClearance/2, yLen=clampYLenTemp, zLen=clampZLen,
+      screwXPos=(mountFrame1X+solPnlClearance)/2, fixture=true, fixtureDia=clampFixturePinDia,
+      fixtureZ=screwLen, cutoutExtra=0.5);
 
     translate([tempX-sideScrewXMove,tempY-screwLen,mountFrameZ/2])
     rotate([-90,0,0])
