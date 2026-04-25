@@ -13,7 +13,8 @@ matrixPixelCntY = 5;
 
 matrixBtmThick = 1;
 matrixWallThickness = 0.8;
-matrixToPixelClearance = 0.1;
+matrixToPixelClearance = 0.3;
+matrixPixelToBotomClearance = 0.2;
 
 notchHoldRad = 1;
 
@@ -29,7 +30,7 @@ module matrix()
   {
     union()
     {
-      cube([matrixDimX,matrixDimY,matrixBtmThick+pixelSideDim+matrixToPixelClearance]);
+      cube([matrixDimX,matrixDimY,matrixBtmThick+pixelSideDim+matrixPixelToBotomClearance]);
     }
 
     translate([matrixWallThickness,matrixWallThickness,matrixBtmThick+extra])
@@ -40,7 +41,9 @@ module matrix()
         translate([xnum*(pixelSideDim+matrixToPixelClearance+matrixWallThickness),
                    ynum*(pixelSideDim+matrixToPixelClearance+matrixWallThickness),
                    0])
-        cube(pixelSideDim+matrixToPixelClearance);
+        cube([pixelSideDim+matrixToPixelClearance,
+              pixelSideDim+matrixToPixelClearance,
+              pixelSideDim+matrixPixelToBotomClearance]);
 
         translate([pixelWallDim/2,pixelWallDim/2,-matrixBtmThick-extra*2])
         translate([xnum*(pixelSideDim+matrixToPixelClearance+matrixWallThickness),
