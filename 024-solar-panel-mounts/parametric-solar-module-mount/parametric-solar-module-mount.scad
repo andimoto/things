@@ -6,6 +6,8 @@ extra=0.02;
 showClamps = true;
 // Show Main Frame Solar Panels
 showFrame = true;
+// Show Hinge
+showHinge = true;
 
 /* [Solar Panel Parameter] */
 // Solar Panel X Len [mm]
@@ -67,7 +69,11 @@ tempCutY = (solPnlY*solPnlCntY) + extra;
 
 clampYLenTemp = tempY - screwLen*2;
 
-/* hingePlate(); */
+if(showHinge == true)
+{
+  hingePlate();
+}
+
 module hingePlate()
 {
   tempYMove = (hingePlateY - tempY)/2;
@@ -77,7 +83,7 @@ module hingePlate()
     translate([-hingeToFrameCutout-hingeFrameClearance,-tempYMove,tempZMove])
     cube([hingePlateX,hingePlateY,hingePlateZ]);
 
-    #translate([-hingeFrameClearance,-hingeFrameClearance,tempZMove-extra])
+    translate([-hingeFrameClearance,-hingeFrameClearance,tempZMove-extra])
     cube([hingeToFrameCutout+extra,hingePlateY-tempYMove*2+hingeFrameClearance*2,hingePlateZ+extra*2]);
   }
 }
@@ -121,7 +127,7 @@ clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen
       tempClampPlateMove = mountFrame1X/2-solPnlClearance/2 + j*(solPnlX + mountFrameMid)
         - mountFrameMid/2;
 
-      #translate([tempClampPlateMove,clampYMove,mountFrameZ+extra])
+      translate([tempClampPlateMove,clampYMove,mountFrameZ+extra])
       clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen,
         screwXPos=(mountFrame1X+solPnlClearance)/2, fixture=true,
         fixtureDia=clampFixturePinDia,
