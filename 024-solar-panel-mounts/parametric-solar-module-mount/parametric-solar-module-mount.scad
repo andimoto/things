@@ -42,26 +42,45 @@ mountFrame2Y = 3;
 mountFrameZ = 5;
 mountFrame2Move = mountFrameZ + 1;
 
+/* [Solar Panels Clamp Parameters] */
+// Clamp Length (y Direction)
 clampYLen = 60;
+// Clamp Height (z Direction)
 clampZLen = 1;
+// Additional Y Move
 clampYMove = 8;
+// Screw Hole x Move
 clampScrewXMove = 5;
+// Screw Hole y Move
 clampScrewYMove = 0;
+// Clamp Fixture Y Move
 clampFixtureYMove = 10;
+// Clamp Fixture Pin Dia
 clampFixturePinDia = 4;
+// Clamp Fixture Pin Z Len
 clampFixturePinZ = 4;
+// Clamp Fixtur Key Length X
 clampFixtureKeyX = 5;
+// Clamp Fixtur Key Length Y
 clampFixtureKeyY = 2;
 
+/* [Hinge Plate Parameters] */
+// Hinge Plate Width (x Direction)
 hingePlateX = 20;
+// Hinge Plate Length (y Direction)
 hingePlateY = 110;
+// Hinge Plate Thickness (z Direction)
 hingePlateZ = mountFrameZ + 3;
+// Cutout to Frame
 hingeToFrameCutout = 10;
+// Clearance for cutout
 hingeFrameClearance = 1;
+// additional x move
 hingePlateMoveX = 0;
+// additional y move
 hingePlateMoveY = 0;
 
-
+/* [Other Parameters] */
 tempX = mountFrame1X + ((solPnlX)*solPnlCntX) + (mountFrameMid * (solPnlCntX-1)) +  mountFrame2X;
 tempY = mountFrame1Y + (solPnlY)*solPnlCntY + mountFrame2Y;
 tempCutX = solPnlX - solPnlClearance*2;
@@ -85,6 +104,19 @@ module hingePlate()
 
     translate([-hingeFrameClearance,-hingeFrameClearance,tempZMove-extra])
     cube([hingeToFrameCutout+extra,hingePlateY-tempYMove*2+hingeFrameClearance*2,hingePlateZ+extra*2]);
+
+    translate([0,0,tempZMove+hingePlateZ/2])
+    union()
+    {
+      translate([sideScrewXMove,
+        hingePlateY-tempYMove-screwLen+extra, 0])
+      rotate([-90,0,0])
+      cylinder(d=screwDia+0.5,h=screwLen+extra*2);
+      translate([sideScrewXMove,
+        hingeFrameClearance-hingeToFrameCutout, 0])
+      rotate([-90,0,0])
+      cylinder(d=screwDia+0.5,h=screwLen+extra*2);
+    }
   }
 }
 
@@ -110,16 +142,16 @@ module clampPlate(xLen=10, yLen=20, zLen=1, screwXPos=0,fixture=true,
 
 if(showClamps == true)
 {
-translate([0,clampYMove,mountFrameZ])
-clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen,
-  screwXPos=clampScrewXMove,fixture=true,
-  fixtureDia=clampFixturePinDia, fixtureZ=clampFixturePinZ);
+  translate([0,clampYMove,mountFrameZ])
+  clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen,
+    screwXPos=clampScrewXMove,fixture=true,
+    fixtureDia=clampFixturePinDia, fixtureZ=clampFixturePinZ);
 
-translate([tempX,clampYMove+clampYLenTemp,mountFrameZ])
-rotate([0,0,180])
-clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen,
-  screwXPos=clampScrewXMove,fixture=true,
-  fixtureDia=clampFixturePinDia, fixtureZ=clampFixturePinZ);
+  translate([tempX,clampYMove+clampYLenTemp,mountFrameZ])
+  rotate([0,0,180])
+  clampPlate(xLen=mountFrame1X+solPnlClearance, yLen=clampYLenTemp, zLen=clampZLen,
+    screwXPos=clampScrewXMove,fixture=true,
+    fixtureDia=clampFixturePinDia, fixtureZ=clampFixturePinZ);
 
   if(solPnlCntX > 1)
   {
