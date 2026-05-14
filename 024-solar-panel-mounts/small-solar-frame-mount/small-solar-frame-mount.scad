@@ -94,13 +94,14 @@ tmpSocketRadiusCutout = (tmpShaftY/2 - shaftMountWallThickness) / cos(30);
 shaftBlockH = 60;
 /* shaftMountRad = (tmpShaftY/2 - shaftMountWallThickness); */
 
-/* translate([15,0,-clipTh])
+ /* translate([15,0,-clipTh])
 rotate([0,0,90])
-frameClip();
+frameClip(); */
 
-translate([solFrameInnerXDist-clipBaseY,clipX,-clipTh])
-rotate([0,0,-90])
-frameClip();*/
+/* translate([solFrameInnerXDist-clipBaseY,clipX,-clipTh]) */
+/* translate([0,0,clipTh]) */
+/* rotate([-90,0,0])
+frameClip(); */
 
 /* translate([-55,clipX,-clipTh])
 rotate([0,0,-90])
@@ -108,8 +109,8 @@ frameClip(); */
 
 
 
-translate([0,(clipX-mntBaseY)/2,0])
-solPanMount();
+/* translate([0,(clipX-mntBaseY)/2,0])
+solPanMount(); */
 
 
 /* translate([-40,(clipX-mntBaseY)/2,0])
@@ -148,12 +149,93 @@ mountHoleArray = [
 [0,69]
 ];
 
+/* translate([35,20,25])
+rotate([-90,0,0])
+frameClip(); */
+
+ubracketBeamThick = 25;
+ubracketXMount1Len = 110+ubracketBeamThick;
+ubracketBeamMountThick = 10;
+
+ubracketXMount2Len = 80 + ubracketBeamThick;
+uDistance = 30;
+screwHoleXMove = 60;
+screwHoleYMove = 6;
+screwHoleToHoleZDist = 13.5;
+ubracket();
+module ubracket()
+{
+
+
+  difference()
+  {
+    union()
+    {
+      union()
+      {
+        cube([ubracketXMount1Len-clipPhaseTh,ubracketBeamMountThick,ubracketBeamThick]);
+        translate([ubracketXMount1Len-clipPhaseTh,0,0])
+        hull()
+        {
+          cube([extra,ubracketBeamMountThick,ubracketBeamThick]);
+          translate([-extra+clipPhaseTh,0,clipPhaseTh])
+          cube([extra,ubracketBeamMountThick,ubracketBeamThick-clipPhaseTh*2]);
+        }
+      }
+      /* u distance */
+      translate([0,ubracketBeamMountThick,0])
+      cube([ubracketBeamThick,uDistance,ubracketBeamThick]);
+
+      translate([0,ubracketBeamMountThick+uDistance,0])
+      union()
+      {
+        cube([ubracketXMount2Len-clipPhaseTh,ubracketBeamMountThick,ubracketBeamThick]);
+        translate([ubracketXMount2Len-clipPhaseTh,0,0])
+        hull()
+        {
+          cube([extra,ubracketBeamMountThick,ubracketBeamThick]);
+          translate([-extra+clipPhaseTh,0,clipPhaseTh])
+          cube([extra,ubracketBeamMountThick,ubracketBeamThick-clipPhaseTh*2]);
+        }
+      }
+    } //end union (bracket())
+
+    translate([0,0,screwHoleYMove])
+    union()
+    {
+      translate([screwHoleXMove,-extra,0])
+      rotate([-90,0,0])
+      clipScrewHoles(dia=screwDia, holeCnt=solPanScrewHoles);
+
+      translate([screwHoleXMove,-extra,screwHoleToHoleZDist])
+      rotate([-90,0,0])
+      clipScrewHoles(dia=screwDia, holeCnt=solPanScrewHoles);
+    }
+
+
+    translate([0,ubracketBeamMountThick+uDistance-extra,screwHoleYMove])
+    union()
+    {
+      translate([screwHoleXMove,-extra,0])
+      rotate([-90,0,0])
+      clipScrewHoles(dia=screwDia+2, holeCnt=solPanScrewHoles);
+
+      translate([screwHoleXMove,-extra,screwHoleToHoleZDist])
+      rotate([-90,0,0])
+      clipScrewHoles(dia=screwDia+2, holeCnt=solPanScrewHoles);
+    }
+
+    translate([ubracketBeamThick+5,ubracketBeamMountThick+uDistance-extra,ubracketBeamThick/2])
+    rotate([-90,0,0])
+    clipScrewHoles(dia=screwDia+1, holeCnt=solPanScrewHoles);
+
+  }
+}
 
 
 
 module shaftMount()
 {
-
 
   difference()
   {
