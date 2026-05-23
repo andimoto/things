@@ -31,7 +31,7 @@ mntPhaseTh = 5;
 mntBaseScrewX = screwYDist;
 mntBaseScrewY = (mntBaseY - (screwXDist*(solPanScrewHoles-1)))/2;
 
-socketScrewDia = 3.1;
+socketScrewDia = 3;
 
 plateMountHolesXDistance = 10;
 plateMountHolesClearance = 10;
@@ -149,9 +149,9 @@ mountHoleArray = [
 [0,69]
 ];
 
-/* translate([35,20,25])
-rotate([-90,0,0])
-frameClip(); */
+translate([35,20,25])
+rotate([0,90,0])
+frameClip();
 
 ubracketBeamThick = 25;
 ubracketXMount1Len = 110+ubracketBeamThick;
@@ -162,7 +162,9 @@ uDistance = 30;
 screwHoleXMove = 60;
 screwHoleYMove = 6;
 screwHoleToHoleZDist = 13.5;
-ubracket();
+
+
+/* ubracket(); */
 module ubracket()
 {
 
