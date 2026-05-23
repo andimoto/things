@@ -79,6 +79,17 @@ hingeFrameClearance = 1;
 hingePlateMoveX = 0;
 // additional y move
 hingePlateMoveY = 0;
+// hingeMountHoles enable/disable
+hingeMountHoles = true;
+// Hinge Mount Screw distance
+hingeMountScrewDistance = 80;
+// Hinge Mount Screw X Move
+hingeMountScrewXMove = 0;
+// Hinge Mount Screw Y Move
+hingeMountScrewYMove = 0;
+// Hinge Mount Screw Dia
+hingeMountScrewDia = 3.3;
+
 
 /* [Other Parameters] */
 tempX = mountFrame1X + ((solPnlX)*solPnlCntX) + (mountFrameMid * (solPnlCntX-1)) +  mountFrame2X;
@@ -97,6 +108,7 @@ module hingePlate()
 {
   tempYMove = (hingePlateY - tempY)/2;
   tempZMove = (mountFrameZ - hingePlateZ);
+
   difference()
   {
     translate([-hingeToFrameCutout-hingeFrameClearance,-tempYMove,tempZMove])
@@ -116,6 +128,22 @@ module hingePlate()
         hingeFrameClearance-hingeToFrameCutout, 0])
       rotate([-90,0,0])
       cylinder(d=screwDia+0.5,h=screwLen+extra*2);
+    }
+
+    if(hingeMountHoles)
+    {
+      // hinge mount screw holes
+      translate([hingeMountScrewXMove,hingePlateY/2-tempYMove+hingeMountScrewYMove,0])
+      {
+        translate([-hingeFrameClearance-hingeToFrameCutout/2,
+          -hingeMountScrewDistance/2,
+          tempZMove+hingePlateZ/2-extra/2])
+        cylinder(d=hingeMountScrewDia, h=hingePlateZ+extra*2, center=true);
+        translate([-hingeFrameClearance-hingeToFrameCutout/2,
+          hingeMountScrewDistance/2,
+          tempZMove+hingePlateZ/2-extra/2])
+        cylinder(d=hingeMountScrewDia, h=hingePlateZ+extra*2, center=true);
+      }
     }
   }
 }
