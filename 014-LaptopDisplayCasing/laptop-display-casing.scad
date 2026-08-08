@@ -101,10 +101,15 @@ pcbCaseMountScrewHeadLen = 3;
 
 
 /* [ Stand Parameter ] */
+// Lower Stand Depth
+standLowerLen = 50;
+// Lower Stand Depth
+standUpperLen = 20;
 // distance between hinge and feet of the stand. Main Parameter to control the angel of the display when standing
 standFeetLength = -40;
 // control the angel of the plate of the stand which touches the ground
 standFeetPlateDegree = -14;
+
 
 /* [ Visualization ] */
 // show everything build together
@@ -128,7 +133,7 @@ showAllLidFrameParts = false;
 // show electronics case
 showPcbCase = false;
 // show stand
-showStand = false;
+showStand = true;
 // cut through the model to view profile
 cutView = false;
 
@@ -222,7 +227,7 @@ lengthY = ((lowerFrameWidth+upperFrameWidth+absDisplayY)/4 ) * 2 + 10;
 standCutoutLen = (lengthY - 10*3)/2 - 10;
 /* some move parameter */
 moveYtemp = 15;
-stand2Zlen = 50;
+
 
 if(showAssembly == false && showDisplay == true)
 {
@@ -664,21 +669,22 @@ module stand2()
       hull()
       {
         translate([0,0,12.6+1])
-        cube([10,0.1,stand2Zlen-1]);
-        translate([0,standFeetLength,12.6+stand2Zlen-stand2Zlen/4])
+        cube([10,0.1,standLowerLen-1]);
+        translate([0,standFeetLength,12.6+standLowerLen-standLowerLen/4])
         rotate([standFeetPlateDegree,0,0])
-        cube([10,0.1,stand2Zlen/4]);
+        cube([10,0.1,standLowerLen/4]);
       }
     }
 
+    assert((standUpperLen > 16), "standUpperLen Var must be greater 16!...");
     // cutout to save material
     translate([0,0,12.6+1+10])
     hull()
     {
       translate([-extra,10,0])
-      cube([10+extra*2,1,stand2Zlen-1-20]);
+      cube([10+extra*2,1,standLowerLen-1-20]);
       translate([-extra,lengthY-1-10,0])
-      cube([10+extra*2,1,(stand2Zlen-1)/2-16]);
+      cube([10+extra*2,1,standUpperLen-16]);
     }
 
   }
@@ -692,9 +698,9 @@ module stand2body()
     translate([0,0,12.6+1])
     hull()
     {
-      cube([10,5,stand2Zlen-1]);
+      cube([10,5,standLowerLen-1]);
       translate([0,lengthY-1,0])
-      cube([10,1,(stand2Zlen-1)/2]);
+      cube([10,1,standUpperLen]);
     }
 
     translate([0,moveYtemp,0])
