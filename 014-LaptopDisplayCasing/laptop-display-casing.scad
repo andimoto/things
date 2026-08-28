@@ -246,11 +246,12 @@ pcbCaseFrameScrews = [
 
 // pcb holes
 caseStandoffPoints = [
-  [3,2.5],
-  [pcbX-2,2.5],
+  [0,0],
+  [28,0],
 
-  [3,pcbY-2],
-  [pcbX-2.5,pcbY-11]
+  [0,pcbY-10]
+  ,
+  [28,pcbY-10]
 ];
 
 /* stand length in y direction */
