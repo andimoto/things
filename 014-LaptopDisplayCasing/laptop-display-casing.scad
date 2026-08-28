@@ -31,27 +31,27 @@ cutView = false;
 
 /* [ Display Dimensions ] */
 // absolute Display Length ( X )
-absDisplayX = 359;
+absDisplayX = 359.0;
 // absolute Display Depth ( Y )
-absDisplayY = 209;
+absDisplayY = 209.0;
 // absolute Display Height ( Z ) (also include connector and electronic height on the back)
-absDisplayZ = 6;
+absDisplayZ = 6.0;
 // length of the black screen ( x )
-screenX=350;
+screenX=350.0;
 // depth of the black screen ( y )
-screenY=200;
+screenY=200.0;
 // height of screen (should be lower than absDisplayZ as Screen is inside the absolute frame dimensions)
 screenZ=4.5;
 // length of the connector on the back (in x direction) (give some room for the connector; this will be also the cutout on the back)
-connectorX = 35;
+connectorX = 35.0;
 // length of the connector on the back (in y direction) (give some room for the connector; this will be also the cutout on the back)
-connectorY = 30;
+connectorY = 30.0;
 // optional: connector will be default 1mm height
-connectorZ = 1;
+connectorZ = 1.0;
 // move the connector cutout on the back of the display in x direction
-connectorXmove = 225;
+connectorXmove = 225.0;
 // move the connector cutout on the back of the display in y direction
-connectorYmove = 25;
+connectorYmove = 25.0;
 
 /* [ Frame Dimensions ] */
 // frame width in vertical dimension (left & right)
