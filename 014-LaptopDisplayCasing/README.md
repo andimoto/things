@@ -1,6 +1,9 @@
 # Laptop Display Casing
 
 WIP!!
+ToDos:
+- add Building Manual
+- add Documentation for Customizer, etc.
 
 __Customizable Case for Laptop Displays which have been removed \/ recycled from old laptops.__
 
@@ -8,8 +11,11 @@ __Customizable Case for Laptop Displays which have been removed \/ recycled from
 
 | STL Model | Display | Display Controller | Note |
 |-----------|---------|--------------------|------|
-| [Display001](stl/display001) |LP156WH2-TLQA <br> N156BGE-L21 <br> N156B6-L04 <br> much more <br> 15.6 "panel | NT68676 | Display Controller suitable for many displays! Button PCB may be different! |
-| WIP!! [Display002](stl/display002) | LP141WX3 <br> B141EW03 <br> LP154W01 <br> LP154WX4 <br> 14.1" <br> 15.4" | LCD-Controller VS-TY2662-V1 | Display Controller suitable for many displays! Button PCB may be different!  <br> Old display with high voltage backlight! |
+| [Display001](stl/display001) | LP156WH2-TLQA | Controller **NT68676** for <br> LP156WH2-TLQA <br> N156BGE-L21 <br> N156B6-L04| Display Controller suitable for many displays! Button PCB may be different! |
+| [Display002](stl/display002) | LP141WX3 | LCD-Controller **VS-TY2662-V1** for <br> LP141WX3 <br> B141EW03 <br> LP154W01 <br> LP154WX4 <br> | Display Controller suitable for many displays! Button PCB may be different!  <br> Old display with high voltage backlight! |
+| [Display003](stl/display003) | LP156WH4 | LCD-Controller **SKU53004425-1-LCD** for <br> LP156WH4 <br> LP140WH1<br> LP156WF1<br> B156XW02 | Display Controller suitable for many displays! Button PCB may be different! Controller PCB relatively small. |
+
+
 
 # Customization
 
