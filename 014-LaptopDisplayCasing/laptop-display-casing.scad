@@ -90,6 +90,22 @@ backMountingHoles = true;
 diffMovePcbCaseX = 0;
 // move pcb case in y direction (from lvds connector)
 diffMovePcbCaseY = 0;
+// enable Plate for glue into Frame Parts - only in 2 Parts Config (Case L / CaseR)
+glueConnector = true;
+// Glue Connector X Size
+glueConPlateX = 20;
+// Glue Connector Y Size
+glueConPlateY = 1;
+// Glue Connector Z Size (height)
+glueConPlateZ = 5;
+// Clearance of Glue Connector Cutout - only be calculated ito cutout
+glueConPlateClearance = 0.4;
+// Glue Connector - additional move X
+glueConPlateXmove = 0;
+// Glue Connector - additional move Y
+glueConPlateYmove = 0;
+// Glue Connector - additional move Z
+glueConPlateZmove = 1;
 
 /* [ PCB Case Parameter ] */
 // pcb length in x direction
@@ -268,7 +284,7 @@ if(showAssembly == false && showCase == true)
   {
     displayCase();
 
-    #if(cutView == true)
+    if(cutView == true)
     {
       translate([(absDisplayX/2)+cutXExtra,-extra+cutYExtra,-extra])
       cube([absDisplayX,
@@ -336,11 +352,29 @@ if(showAssembly == false && showCase == false && showCaseL == true)
     cube([absoluteX/2+extra,absoluteY+extra*2,
       absDisplayZ+backwallThickness+backwallClearance+extra*2]);
 
+
+    if(glueConnector == true)
+    {
+      translate([-(glueConPlateX+isToleranceEn(true))/2+absoluteX/2+glueConPlateXmove,
+        lowerFrameWidth/2+glueConPlateYmove-isToleranceEn(true)/2,
+        backwallThickness+backwallClearance+glueConPlateZmove-isToleranceEn(true)+extra/2])
+      glueConnector(tolerance = true);
+
+      translate([-(glueConPlateX+isToleranceEn(true))/2+absoluteX/2+glueConPlateXmove,
+        absoluteY-isToleranceEn(true)/2 - (upperFrameWidth/2 + glueConPlateYmove),
+        backwallThickness+backwallClearance+glueConPlateZmove-isToleranceEn(true)+extra/2])
+      glueConnector(tolerance = true);
+    }
+
   }
 }
 
+
+
+
 if(showAssembly == false && showCase == false && showCaseR == true)
 {
+  // to separate parts in preview, move in x
   translate([10,0,0])
   difference()
   {
@@ -353,6 +387,18 @@ if(showAssembly == false && showCase == false && showCaseR == true)
     cube([absoluteX/2+extra,absoluteY+extra*2,
       absDisplayZ+backwallThickness+backwallClearance+extra*2]);
 
+    if(glueConnector == true)
+    {
+      translate([-(glueConPlateX+isToleranceEn(true))/2+absoluteX/2+glueConPlateXmove,
+        lowerFrameWidth/2+glueConPlateYmove-isToleranceEn(true)/2,
+        backwallThickness+backwallClearance+glueConPlateZmove-isToleranceEn(true)+extra/2])
+      glueConnector(tolerance = true);
+
+      translate([-(glueConPlateX+isToleranceEn(true))/2+absoluteX/2+glueConPlateXmove,
+        absoluteY-isToleranceEn(true)/2 - (upperFrameWidth/2 + glueConPlateYmove),
+        backwallThickness+backwallClearance+glueConPlateZmove-isToleranceEn(true)+extra/2])
+      glueConnector(tolerance = true);
+    }
   }
 }
 
@@ -771,6 +817,18 @@ module stand2body()
   }
 }
 
+function isToleranceEn(tol) = (tol == true) ? glueConPlateClearance : 0;
+module glueConnector(tolerance = true)
+{
+  assert((glueConPlateY < lowerFrameWidth-2), "Error: glueConPlateY must be smaller than `lowerFrameWidth-2` ");
+  assert((glueConPlateY < upperFrameWidth-2), "Error: glueConPlateY must be smaller than `upperFrameWidth-2` ");
+  assert((glueConPlateZ < (backwallClearance+absDisplayZ)),
+    "Error: glueConPlateY must be smaller than `backwallThickness-backwallClearance+absDisplayZ` ");
+
+  cube([(glueConPlateX+isToleranceEn(tolerance)),
+    glueConPlateY+isToleranceEn(tolerance),
+    glueConPlateZ+isToleranceEn(tolerance)]);
+}
 
 module coneCutout()
 {
