@@ -2,6 +2,33 @@
 Author: andimoto@posteo.de
 ----------------------------
 */
+
+/* [ Visualization ] */
+// show everything build together
+showAssembly = false;
+// show full assembly with lid frame
+assemblyWithLid = false;
+// show full assembly with screws
+assemblyWithScrews = false;
+// show only display
+showDisplay = false;
+// show display casing
+showCase = false;
+// show right part of case (for printing)
+showCaseR = false;
+// show left part of case (for printing)
+showCaseL = false;
+// place complete lidFrame
+showLidFrame = false;
+// place lidFrame parts divided into 2 side parts and 2 parts
+showAllLidFrameParts = false;
+// show electronics case
+showPcbCase = false;
+// show stand
+showStand = false;
+// cut through the model to view profile
+cutView = false;
+
 /* [ Display Dimensions ] */
 // absolute Display Length ( X )
 absDisplayX = 359;
@@ -111,45 +138,33 @@ standFeetLength = -40;
 standFeetPlateDegree = -14;
 
 
-/* [ Visualization ] */
-// show everything build together
-showAssembly = false;
-// show full assembly with lid frame
-assemblyWithLid = false;
-// show full assembly with screws
-assemblyWithScrews = false;
-// show only display
-showDisplay = false;
-// show display casing
-showCase = false;
-// show right part of case (for printing)
-showCaseR = false;
-// show left part of case (for printing)
-showCaseL = false;
-// place complete lidFrame
-showLidFrame = false;
-// place lidFrame parts divided into 2 side parts and 2 parts
-showAllLidFrameParts = false;
-// show electronics case
-showPcbCase = false;
-// show stand
-showStand = true;
-// cut through the model to view profile
-cutView = false;
 
-/* [ Frame Screw Parameter ] */
-frameScrewDia = 3.2;
-frameScrewLen = 10;
+/* [ Frame Screw Parameter - Direct Screws or Heat-Set Insets ] */
+// Screw Diameter [for M3 use about 3.1]
+frameScrewDia = 3.1;
+// Screw Length [ check frame thickness! ]
+frameScrewLen = 15;
+// Screw Head Height [ 3mm for Socket Head Screws; relevant in stand() ]
 frameScrewHeadLen = 3;
+// Screw Head Diameter [ Dia of Screw Head - fits many M3 Screws ]
 screwHeadThickness = 6.2;
+// Diameter for Heat-Set Insert (if enabled) [ for example Ruthex-Style M3 Inserts ]
 insertDia=4.2;
+// Height of normal Heat-Set Inserts [ Ruthex Style ]
 insertH=6;
 
 
-/* [ other Parameter ] */
+/* [ other Parameter & Debugging Cuts ] */
+//  Number of Segments / Resolution
 $fn = 80;
+// "extra" Param for getting cleaner preview
 extra = 0.015;
-cutExtra = 1;
+// In "Cut" View this sets cutting amount
+cutHeightExtra = 1;
+// move "Cut" in X Position - positiv => move right; negative => move left
+cutXExtra = 0;
+// move "Cut" in Y Position - only upwards
+cutYExtra = 0;
 
 // movement of ocb case depends on cutout of lvds connector
 movePcbCaseX = connectorXmove + diffMovePcbCaseX;
@@ -197,7 +212,8 @@ backFrameMountingInserts = [
   [verticalFrameWidth/2,midTemp-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4],
   [verticalFrameWidth/2,midTemp],
   [verticalFrameWidth/2,midTemp+(lowerFrameWidth+upperFrameWidth+absDisplayY)/4],
-  // right side mounting insert holes
+  // right side mounting insert holes - these next 3 holes are also used for stands.
+  // 3 more screws are visible when debugging stand() - doesn't matter, keep it
   [rightSideTemp,midTemp-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4],
   [rightSideTemp,midTemp],
   [rightSideTemp,midTemp+(lowerFrameWidth+upperFrameWidth+absDisplayY)/4],
@@ -252,12 +268,12 @@ if(showAssembly == false && showCase == true)
   {
     displayCase();
 
-    if(cutView == true)
+    #if(cutView == true)
     {
-      translate([absDisplayX/2,-extra,-extra])
+      translate([(absDisplayX/2)+cutXExtra,-extra+cutYExtra,-extra])
       cube([absDisplayX,
         absDisplayY+upperFrameWidth+lowerFrameWidth+sideClearance*2+extra*2,
-        absDisplayZ+backwallThickness+backwallClearance+extra*2+cutExtra]);
+        absDisplayZ+backwallThickness+backwallClearance+extra*2+cutHeightExtra]);
     }
   }
 }
@@ -426,10 +442,10 @@ module assembly()
 
     if(cutView == true)
     {
-      translate([absDisplayX/2+verticalFrameWidth+sideClearance,-extra,-extra])
+      translate([(absDisplayX/2+verticalFrameWidth+sideClearance)+cutXExtra,-extra+cutYExtra,-extra])
       cube([absDisplayX,
         absDisplayY+upperFrameWidth+lowerFrameWidth+sideClearance*2+extra*2,
-        absDisplayZ+backwallThickness+backwallClearance+extra*2+cutExtra+2]);
+        absDisplayZ+backwallThickness+backwallClearance+extra*2+cutHeightExtra]);
     }
   }
 
@@ -619,12 +635,16 @@ module stand()
         cube([5+5/2,lengthY,0.1]);
       }
     }
-    translate([0,5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,-extra])
-      cylinderList(dia=frameScrewDia+0.4 ,height=10+2.6+extra*2, points=backFrameMountingInserts);
 
-    translate([0,5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,12.6-frameScrewHeadLen])
-      cylinderList(dia=screwHeadThickness ,height=frameScrewHeadLen+extra, points=backFrameMountingInserts);
+    /* Screws */
+    union()
+    {
+      translate([0,5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,-extra])
+        cylinderList(dia=frameScrewDia+0.4 ,height=10+2.6+extra*2, points=backFrameMountingInserts);
 
+      translate([0,5-(lowerFrameWidth+upperFrameWidth+absDisplayY)/4,12.6-frameScrewHeadLen])
+        cylinderList(dia=screwHeadThickness ,height=frameScrewHeadLen+extra, points=backFrameMountingInserts);
+    }
 
 
     translate([-extra,15,2.6+extra])
