@@ -26,6 +26,8 @@ showAllLidFrameParts = false;
 showPcbCase = false;
 // show stand
 showStand = false;
+// show glue connector without tolerance
+showGlueConnector = false;
 // cut through the model to view profile
 cutView = false;
 
@@ -440,6 +442,12 @@ if(showAssembly == false && showCase == false && showStand == true)
       cube([10,lengthY+extra*2,20]);
     }
   }
+}
+
+if(showAssembly == false && showCase == false && showGlueConnector == true)
+{
+  rotate([90,0,0])
+  glueConnector(tolerance = false);
 }
 
 module assembly()
