@@ -412,8 +412,10 @@ module enclosureComplete()
     mirror([tempMirror[i][0],tempMirror[i][1],0])
     union()
     {
-      translate([0,0,0]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-      translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+      for (i=[0:vBeamCount]) {
+        translate([0,0,vBeamCount*i]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+      }
+      // translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
     }
   }
 
@@ -424,8 +426,10 @@ module enclosureComplete()
     mirror([0,1,0])
     union()
     {
-      translate([0,0,0]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
-      translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+      for (i=[0:vBeamCount]) {
+        translate([0,0,vBeamCount*i]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
+      }
+      // translate([0,0,beamLen]) corner_beam(beamX,beamY,beamLen, beamWallThickness, beamMountThickness);
     }
   }
 
