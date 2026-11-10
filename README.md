@@ -6,34 +6,34 @@ If not explicitly mentioned, all models have been created using OpenSCAD.
 
 |No. | Thing             |  Image |
 |:--:|:---------------:|:------:|
-|001| Parametric Case or Box with snapable Lid|![](001-parametricCase/parametricCase.png)|
-|002| Parametric Round Cap |![](002-cap/parametricCap.png)|
-|003| Panel Wall Holder System !!!WIP!! ||
-|004| Parametric Roller Blind Blend |![](004-roller-blind-blend/004-1.png)|
-|005| Brandson Vertical Blower Cable Holder |![](005-brandson-vertical-blower-cable-holder/holderRing001.png)|
-|006| Fan-Funnel |![](006-fan-funnel/006-fan-funnel.png)|
-|007| LED Holder for Fan-Funnel |![](007-fan-funnel-upgrade/007-fan-funnel-upgrade.png)|
-|008| Antenna Mount System |![](008-antenna-holder-kitchen-air-vent/008-antanna-holder-frame.png)|
-|009| Banana Cable Organizer with Lid |![](009-banana-cable-org/009-banana-cable-org.png)|
-|010| IDEA: Ikea Besta Mod (with SCAD Model) |![](010-ikea-besta-mod/bigBestaMod.gif)|
-|011| Enclosure Generator WIP |![](011-enclosureGenerator/011-enclosure-generator.png)|
-|012| Tablet Shelf WIP (FreeCAD) |  |
-|013| Rectangular Cover WIP! |![](013-rectangularCover/013-rectangularCover.png)|
-|014| Customizable Display Casing for old Laptop Displays WIP! |![](014-LaptopDisplayCasing/014-laptop-display-casing.png) ![](014-LaptopDisplayCasing/stl/display001/009.jpg) ![](014-LaptopDisplayCasing/stl/display001/010.jpg) |
-|015| Pipe Connector | ![](015-pipe-connector/pipe-connector.png) ![](015-pipe-connector/pipe-con001.jpg) |
-|016| Telescope Drawer Thing | ![](016-telescope-drawer-thing/000.png) ![](016-telescope-drawer-thing/001.jpg) |
-|017| Shelly Door Window 2 Tubes (FreeCAD) | ![](017-shelly-dw2-clamp/001.jpg) ![](017-shelly-dw2-clamp/shelly-dw2-clamp-slicer.png) |
-|018| Clockwork Frame Holder | ![](018-clockwork-holder/000.png) ![](018-clockwork-holder/001.jpg) |
-|019| SUP Puller | ![](019-SUP-Puller/001.jpg) ![](019-SUP-Puller/002.jpg) ![](019-SUP-Puller/003.jpg) |
-|020| SUP Fin Wagon | ![](020-sup-fin-Wagon/sup-fin-wagon.png) ![](020-sup-fin-Wagon/002.jpg) ![](020-sup-fin-Wagon/004.jpg) |
-|021| Knob Level | ![](021-knob-lever/knob-lever.png) |
-|022| Smart LED Lamp Base | n/a |
-|023| Electronic Grid Plate | ![](023-electronic-grid-plate/electronic-plate.png) |
-|024| Small Solar Panel Frame Mount | ![](024-solar-panel-mounts/small-solar-frame-mount/001s.jpg) |
-|025| Tube Flange | ![](025-tube-flange/001.png) |
-|026| Ring Adapter | ![](026-RingAdapter/ringAdapter.png) |
-|027| Fan Funnel | ![](027-fan-funnel-v2/fanFunnel_v2.png) |
-|028| Pixel Art WIP! | ![](028-pixel-art/pixelart.png) |
+|001| [Parametric Case or Box with snapable Lid](001-parametricCase/)|![](001-parametricCase/parametricCase.png)|
+|002| [Parametric Round Cap](002-cap/)|![](002-cap/parametricCap.png)|
+|003| [Panel Wall Holder System !!!WIP!!](003-panel-wall-holder/) ||
+|004| [Parametric Roller Blind Blend](004-roller-blind-blend/)|![](004-roller-blind-blend/004-1.png)|
+|005| [Brandson Vertical Blower Cable Holder](005-brandson-vertical-blower-cable-holder/)|![](005-brandson-vertical-blower-cable-holder/holderRing001.png)|
+|006| [Fan-Funnel](006-fan-funnel/)|![](006-fan-funnel/006-fan-funnel.png)|
+|007| [LED Holder for Fan-Funnel](007-fan-funnel-upgrade/)|![](007-fan-funnel-upgrade/007-fan-funnel-upgrade.png)|
+|008| [Antenna Mount System](008-antenna-holder-kitchen-air-vent/)|![](008-antenna-holder-kitchen-air-vent/008-antanna-holder-frame.png)|
+|009| [Banana Cable Organizer with Lid](009-banana-cable-org/)|![](009-banana-cable-org/009-banana-cable-org.png)|
+|010| [IDEA: Ikea Besta Mod (with SCAD Model)](010-ikea-besta-mod/)|![](010-ikea-besta-mod/bigBestaMod.gif)|
+|011| [Enclosure Generator WIP](011-enclosureGenerator/)|![](011-enclosureGenerator/011-enclosure-generator.png)|
+|012| [Tablet Shelf WIP (FreeCAD)](012-tabShelf/)|  |
+|013| [Rectangular Cover WIP!](013-rectangularCover/)|![](013-rectangularCover/013-rectangularCover.png)|
+|014| [Customizable Display Casing for old Laptop Displays WIP!](014-LaptopDisplayCasing/)|![](014-LaptopDisplayCasing/014-laptop-display-casing.png) ![](014-LaptopDisplayCasing/stl/display001/009.jpg) ![](014-LaptopDisplayCasing/stl/display001/010.jpg) |
+|015| [Pipe Connector](015-pipe-connector/)| ![](015-pipe-connector/pipe-connector.png) ![](015-pipe-connector/pipe-con001.jpg) |
+|016| [Telescope Drawer Thing](016-telescope-drawer-thing/)| ![](016-telescope-drawer-thing/000.png) ![](016-telescope-drawer-thing/001.jpg) |
+|017| [Shelly Door Window 2 Tubes (FreeCAD)](017-shelly-dw2-clamp/)| ![](017-shelly-dw2-clamp/001.jpg) ![](017-shelly-dw2-clamp/shelly-dw2-clamp-slicer.png) |
+|018| [Clockwork Frame Holder](018-clockwork-holder/)| ![](018-clockwork-holder/000.png) ![](018-clockwork-holder/001.jpg) |
+|019| [SUP Puller](019-SUP-Puller/)| ![](019-SUP-Puller/001.jpg) ![](019-SUP-Puller/002.jpg) ![](019-SUP-Puller/003.jpg) |
+|020| [SUP Fin Wagon](020-sup-fin-Wagon/)| ![](020-sup-fin-Wagon/sup-fin-wagon.png) ![](020-sup-fin-Wagon/002.jpg) ![](020-sup-fin-Wagon/004.jpg) |
+|021| [Knob Level](021-knob-lever/)| ![](021-knob-lever/knob-lever.png) |
+|022| [Smart LED Lamp Base](022-smart-led-lamp-base/)| n/a |
+|023| [Electronic Grid Plate](023-electronic-grid-plate/)| ![](023-electronic-grid-plate/electronic-plate.png) |
+|024| [Small Solar Panel Frame Mount](024-solar-panel-mounts/)| ![](024-solar-panel-mounts/small-solar-frame-mount/001s.jpg) |
+|025| [Tube Flange](025-tube-flange/)| ![](025-tube-flange/001.png) |
+|026| [Ring Adapter](026-RingAdapter/)| ![](026-RingAdapter/ringAdapter.png) |
+|027| [Fan Funnel](027-fan-funnel-v2/)| ![](027-fan-funnel-v2/fanFunnel_v2.png) |
+|028| [Pixel Art WIP!](028-pixel-art/)| ![](028-pixel-art/pixelart.png) |
 |00x| next thing is WIP! | |
 <br>
 <br>
