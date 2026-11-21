@@ -65,7 +65,7 @@ module carrPlate()
 }
 
 // translate([0,diaTemp/2,0]) 
-autoblade_adapter();
+// autoblade_adapter();
 
 module autoblade_adapter()
 {
@@ -114,3 +114,64 @@ module autoblade_adapter()
     }
 }
 
+baseWidth = 20;
+lowerBorder = 5;
+upperBorder = 10;
+trigThick = 5;
+trigWidth = 20;
+
+bladeTopToAdapterBottom = 43;
+adBtmToTip = 16; 
+adBtmToReset = 12;
+
+longSide = bladeTopToAdapterBottom + adBtmToTip;
+shortSide = bladeTopToAdapterBottom + adBtmToReset;
+
+trigHeight = longSide+upperBorder+lowerBorder;
+
+screwHoleLoose = 3.1;
+
+autoTrigger();
+module autoTrigger()
+{
+    difference() 
+    {
+        cube([baseWidth+trigWidth,trigThick,trigHeight]);
+        
+        translate([0,-extra,0]) 
+        hull()
+        {
+            translate([-extra,0,trigHeight-longSide-upperBorder]) 
+            cube([0.1,trigThick+extra*2,longSide]);
+
+            translate([trigWidth,0,trigHeight-shortSide-upperBorder]) 
+            cube([0.1,trigThick+extra*2,shortSide]);
+        
+        }
+
+
+        translate([trigWidth,0,0]) 
+            autoTriggerScrewLayout();
+
+    }
+}
+
+
+module autoTriggerScrewLayout()
+{
+    {
+        #translate([baseWidth/2,-extra,lowerBorder]) 
+        rotate([-90,0,0]) 
+        cylinder(d=screwHoleLoose, h=trigThick+extra*2);
+
+        translate([baseWidth/2,-extra,trigHeight/2]) 
+        rotate([-90,0,0]) 
+        cylinder(d=screwHoleLoose, h=trigThick+extra*2);
+
+        translate([baseWidth/2,-extra,trigHeight-upperBorder]) 
+        rotate([-90,0,0]) 
+        cylinder(d=screwHoleLoose, h=trigThick+extra*2);
+
+
+    }
+}
