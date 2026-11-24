@@ -116,13 +116,13 @@ module autoblade_adapter()
 
 baseWidth = 20;
 lowerBorder = 5;
-upperBorder = 10;
+upperBorder = 8;
 trigThick = 5;
 trigWidth = 20;
 
 bladeTopToAdapterBottom = 43;
-adBtmToTip = 16; 
-adBtmToReset = 12;
+adBtmToTip = 17; 
+adBtmToReset = 10;
 
 longSide = bladeTopToAdapterBottom + adBtmToTip;
 shortSide = bladeTopToAdapterBottom + adBtmToReset;
@@ -148,7 +148,6 @@ module autoTrigger()
             cube([0.1,trigThick+extra*2,shortSide]);
         
         }
-
 
         translate([trigWidth,0,0]) 
             autoTriggerScrewLayout();
